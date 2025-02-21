@@ -6,7 +6,7 @@
 /*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/19 16:37:11 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:03:24 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int argc, char **argv)
 		return (ft_putstr_fd("Example: ./cub3D file.cub\n", 2), 1);
 	if (!parsing(argv))
 		return (ft_putstr_fd("Example: ./cub3D file.cub\n", 2), 1);
+	ft_putstr_fd("Yay, file in correct format!\n", 1);
 	//create the window
 	//draw the image
 	//put image to window

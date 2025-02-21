@@ -6,7 +6,7 @@
 /*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/19 16:35:22 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:20:30 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,12 @@ static int	check_file_format(char *file)
 {
 	//if ending is not .cub, file is in wrong format
 	int		i;
-	char	*str;
 
 	i = ft_strlen(file) - 4;
 	if (i < 0)
 		return (0);
-	//file[i] == '.', file[i + 1] == 'c', file[i + 2] == 'u', file[i + 3] == 'b'
-	str = file;
-	*str += (ft_strlen(file) - i);
-	if (ft_strncmp(str, ".cub", 5))
+	file += i;
+	if (ft_strncmp(file, ".cub", 5))
 		return (0);
 	return (1);
 }
