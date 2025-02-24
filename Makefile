@@ -6,14 +6,13 @@
 #    By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/02/19 16:33:25 by hpirkola         ###   ########.fr        #
+#    Updated: 2025/02/24 16:23:53 by hpirkola         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
-SRC = ./src/main.c \
-		./src/parsing.c
+SRC = ./src/main.c ./src/parsing.c ./src/utils.c
 
 OBJ = $(SRC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/21 15:34:45 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:18:20 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,14 @@ typedef struct s_map
 	char	*EA;
 	t_rgb	floor_color;
 	t_rgb	ceiling_color;
-	
 }	t_map;
+
+enum	e_type
+{
+	FLOOR,
+	WALL,
+	PADDING
+};
 
 typedef struct s_data
 {
@@ -47,7 +53,9 @@ typedef struct s_data
 
 //main.c
 //parsing.c
-int	parsing(t_data *data, char **argv);
+int		parsing(t_data *data, char **argv);
 
+//utils.c
+void	free_2d_array(char **ptr);
 #endif
 
