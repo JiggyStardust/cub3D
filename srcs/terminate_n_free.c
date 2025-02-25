@@ -33,6 +33,7 @@ void	terminate_free(t_cubed *cubed, int error, char *message)
 	delete_images(cubed);
 	if (cubed->mlx)
 		mlx_terminate(cubed->mlx);
+//	free(cubed);
 	if (error && message)
 	{
 		ft_printf("%s", message);

@@ -1,85 +1,43 @@
 #include "../cub3d.h"
 
-int	get_width(char **map)
+void	close_window(void *param)
 {
-	int	width;
-	int	i;
+	t_cubed	*cubed;
 
-	i = 0;
-	width = (int)ft_strlen(map[i]);
-	while (map[i])
-	{
-		if ((int)ft_strlen(map[i]) > width)
-			width = ft_strlen(map[i]);
-		i++;
-	}
-	width *= TILE_MINI;
-	return (width);
+	cubed = (t_cubed *)param;
+	terminate_free(cubed, 0, NULL);
+	exit(0);
 }
 
-int	get_height(char **map)
+void	key_hook(mlx_key_data_t keydata, void *param)
 {
-	int	i;
-	int	height;
-
-	i = 0;
-	while (map[i] != NULL)
-		i++;
-	height = i * TILE_MINI;
-	return (height);
-}
-
-double	get_player_x(char **map, int y, char p_dir)
-{
-	int	x;
+	t_cubed	*cubed;
+	int			x;
+	int			y;
 
 	x = 0;
-	while (map[y][x] != '\0')
-	{
-		if (map[y][x] == p_dir)
-			break ;
-		x++;
-	}
-	return ((double)x + 0.5); //+0.5 places player in the middle of the tile rather than onthe side
-}
-
-double	get_player_y(char **map, char p_dir)
-{
-	int	y;
-
 	y = 0;
-	while (map[y] != NULL)
+	cubed = (t_cubed *)param;
+	if (keydata.action == MLX_PRESS)
 	{
-		if (ft_strchr(map[y], p_dir))
-			break ;
-		y++;
+		if (keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_W)
+			y = -1;
+		else if (keydata.key == MLX_KEY_DOWN || keydata.key == MLX_KEY_S)
+			y = 1;
+		else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_A)
+			x = -1;
+		else if (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_D)
+			x = 1;
+		else if (keydata.key == MLX_KEY_ESCAPE)
+			terminate_free(cubed, 0, "Game ended\n");
+		if ((x != 0 || y != 0) && !move_player(cubed, x, y))
+			return ;
 	}
-	return ((double)y + 0.5); //+0.5 places player in the middle of the tile rather than on the side
-}
-
-char	get_player_dir(char **map)
-{
-	int		i;
-
-	i = 0;
-	while (map[i] != NULL)
-	{
-		if (ft_strchr(map[i], 'N'))
-			return ('N');
-		else if (ft_strchr(map[i], 'S'))
-			return ('S');
-		else if (ft_strchr(map[i], 'W'))
-			return ('W');
-		else if (ft_strchr(map[i], 'E'))
-			return ('E');
-		i++;
-	}
-	return ('\0');
 }
 
 bool	init_cubed(t_cubed *cubed, char *path_to_map)
 {
-	ft_memset(cubed, 0, sizeof(cubed));
+	// ft_memset(cubed, 0, sizeof(cubed)); // is there need to allocate / memset cubed at this point?
 	cubed->map = create_map(path_to_map);
 	cubed->m_height = get_height(cubed->map);
 	cubed->m_width = get_width(cubed->map);
@@ -103,7 +61,10 @@ int main(int ac, char **av)
 		return (1);
 	if (!setup_images(&cubed))
 		terminate_free(&cubed, 1, "Error\nProblem with setup_images.\n");
-//	if (!images_to_window(&cubed))
-//		terminate_free(&cubed, 1, "Error\nProblem with opening the window.\n");
-	
+	if (!images_to_window(&cubed))
+		terminate_free(&cubed, 1, "Error\nProblem with opening the window.\n");
+	mlx_key_hook(cubed.mlx, key_hook, &cubed);
+	mlx_close_hook(cubed.mlx, close_window, &cubed);
+	mlx_loop(cubed.mlx);
+	terminate_free(&cubed, 0, NULL);
 }

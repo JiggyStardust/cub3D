@@ -23,6 +23,9 @@ SOURCES = \
 	cub3d.c \
 	create_map.c \
 	image_handling.c \
+	images_to_window.c \
+	init_utils.c \
+	moving.c \
 	terminate_n_free.c 
 
 SRCDIR = srcs
