@@ -1,14 +1,4 @@
-#include "cub3d.h"
-
-char temp_map[MINI_HEIGHT][MINI_WIDTH] = 
-{
-	{'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-	{'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
-	{'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
-	{'1', '0', '0', '0', '0', '1', '1', '0', '0', '0', '1'},
-	{'1', '0', '0', '0', '0', '0', '0', '0', 'N', '0', '1'},
-	{'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'}
-};
+#include "../cub3d.h"
 
 int	get_width(char **map)
 {
@@ -19,7 +9,7 @@ int	get_width(char **map)
 	width = (int)ft_strlen(map[i]);
 	while (map[i])
 	{
-		if (ft_strlen(map[i]) > width)
+		if ((int)ft_strlen(map[i]) > width)
 			width = ft_strlen(map[i]);
 		i++;
 	}
@@ -41,30 +31,30 @@ int	get_height(char **map)
 
 double	get_player_x(char **map, int y, char p_dir)
 {
-	double	x;
+	int	x;
 
 	x = 0;
 	while (map[y][x] != '\0')
 	{
-		if (map[y][x] == cubed->p_dir)
+		if (map[y][x] == p_dir)
 			break ;
 		x++;
 	}
-	return (x + 0.5); //+0.5 places player in the middle of the tile rather than onthe side
+	return ((double)x + 0.5); //+0.5 places player in the middle of the tile rather than onthe side
 }
 
 double	get_player_y(char **map, char p_dir)
 {
-	double	y;
+	int	y;
 
 	y = 0;
 	while (map[y] != NULL)
 	{
-		if (ft_strchr(map[y], cubed->p_dir))
+		if (ft_strchr(map[y], p_dir))
 			break ;
 		y++;
 	}
-	return (y + 0.5); //+0.5 places player in the middle of the tile rather than on the side
+	return ((double)y + 0.5); //+0.5 places player in the middle of the tile rather than on the side
 }
 
 char	get_player_dir(char **map)
@@ -90,27 +80,30 @@ char	get_player_dir(char **map)
 bool	init_cubed(t_cubed *cubed, char *path_to_map)
 {
 	ft_memset(cubed, 0, sizeof(cubed));
-	cubed->map = map;
+	cubed->map = create_map(path_to_map);
 	cubed->m_height = get_height(cubed->map);
 	cubed->m_width = get_width(cubed->map);
 	cubed->mlx = mlx_init(cubed->m_width, cubed->m_height, "minimap", true);
-	if (!solong->mlx)
+	if (!cubed->mlx)
 		return (false);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
 	cubed->p_dir = get_player_dir(cubed->map);
 	cubed->p_y = get_player_y(cubed->map, cubed->p_dir);
 	cubed->p_x = get_player_x(cubed->map, cubed->p_y, cubed->p_dir);
+	return (true);
 }
 
 int main(int ac, char **av)
 {
 	t_cubed	cubed;
 
-	if (!init_cubed(&cubed), av[1])
+	if (ac != 2)
+		return (1);
+	if (!init_cubed(&cubed, av[1]))
 		return (1);
 	if (!setup_images(&cubed))
 		terminate_free(&cubed, 1, "Error\nProblem with setup_images.\n");
-	if (!images_to_window(&cubed))
-		terminate_free(&cubed, 1, "Error\nProblem with opening the window.\n");
+//	if (!images_to_window(&cubed))
+//		terminate_free(&cubed, 1, "Error\nProblem with opening the window.\n");
 	
 }

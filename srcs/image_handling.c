@@ -1,6 +1,6 @@
 #include "../cub3d.h"
 
-mlx_image_t	*png_to_resized_img(t_cubed *cubed, const char *path_text)
+static mlx_image_t	*png_to_resized_img(t_cubed *cubed, const char *path_text)
 {
 	mlx_texture_t	*text;
 	mlx_image_t		*img;

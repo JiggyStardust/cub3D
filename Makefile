@@ -19,18 +19,23 @@ CFLAGS = -Wall -Werror -Wextra
 LDFLAGS = -lglfw
 CC = cc
 
-SRCDIR = srcs
-OBJDIR = objs
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-MLX42_DIR = MLX42
-MLX42_LIB = $(MLX42_DIR)/build/libmlx42.a
-INCLUDE = -I. -I$(LIBFT_DIR) -I$(MLX42_DIR)/include
-
 SOURCES = \
 	cub3d.c \
+	create_map.c \
+	image_handling.c \
+	terminate_n_free.c 
 
+SRCDIR = srcs
+OBJDIR = objs
 OBJS = $(SOURCES:%.c=$(OBJDIR)/%.o)
+
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+MLX42_DIR = MLX42
+MLX42_LIB = $(MLX42_DIR)/build/libmlx42.a
+
+INCLUDE = -I. -I$(LIBFT_DIR) -I$(MLX42_DIR)/include
 
 REQUIRED_PACKAGES = build-essential libx11-dev libglfw3 xorg-dev
 CHECK_PACKAGES_CMD = dpkg -l | grep -E '$(subst $(space),|,$(REQUIRED_PACKAGES))'
@@ -49,7 +54,7 @@ $(NAME): $(OBJS) $(LIBFT) $(MLX42_LIB)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX42_LIB) $(LDFLAGS) -o $(NAME)
 	@$(X_READY)
 
-$(OBJDIR):
+$(OBJDIR): $(MLX42_LIB) $(LIBFT)
 	@mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
