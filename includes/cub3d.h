@@ -6,7 +6,7 @@
 /*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/24 16:18:20 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:36:06 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ typedef struct	s_rgb
 	int	b;
 }	t_rgb;
 
+typedef struct s_position
+{
+	int	row;
+	int	col;
+}	t_position;
+
 typedef struct s_map
 {
 	int	height;
@@ -40,7 +46,11 @@ enum	e_type
 {
 	FLOOR,
 	WALL,
-	PADDING
+	PADDING,
+	N,
+	S,
+	W,
+	E
 };
 
 typedef struct s_data
@@ -48,7 +58,7 @@ typedef struct s_data
 	//mlx etc
 	char	*file;
 	t_map	map_info;
-	//map
+	enum e_type	*map;
 }	t_data;
 
 //main.c
@@ -57,5 +67,9 @@ int		parsing(t_data *data, char **argv);
 
 //utils.c
 void	free_2d_array(char **ptr);
+int		to_map(t_data *data, char *line, int j);
+t_position	get_pos(t_data *data, int i);
+enum e_type	get_type(t_data *data, int row, int col);
+
 #endif
 
