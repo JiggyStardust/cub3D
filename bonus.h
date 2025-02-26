@@ -3,18 +3,23 @@
 
 # define MINI_HEIGHT 256
 # define MINI_WIDTH 180
-# define TILE_MINI 30
+# define TILE_MINI 50
 
 # define GRAY 0x888888FF
 # define DARK_GRAY 0x222222FF
 # define RED 0xFF0000FF
+# define PI 3.14159265359
 
 # include "cub3d.h"
+# include <math.h>
 
 typedef struct s_cubed
 {
-	double	p_x; // player X position in pixels
-	double	p_y; // player Y position in pixels
+	float	p_x; // player X position
+	float	p_y; // player Y position
+	float	p_d_x; // player delta X
+	float	p_d_x; // player delta Y
+	float	p_a; // player angle
 	int 	x; // player pos in X tiles
 	int		y; // player pos in Y tiles
 	char	p_dir; // marks player and beginning direction

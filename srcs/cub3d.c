@@ -12,27 +12,21 @@ void	close_window(void *param)
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_cubed	*cubed;
-	int			x;
-	int			y;
 
-	x = 0;
-	y = 0;
+
 	cubed = (t_cubed *)param;
-	if (keydata.action == MLX_PRESS)
-	{
-		if (keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_W)
-			y = -1;
-		else if (keydata.key == MLX_KEY_DOWN || keydata.key == MLX_KEY_S)
-			y = 1;
-		else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_A)
-			x = -1;
-		else if (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_D)
-			x = 1;
-		else if (keydata.key == MLX_KEY_ESCAPE)
-			terminate_free(cubed, 0, "Game ended\n");
-		if ((x != 0 || y != 0) && !move_player(cubed, x, y))
+	if (keydata.key == MLX_KEY_ESCAPE)
+		terminate_free(cubed, 0, "Game ended\n");
+	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
+		cubed->p_y -= 0.1;
+	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
+		subed->p_y += 0.1;
+	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
+		cubed->p_a -= 0.1;
+	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_RIGHT))
+		cubed->p_a += 0.1;
+	if ((x != 0 || y != 0) && !move_player(cubed, x, y))
 			return ;
-	}
 }
 
 bool	init_cubed(t_cubed *cubed, char *path_to_map)
