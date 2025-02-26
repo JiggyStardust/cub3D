@@ -52,3 +52,32 @@ Added float p_y, p_x, p_d_y (player delta y), p_d_x and pa (player angle) to str
     }
 ```
 
+void buttons(unsigned char key, int x, int y)
+{
+	if (key == 'a')
+	{
+		pa -= 0.1; 
+		if (pa < 0)
+			pa += 2*PI;
+		p_d_x = cos(pa)*5;
+		p_d_y= sin(pa)*5;
+	}
+	if (key == 'd')
+	{
+		pa += 0.1; 
+		if (pa > 2*PI)
+			pa -= 2*PI;
+		p_d_x = cos(pa)*5;
+		p_d_y= sin(pa)*5;
+	}
+	if (key == 'w')
+	{
+		px += pdx;
+		py += pdy;
+	}
+	if (key == 's')
+	{
+		px -= pdx;
+		py -= pdy;
+	}
+}

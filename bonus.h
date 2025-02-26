@@ -18,7 +18,7 @@ typedef struct s_cubed
 	float	p_x; // player X position
 	float	p_y; // player Y position
 	float	p_d_x; // player delta X
-	float	p_d_x; // player delta Y
+	float	p_d_y; // player delta Y
 	float	p_a; // player angle
 	int 	x; // player pos in X tiles
 	int		y; // player pos in Y tiles
@@ -45,6 +45,7 @@ double	get_player_y(char **map, char p_dir);
 
 bool	images_to_window(t_cubed *cubed);
 
-bool	move_player(t_cubed *cubed, int x, int y);
+// bool	move_player(t_cubed *cubed, int x, int y);
+void move_player(t_cubed *cubed, double dx, double dy);
 
 #endif

@@ -9,25 +9,80 @@ void	close_window(void *param)
 	exit(0);
 }
 
+// void	key_hook(mlx_key_data_t keydata, void *param)
+// {
+// 	t_cubed	*cubed;
+
+
+// 	cubed = (t_cubed *)param;
+// 	if (keydata.key == MLX_KEY_ESCAPE)
+// 		terminate_free(cubed, 0, "Game ended\n");
+// 	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
+// 		cubed->p_y -= 0.1;
+// 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
+// 		subed->p_y += 0.1;
+// 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
+// 		cubed->p_a -= 0.1;
+// 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_RIGHT))
+// 		cubed->p_a += 0.1;
+// 	if ((x != 0 || y != 0) && !move_player(cubed, x, y))
+// 			return ;
+// }
+
+void move_player(t_cubed *cubed, double dx, double dy)
+{
+	double new_px = cubed->p_x + dx;
+	double new_py = cubed->p_y + dy;
+	int new_x = (int)(new_px / TILE_MINI);
+	int new_y = (int)(new_py / TILE_MINI);
+
+	// Collision check (prevent walking through walls)
+	if (cubed->map[new_y][new_x] != '1')
+	{
+		cubed->p_x = new_px;
+		cubed->p_y = new_py;
+	}
+}
+
+
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_cubed	*cubed;
-
+	double	move_speed;
+	double	turn_speed;
 
 	cubed = (t_cubed *)param;
+	move_speed = 4.0; // Pixels per frame
+	turn_speed = 0.1; // Radians per frame
+
 	if (keydata.key == MLX_KEY_ESCAPE)
 		terminate_free(cubed, 0, "Game ended\n");
-	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
-		cubed->p_y -= 0.1;
-	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
-		subed->p_y += 0.1;
-	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
-		cubed->p_a -= 0.1;
+
+	// Handle rotation (LEFT and RIGHT keys)
+	if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
+	{
+		cubed->p_a -= turn_speed;
+		if (cubed->p_a < 0)
+			cubed->p_a += 2 * PI;
+	}
 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_RIGHT))
-		cubed->p_a += 0.1;
-	if ((x != 0 || y != 0) && !move_player(cubed, x, y))
-			return ;
+	{
+		cubed->p_a += turn_speed;
+		if (cubed->p_a > 2 * PI)
+			cubed->p_a -= 2 * PI;
+	}
+
+	// Update direction vector after rotation
+	cubed->p_d_x = cos(cubed->p_a) * move_speed;
+	cubed->p_d_y = sin(cubed->p_a) * move_speed;
+
+	// Handle movement (W and S keys)
+	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
+		move_player(cubed, cubed->p_d_x, cubed->p_d_y);
+	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
+		move_player(cubed, -cubed->p_d_x, -cubed->p_d_y);
 }
+
 
 bool	init_cubed(t_cubed *cubed, char *path_to_map)
 {
