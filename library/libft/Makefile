@@ -6,7 +6,7 @@
 #    By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/18 09:31:23 by hpirkola          #+#    #+#              #
-#    Updated: 2024/07/12 17:54:45 by hpirkola         ###   ########.fr        #
+#    Updated: 2025/02/26 16:19:48 by hpirkola         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,23 +68,23 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME) : $(OBJECTS)
-	ar rcs $(NAME) $(OBJECTS)
+	@ar rcs $(NAME) $(OBJECTS)
 
 %.o : %.c
-	cc $(CFLAGS) -c $< -o $@
+	@cc $(CFLAGS) -c $< -o $@
 
 bonus: .bonus 
 
 .bonus: $(NAME) $(BONUS_OBJS)
-	ar rcs $(NAME) $(BONUS_OBJS)
+	@ar rcs $(NAME) $(BONUS_OBJS)
 	@touch .bonus
 
 clean:
-	rm -f $(OBJECTS) $(BONUS_OBJS)
+	@rm -f $(OBJECTS) $(BONUS_OBJS)
 
 fclean: clean
-	rm -f $(NAME)
-	rm -f .bonus
+	@rm -f $(NAME)
+	@rm -f .bonus
 
 re: fclean all
 
