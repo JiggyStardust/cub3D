@@ -16,7 +16,7 @@ CUB3D			= echo "🔗 $(YELLOW)Linking cub3D...$(RESET)"
 
 NAME = cub3d
 CFLAGS = -Wall -Werror -Wextra
-LDFLAGS = -lglfw
+LDFLAGS = -lglfw -lm
 CC = cc
 
 SOURCES = \

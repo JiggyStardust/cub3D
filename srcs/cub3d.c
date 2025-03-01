@@ -9,56 +9,88 @@ void	close_window(void *param)
 	exit(0);
 }
 
+// void move_player(t_cubed *cubed, float dx, float dy)
+// {
+// 	float new_px = cubed->p_x + dx;
+// 	float new_py = cubed->p_y + dy;
+// 	int new_x = (int)(new_px / TILE_MINI);
+// 	int new_y = (int)(new_py / TILE_MINI);
+
+// 	// Collision check (prevent walking through walls)
+// 	if (cubed->map[new_y][new_x] != '1')
+// 	{
+// 		cubed->p_x = new_px;
+// 		cubed->p_y = new_py;
+// 	}
+// }
+
 // void	key_hook(mlx_key_data_t keydata, void *param)
 // {
 // 	t_cubed	*cubed;
-
+// 	float	move_speed;
+// 	float	turn_speed;
 
 // 	cubed = (t_cubed *)param;
+// 	move_speed = 4.0; // Pixels per frame
+// 	turn_speed = 0.1; // Radians per frame
+
 // 	if (keydata.key == MLX_KEY_ESCAPE)
 // 		terminate_free(cubed, 0, "Game ended\n");
-// 	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
-// 		cubed->p_y -= 0.1;
-// 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
-// 		subed->p_y += 0.1;
-// 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
-// 		cubed->p_a -= 0.1;
+
+// 	// Handle rotation (LEFT and RIGHT keys)
+// 	if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
+// 	{
+// 		cubed->p_a -= turn_speed;
+// 		if (cubed->p_a < 0)
+// 			cubed->p_a += 2 * PI;
+// 	}
 // 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_RIGHT))
-// 		cubed->p_a += 0.1;
-// 	if ((x != 0 || y != 0) && !move_player(cubed, x, y))
-// 			return ;
+// 	{
+// 		cubed->p_a += turn_speed;
+// 		if (cubed->p_a > 2 * PI)
+// 			cubed->p_a -= 2 * PI;
+// 	}
+
+// 	// Update direction vector after rotation
+// 	cubed->p_d_x = cos(cubed->p_a) * move_speed;
+// 	cubed->p_d_y = sin(cubed->p_a) * move_speed;
+
+// 	// Handle movement (W and S keys)
+// 	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
+// 		move_player(cubed, cubed->p_d_x, cubed->p_d_y);
+// 	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
+// 		move_player(cubed, -cubed->p_d_x, -cubed->p_d_y);
 // }
 
-void move_player(t_cubed *cubed, double dx, double dy)
+void	move_player(t_cubed *cubed)
 {
-	double new_px = cubed->p_x + dx;
-	double new_py = cubed->p_y + dy;
-	int new_x = (int)(new_px / TILE_MINI);
-	int new_y = (int)(new_py / TILE_MINI);
+	float	move_speed = 0.1;
+	float	turn_speed = 0.1;
+	float	x;
+	float	y;
 
-	// Collision check (prevent walking through walls)
-	if (cubed->map[new_y][new_x] != '1')
+	printf("p_y: %f, p_x: %f\n", cubed->p_y, cubed->p_x);
+
+	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
 	{
-		cubed->p_x = new_px;
-		cubed->p_y = new_py;
+		x = cubed->p_x - cubed->p_d_x * move_speed;
+		y = cubed->p_y - cubed->p_d_y * move_speed;
+
+		if (cubed->map[(int)y][(int)cubed->p_x] != '1')
+			cubed->p_y = y;
+		if (cubed->map[(int)cubed->p_y][(int)x] != '1')
+			cubed->p_x = x;
 	}
-}
+	if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
+	{
+		x = cubed->p_x + cubed->p_d_x * move_speed;
+		y = cubed->p_y + cubed->p_d_y * move_speed;
 
-
-void	key_hook(mlx_key_data_t keydata, void *param)
-{
-	t_cubed	*cubed;
-	double	move_speed;
-	double	turn_speed;
-
-	cubed = (t_cubed *)param;
-	move_speed = 4.0; // Pixels per frame
-	turn_speed = 0.1; // Radians per frame
-
-	if (keydata.key == MLX_KEY_ESCAPE)
-		terminate_free(cubed, 0, "Game ended\n");
-
-	// Handle rotation (LEFT and RIGHT keys)
+		if (cubed->map[(int)y][(int)cubed->p_x] != '1')
+			cubed->p_y = y;
+		if (cubed->map[(int)cubed->p_y][(int)x] != '1')
+			cubed->p_x = x;
+	}
 	if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
 	{
 		cubed->p_a -= turn_speed;
@@ -71,18 +103,37 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 		if (cubed->p_a > 2 * PI)
 			cubed->p_a -= 2 * PI;
 	}
-
-	// Update direction vector after rotation
 	cubed->p_d_x = cos(cubed->p_a) * move_speed;
 	cubed->p_d_y = sin(cubed->p_a) * move_speed;
-
-	// Handle movement (W and S keys)
-	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
-		move_player(cubed, cubed->p_d_x, cubed->p_d_y);
-	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
-		move_player(cubed, -cubed->p_d_x, -cubed->p_d_y);
 }
 
+void	draw_player(t_cubed *cubed)
+{
+	if (mlx_image_to_window(cubed->mlx, cubed->p_img, cubed->p_x * TILE_MINI, cubed->p_y * TILE_MINI) == -1)
+		terminate_free(cubed, 1, "mlx_put_image failed\n");
+}
+
+void	movement(void *param)
+{
+	t_cubed		*cubed;
+
+	cubed = (t_cubed *)param;
+	move_player(cubed);
+	// draw_floor(cubed); this will be solved later
+	draw_player(cubed);
+}
+
+void	key_hook(mlx_key_data_t keydata, void *param)
+{
+	t_cubed	*cubed;
+
+	cubed = (t_cubed *)param;
+	if (keydata.action == MLX_PRESS && keydata.key == MLX_KEY_ESCAPE)
+		terminate_free(cubed, 0, NULL);
+	/* 
+		Shooting, opening doors etc might come here aswell
+	*/
+}
 
 bool	init_cubed(t_cubed *cubed, char *path_to_map)
 {
@@ -112,8 +163,9 @@ int main(int ac, char **av)
 		terminate_free(&cubed, 1, "Error\nProblem with setup_images.\n");
 	if (!images_to_window(&cubed))
 		terminate_free(&cubed, 1, "Error\nProblem with opening the window.\n");
-	mlx_key_hook(cubed.mlx, key_hook, &cubed);
-	mlx_close_hook(cubed.mlx, close_window, &cubed);
+	mlx_key_hook(cubed.mlx, &key_hook, &cubed);
+	mlx_loop_hook(cubed.mlx, &movement, &cubed);
+	mlx_close_hook(cubed.mlx, &close_window, &cubed);
 	mlx_loop(cubed.mlx);
 	terminate_free(&cubed, 0, NULL);
 }

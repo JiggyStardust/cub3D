@@ -46,6 +46,6 @@ double	get_player_y(char **map, char p_dir);
 bool	images_to_window(t_cubed *cubed);
 
 // bool	move_player(t_cubed *cubed, int x, int y);
-void move_player(t_cubed *cubed, double dx, double dy);
+void move_player(t_cubed *cubed);
 
 #endif

@@ -32,8 +32,6 @@ static bool	draw_wpc(t_cubed *cubed, char c, int x, int y)
 
 	if (c == '1')
 		image = cubed->w_img;
-	else if (c == cubed->p_dir)
-		image = cubed->p_img;
 	else
 		return (true);
 	if (mlx_image_to_window(cubed->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
