@@ -98,3 +98,6 @@ Before lunch:
 
 Last commit:
 - Commented out in cub3d.c are different implementations for movement and draw_player using mlx_put_pixel. Right now its instead drawing and moving multiple points on walls, so totally not working properly. Will continue on monday (3.3.)
+
+TO DO:
+Make moving and rendering of minimap work on a basic level and pull from main and adjust bonus to use parsings output.
