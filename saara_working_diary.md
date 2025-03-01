@@ -81,3 +81,17 @@ void buttons(unsigned char key, int x, int y)
 		py -= pdy;
 	}
 }
+
+----------------
+27th of February 2025
+----------------
+
+Was a bad working day honestly, ran in circles and came back to 26th commit.
+
+----------------
+1st of March 2025
+----------------
+
+Before lunch:
+- Moves our player : W goes up, S goes down, < and > change the direction.
+- Draws the player with a trace, need to add draw map to every loop after lunch.
