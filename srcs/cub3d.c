@@ -60,13 +60,73 @@ void	draw_player(t_cubed *cubed)
 		terminate_free(cubed, 1, "mlx_put_image failed\n");
 }
 
+// void	draw_player(t_cubed *cubed)
+// {
+// 	int	center_x = (int)(cubed->p_x * TILE_MINI);
+// 	int	center_y = (int)(cubed->p_y * TILE_MINI);
+
+// 	// Don't draw if the player is inside a wall
+// 	if (cubed->map[(int)cubed->p_y][(int)cubed->p_x] == '1')
+// 		return;
+
+// 	// Draw a single red dot at the player's position
+// 	mlx_put_pixel(cubed->f_img, center_x, center_y, 0xFF0000FF); // Red
+// }
+
+
+static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
+{
+	mlx_image_t	*image;
+
+	if (c == '0')
+		image = cubed->f_img;
+	else if (c == '1')
+		image = cubed->w_img;
+	else
+		return (true);
+	if (mlx_image_to_window(cubed->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
+		return (false);
+	return (true);
+}
+// void	movement(void *param)
+// {
+// 	t_cubed	*cubed;
+// 	int		prev_x, prev_y;
+
+// 	cubed = (t_cubed *)param;
+// 	prev_x = (int)(cubed->p_x * TILE_MINI);
+// 	prev_y = (int)(cubed->p_y * TILE_MINI);
+
+// 	move_player(cubed);
+
+// 	// Erase the old position by redrawing the floor *only if it's not a wall*
+// 	if (cubed->map[(int)(prev_y / TILE_MINI)][(int)(prev_x / TILE_MINI)] == '0')
+// 		draw_wf(cubed, '0', prev_x / TILE_MINI, prev_y / TILE_MINI);
+
+// 	// Draw the new player dot
+// 	draw_player(cubed);
+// }
+
+
 void	movement(void *param)
 {
 	t_cubed		*cubed;
+	float		prev_x;
+	float		prev_y;
+	float		curr_x;
+	float		curr_y;
 
 	cubed = (t_cubed *)param;
+	prev_x = cubed->p_x;
+	prev_y = cubed->p_y;
+
 	move_player(cubed);
-	// draw_floor(cubed); this will be solved later
+	curr_x = cubed->p_x;
+	curr_y = cubed->p_y;
+	if (prev_x != curr_x || prev_y != curr_y)
+	{
+		draw_wf(cubed, '0', prev_x, prev_y); // here to simulate that affected floor tiles should be redrawn.
+	}
 	draw_player(cubed);
 }
 
@@ -84,7 +144,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 
 bool	init_cubed(t_cubed *cubed, char *path_to_map)
 {
-	ft_memset(cubed, 0, sizeof(cubed)); // is there need to allocate / memset cubed at this point?
+	ft_memset(cubed, 0, sizeof(cubed));
 	cubed->map = create_map(path_to_map);
 	cubed->m_height = get_height(cubed->map);
 	cubed->m_width = get_width(cubed->map);

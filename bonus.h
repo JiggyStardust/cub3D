@@ -40,8 +40,8 @@ void	terminate_free(t_cubed *cubed, int error, char *message);
 char	get_player_dir(char **map);
 int		get_height(char **map);
 int		get_width(char **map);
-double	get_player_x(char **map, int y, char p_dir);
-double	get_player_y(char **map, char p_dir);
+float	get_player_x(char **map, int y, char p_dir);
+float	get_player_y(char **map, char p_dir);
 
 bool	images_to_window(t_cubed *cubed);
 

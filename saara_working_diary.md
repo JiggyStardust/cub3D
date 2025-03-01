@@ -95,3 +95,6 @@ Was a bad working day honestly, ran in circles and came back to 26th commit.
 Before lunch:
 - Moves our player : W goes up, S goes down, < and > change the direction.
 - Draws the player with a trace, need to add draw map to every loop after lunch.
+
+Last commit:
+- Commented out in cub3d.c are different implementations for movement and draw_player using mlx_put_pixel. Right now its instead drawing and moving multiple points on walls, so totally not working properly. Will continue on monday (3.3.)

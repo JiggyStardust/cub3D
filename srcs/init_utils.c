@@ -29,7 +29,7 @@ int	get_height(char **map)
 	return (height);
 }
 
-double	get_player_x(char **map, int y, char p_dir)
+float	get_player_x(char **map, int y, char p_dir)
 {
 	int	x;
 
@@ -40,10 +40,10 @@ double	get_player_x(char **map, int y, char p_dir)
 			break ;
 		x++;
 	}
-	return ((double)x); //+0.5 places player in the middle of the tile rather than onthe side
+	return ((float)x);
 }
 
-double	get_player_y(char **map, char p_dir)
+float	get_player_y(char **map, char p_dir)
 {
 	int	y;
 
@@ -54,7 +54,7 @@ double	get_player_y(char **map, char p_dir)
 			break ;
 		y++;
 	}
-	return ((double)y); //+0.5 places player in the middle of the tile rather than on the side
+	return ((float)y);
 }
 
 char	get_player_dir(char **map)
