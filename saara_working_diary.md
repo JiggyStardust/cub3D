@@ -110,3 +110,5 @@ Make moving and rendering of minimap work on a basic level and pull from main an
 - There's also a function (draw_player()) in comments where player is drawn using put_pixel and moved calling put_image_to_window. This seems too heavy compared to moving with instances.
 - Rays are not drawn yet
 - It doesn't succesfully understand the boundaries (walls), or it does, but it doesn't visualize it as we'd like to.
+
+- Merged Helmi's work from main branch, starting to connect their parsing to my work tomorrow. Right now Helmi's main() is commented out.
