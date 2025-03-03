@@ -1,4 +1,4 @@
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
 {

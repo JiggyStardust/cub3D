@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../includes/cub3d.h"
 
 // static bool	valid_move(t_cubed *cubed, int x, int y)
 // {

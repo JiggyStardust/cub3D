@@ -1,4 +1,4 @@
-#include "../cub3d.h"
+#include "../includes/cub3d.h"
 
 static mlx_image_t	*png_to_resized_img(t_cubed *cubed, const char *path_text)
 {

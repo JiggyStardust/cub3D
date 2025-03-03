@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/26 15:36:06 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:58:26 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../library/libft/libft.h"
-# include <unistd.h>
+# include "../libft/libft.h"
+# include "MLX42/include/MLX42/MLX42.h"
+# include "MLX42/include/MLX42/MLX42_Int.h"
+# include "bonus.h"
 # include <fcntl.h>
 
 typedef struct	s_rgb
