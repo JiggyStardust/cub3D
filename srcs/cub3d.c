@@ -54,11 +54,11 @@ void	move_player(t_cubed *cubed)
 	cubed->p_d_y = sin(cubed->p_a) * move_speed;
 }
 
-void	draw_player(t_cubed *cubed)
-{
-	if (mlx_image_to_window(cubed->mlx, cubed->p_img, cubed->p_x * TILE_MINI, cubed->p_y * TILE_MINI) == -1)
-		terminate_free(cubed, 1, "mlx_put_image failed\n");
-}
+// void	draw_player(t_cubed *cubed)
+// {
+// 	if (mlx_image_to_window(cubed->mlx, cubed->p_img, cubed->p_x * TILE_MINI, cubed->p_y * TILE_MINI) == -1)
+// 		terminate_free(cubed, 1, "mlx_put_image failed\n");
+// }
 
 // void	draw_player(t_cubed *cubed)
 // {
@@ -74,20 +74,45 @@ void	draw_player(t_cubed *cubed)
 // }
 
 
-static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
+void draw_player(t_cubed *cubed)
 {
-	mlx_image_t	*image;
+	int center_x = TILE_MINI / 2;
+	int center_y = TILE_MINI / 2;
+	int	y;
+	int	x;
 
-	if (c == '0')
-		image = cubed->f_img;
-	else if (c == '1')
-		image = cubed->w_img;
-	else
-		return (true);
-	if (mlx_image_to_window(cubed->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
-		return (false);
-	return (true);
+	mlx_delete_image(cubed->mlx, cubed->p_img);
+	cubed->p_img = mlx_new_image(cubed->mlx, TILE_MINI, TILE_MINI);
+	y = -6;
+	while (y <= 6)
+	{
+		x = -6;
+		while (x <= 6)
+		{
+			mlx_put_pixel(cubed->p_img, center_x + x, center_y + y, 0xFF0000FF);
+			x++;
+		}
+		y++;
+	}
+	mlx_image_to_window(cubed->mlx, cubed->p_img, cubed->p_x * TILE_MINI, cubed->p_y * TILE_MINI);
 }
+
+
+// static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
+// {
+// 	mlx_image_t	*image;
+
+// 	if (c == '0')
+// 		image = cubed->f_img;
+// 	else if (c == '1')
+// 		image = cubed->w_img;
+// 	else
+// 		return (true);
+// 	if (mlx_image_to_window(cubed->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
+// 		return (false);
+// 	return (true);
+// }
+
 // void	movement(void *param)
 // {
 // 	t_cubed	*cubed;
@@ -111,22 +136,22 @@ static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
 void	movement(void *param)
 {
 	t_cubed		*cubed;
-	float		prev_x;
-	float		prev_y;
-	float		curr_x;
-	float		curr_y;
+	// float		prev_x;  // with current usage of mlx_put_pixel in drwaing player, this seems to be unnecessary
+	// float		prev_y;
+	// float		curr_x;
+	// float		curr_y;
 
 	cubed = (t_cubed *)param;
-	prev_x = cubed->p_x;
-	prev_y = cubed->p_y;
+	// prev_x = cubed->p_x;
+	// prev_y = cubed->p_y;
 
 	move_player(cubed);
-	curr_x = cubed->p_x;
-	curr_y = cubed->p_y;
-	if (prev_x != curr_x || prev_y != curr_y)
-	{
-		draw_wf(cubed, '0', prev_x, prev_y); // here to simulate that affected floor tiles should be redrawn.
-	}
+	// curr_x = cubed->p_x;
+	// curr_y = cubed->p_y;
+	// if (prev_x != curr_x || prev_y != curr_y)
+	// // {
+	// // 	draw_wf(cubed, '0', prev_x, prev_y); // here to simulate that affected floor tiles should be redrawn.
+	// // }
 	draw_player(cubed);
 }
 
