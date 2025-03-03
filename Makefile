@@ -15,18 +15,18 @@ REMAKE			= echo "💡 $(GREEN)Successfully rebuilt everything!$(RESET)"
 CUB3D			= echo "🔗 $(YELLOW)Linking cub3D...$(RESET)"
 
 NAME = cub3d
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra
 LDFLAGS = -lglfw -lm
 CC = cc
 
 SOURCES = \
-	cub3d_bonus.c \
-	create_map_bonus.c \
-	image_handling_bonus.c \
-	images_to_window_bonus.c \
-	init_utils_bonus.c \
-	moving_bonus.c \
-	terminate_n_free_bonus.c 
+	cub3d.c \
+	create_map.c \
+	image_handling.c \
+	images_to_window.c \
+	init_utils.c \
+	moving.c \
+	terminate_n_free.c 
 
 SRCDIR = srcs
 OBJDIR = objs
