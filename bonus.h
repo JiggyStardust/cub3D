@@ -42,6 +42,7 @@ int		get_height(char **map);
 int		get_width(char **map);
 float	get_player_x(char **map, int y, char p_dir);
 float	get_player_y(char **map, char p_dir);
+float	get_player_angle(char dir);
 
 bool	images_to_window(t_cubed *cubed);
 

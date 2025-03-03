@@ -76,3 +76,15 @@ char	get_player_dir(char **map)
 	}
 	return ('\0');
 }
+
+float	get_player_angle(char dir)
+{
+	if (dir == 'N')
+		return ((PI) / 2);
+	else if (dir == 'W')
+		return (0.0);
+	else if (dir == 'S')
+		return ((3 * PI) / 2);
+	else
+		return (PI);
+}

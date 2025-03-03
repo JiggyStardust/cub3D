@@ -12,11 +12,6 @@ static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
 		return (true);
 	if (mlx_image_to_window(cubed->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
 		return (false);
-	// if (c == cubed->p_dir)
-	// {
-	// 	if (mlx_image_to_window(cubed->mlx, cubed->p_img, x * TILE_MINI, y * TILE_MINI) == -1)
-	// 	return (false);
-	// }
 	return (true);
 }
 
@@ -37,5 +32,7 @@ bool	images_to_window(t_cubed *cubed)
 		}
 		y++;
 	}
+	if (mlx_image_to_window(cubed->mlx, cubed->p_img, x * TILE_MINI, y * TILE_MINI) == -1)
+		return (false);
 	return (true);
 }

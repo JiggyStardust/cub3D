@@ -101,3 +101,12 @@ Last commit:
 
 TO DO:
 Make moving and rendering of minimap work on a basic level and pull from main and adjust bonus to use parsings output.
+
+----------------
+3rd of March 2025
+----------------
+
+- Player image is now moving to all directions.
+- There's also a function (draw_player()) in comments where player is drawn using put_pixel and moved calling put_image_to_window. This seems too heavy compared to moving with instances.
+- Rays are not drawn yet
+- It doesn't succesfully understand the boundaries (walls), or it does, but it doesn't visualize it as we'd like to.
