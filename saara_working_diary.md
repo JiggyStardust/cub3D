@@ -112,3 +112,23 @@ Make moving and rendering of minimap work on a basic level and pull from main an
 - It doesn't succesfully understand the boundaries (walls), or it does, but it doesn't visualize it as we'd like to.
 
 - Merged Helmi's work from main branch, starting to connect their parsing to my work tomorrow. Right now Helmi's main() is commented out.
+
+----------------
+4th of March 2025
+----------------
+
+- Synced bonus and main branches together so that Helmi's parsing and data structs align with
+minimap handling and drawing. It makes and runs and shouldn't leak.
+There is now:
+- updated Makefile
+- updated cub3d.h with additions to data structs, functions and libraries.
+
+There are still some parts that need to be figured out together, for example:
+
+How to best enhance enum e_type	*map's features when checking for valid player moves (will updating x and y make the player hit a wall).
+
+- All the latest (today's) updates of parsing branch are not implemented, this is merged from main branch.
+
+Remarks:
+- I have free_2d_array() in my libft
+- Is there a need to allocate +1 for map (not a char array)?

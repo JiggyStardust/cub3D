@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/03/03 15:58:48 by sniemela         ###   ########.fr        #
+#    Updated: 2025/03/04 17:02:24 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,8 +38,7 @@ SOURCES = \
 	main.c \
 	parsing.c \
 	utils.c \
-	cub3d_bonus.c \
-	create_map_bonus.c \
+	hooks_bonus.c \
 	image_handling_bonus.c \
 	images_to_window_bonus.c \
 	init_utils_bonus.c \

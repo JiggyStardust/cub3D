@@ -1,39 +1,34 @@
-#include "../includes/cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   terminate_n_free_bonus.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/04 17:23:21 by sniemela          #+#    #+#             */
+/*   Updated: 2025/03/04 17:23:26 by sniemela         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void	free_map(char **array)
+#include "includes/cub3d.h"
+
+static void	delete_images(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	if (!array)
-		return ;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-	array = NULL;
+	if (data->mini_p_img)
+		mlx_delete_image(data->mlx, data->mini_p_img);
+	if (data->mini_f_img)
+		mlx_delete_image(data->mlx, data->mini_f_img);
+	if (data->mini_w_img)
+		mlx_delete_image(data->mlx, data->mini_w_img);
 }
 
-static void	delete_images(t_cubed *cubed)
+void	terminate_free(t_data *data, int error, char *message)
 {
-	if (cubed->p_img)
-		mlx_delete_image(cubed->mlx, cubed->p_img);
-	if (cubed->f_img)
-		mlx_delete_image(cubed->mlx, cubed->f_img);
-	if (cubed->w_img)
-		mlx_delete_image(cubed->mlx, cubed->w_img);
-}
-
-void	terminate_free(t_cubed *cubed, int error, char *message)
-{
-	if (cubed->map)
-		free_map(cubed->map);
-	delete_images(cubed);
-	if (cubed->mlx)
-		mlx_terminate(cubed->mlx);
-//	free(cubed);
+	if (data->map)
+		free(data->map);
+	delete_images(data);
+	if (data->mlx)
+		mlx_terminate(data->mlx);
 	if (error && message)
 	{
 		ft_printf("%s", message);
