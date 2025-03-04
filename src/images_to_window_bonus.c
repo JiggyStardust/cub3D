@@ -36,3 +36,17 @@ bool	images_to_window(t_cubed *cubed)
 		return (false);
 	return (true);
 }
+
+/*
+int i;
+struct pos;
+
+i = 0;
+while (i < width * height)
+{
+	pos = get_pos(map[i]);
+	pos.row = y;
+	pos.col = x;
+	i++;
+}
+*/
