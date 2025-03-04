@@ -1,6 +1,6 @@
 #include "../includes/cub3d.h"
 
-static mlx_image_t	*png_to_resized_img(t_cubed *cubed, const char *path_text)
+static mlx_image_t	*png_to_resized_img(t_data *data, const char *path_text)
 {
 	mlx_texture_t	*text;
 	mlx_image_t		*img;
@@ -8,7 +8,7 @@ static mlx_image_t	*png_to_resized_img(t_cubed *cubed, const char *path_text)
 	text = mlx_load_png(path_text);
 	if (!text)
 		return (NULL);
-	img = mlx_texture_to_image(cubed->mlx, text);
+	img = mlx_texture_to_image(data->mlx, text);
 	if (!img)
 	{
 		mlx_delete_texture(text);
@@ -19,23 +19,23 @@ static mlx_image_t	*png_to_resized_img(t_cubed *cubed, const char *path_text)
 	{
 		if (!mlx_resize_image(img, TILE_MINI, TILE_MINI))
 		{
-			mlx_delete_image(cubed->mlx, img);
+			mlx_delete_image(data->mlx, img);
 			return (NULL);
 		}
 	}
 	return (img);
 }
 
-bool	setup_images(t_cubed *cubed)
+bool	setup_images(t_data *data)
 {
-	cubed->f_img = png_to_resized_img(cubed, "./textures/floor.png");
-	if (!cubed->f_img)
+	data->mini_f_img = png_to_resized_img(data, "./textures/mini_floor.png");
+	if (!data->mini_f_img)
 		return (false);
-	cubed->w_img = png_to_resized_img(cubed, "./textures/wall.png");
-	if (!cubed->w_img)
+	data->mini_w_img = png_to_resized_img(data, "./textures/mini_wall.png");
+	if (!data->mini_w_img)
 		return (false);
-	cubed->p_img = png_to_resized_img(cubed, "./textures/player.png");
-	if (!cubed->p_img)
+	data->p_img = png_to_resized_img(data, "./textures/mini_player.png");
+	if (!data->mini_w_img)
 		return (false);
 	return (true);
 }

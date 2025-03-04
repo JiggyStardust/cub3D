@@ -2,142 +2,142 @@
 
 void	close_window(void *param)
 {
-	t_cubed	*cubed;
+	t_data	*data;
 
-	cubed = (t_cubed *)param;
-	terminate_free(cubed, 0, NULL);
+	data = (t_data *)param;
+	terminate_free(data, 0, NULL);
 	exit(0);
 }
 
-void	move_player(t_cubed *cubed)
+void	move_player(t_data *data)
 {
 	float	move_speed = 0.1;
 	float	turn_speed = 0.1;
 	float	x;
 	float	y;
 
-	// printf("p_y: %f, p_x: %f, p_a: %f\n", cubed->p_y, cubed->p_x, cubed->p_a);
+	// printf("p_y: %f, p_x: %f, p_a: %f\n", data->p_y, data->p_x, data->p_a);
 
-	if (mlx_is_key_down(cubed->mlx, MLX_KEY_W))
+	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
 	{
-		x = cubed->p_x - cubed->p_d_x * move_speed;
-		y = cubed->p_y - cubed->p_d_y * move_speed;
+		x = data->p_x - data->p_d_x * move_speed;
+		y = data->p_y - data->p_d_y * move_speed;
 
-		if (cubed->map[(int)y][(int)cubed->p_x] != '1')
-			cubed->p_y = y;
-		if (cubed->map[(int)cubed->p_y][(int)x] != '1')
-			cubed->p_x = x;
+		if (data->map[(int)y][(int)data->p_x] != '1')
+			data->p_y = y;
+		if (data->map[(int)data->p_y][(int)x] != '1')
+			data->p_x = x;
 	}
-	if (mlx_is_key_down(cubed->mlx, MLX_KEY_S))
+	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
 	{
-		x = cubed->p_x + cubed->p_d_x * move_speed;
-		y = cubed->p_y + cubed->p_d_y * move_speed;
+		x = data->p_x + data->p_d_x * move_speed;
+		y = data->p_y + data->p_d_y * move_speed;
 
-		if (cubed->map[(int)y][(int)cubed->p_x] != '1')
-			cubed->p_y = y;
-		if (cubed->map[(int)cubed->p_y][(int)x] != '1')
-			cubed->p_x = x;
+		if (data->map[(int)y][(int)data->p_x] != '1')
+			data->p_y = y;
+		if (data->map[(int)data->p_y][(int)x] != '1')
+			data->p_x = x;
 	}
-	if (mlx_is_key_down(cubed->mlx, MLX_KEY_LEFT))
+	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
 	{
-		cubed->p_a -= turn_speed;
-		if (cubed->p_a < 0)
-			cubed->p_a += 2 * PI;
+		data->p_a -= turn_speed;
+		if (data->p_a < 0)
+			data->p_a += 2 * PI;
 	}
-	else if (mlx_is_key_down(cubed->mlx, MLX_KEY_RIGHT))
+	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 	{
-		cubed->p_a += turn_speed;
-		if (cubed->p_a > 2 * PI)
-			cubed->p_a -= 2 * PI;
+		data->p_a += turn_speed;
+		if (data->p_a > 2 * PI)
+			data->p_a -= 2 * PI;
 	}
-	cubed->p_d_x = cos(cubed->p_a) * move_speed;
-	cubed->p_d_y = sin(cubed->p_a) * move_speed;
+	data->p_d_x = cos(data->p_a) * move_speed;
+	data->p_d_y = sin(data->p_a) * move_speed;
 }
 
-void	move_player_image(t_cubed *cubed)
+void	move_player_image(t_data *data)
 {
-	cubed->p_img->instances[0].x = cubed->p_x * TILE_MINI;
-	cubed->p_img->instances[0].y = cubed->p_y * TILE_MINI;
+	data->p_img->instances[0].x = data->p_x * TILE_MINI;
+	data->p_img->instances[0].y = data->p_y * TILE_MINI;
 }
 
 
-// void draw_player(t_cubed *cubed) // Using mlx_put_pixel and mlx_image_to_window
+// void draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
 // {
 // 	int center_x = TILE_MINI / 2;
 // 	int center_y = TILE_MINI / 2;
 // 	int	y;
 // 	int	x;
 
-// 	mlx_delete_image(cubed->mlx, cubed->p_img);
-// 	cubed->p_img = mlx_new_image(cubed->mlx, TILE_MINI, TILE_MINI);
+// 	mlx_delete_image(data->mlx, data->p_img);
+// 	data->p_img = mlx_new_image(data->mlx, TILE_MINI, TILE_MINI);
 // 	y = -6;
 // 	while (y <= 6)
 // 	{
 // 		x = -6;
 // 		while (x <= 6)
 // 		{
-// 			mlx_put_pixel(cubed->p_img, center_x + x, center_y + y, 0xFF0000FF);
+// 			mlx_put_pixel(data->p_img, center_x + x, center_y + y, 0xFF0000FF);
 // 			x++;
 // 		}
 // 		y++;
 // 	}
-// 	mlx_image_to_window(cubed->mlx, cubed->p_img, cubed->p_x * TILE_MINI, cubed->p_y * TILE_MINI);
+// 	mlx_image_to_window(data->mlx, data->p_img, data->p_x * TILE_MINI, data->p_y * TILE_MINI);
 // }
 
 void	movement(void *param)
 {
-	t_cubed		*cubed;
+	t_data		*data;
 
-	cubed = (t_cubed *)param;
-	move_player(cubed);
-	move_player_image(cubed); // moving player pixture using instances
-	//draw_player(cubed); // using mlx_put_pixel
+	data = (t_data *)param;
+	move_player(data);
+	move_player_image(data); // moving player pixture using instances
+	//draw_player(data); // using mlx_put_pixel
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_cubed	*cubed;
+	t_data	*data;
 
-	cubed = (t_cubed *)param;
+	data = (t_data *)param;
 	if (keydata.action == MLX_PRESS && keydata.key == MLX_KEY_ESCAPE)
-		terminate_free(cubed, 0, NULL);
+		terminate_free(data, 0, NULL);
 	/* 
 		Shooting, opening doors etc might come here aswell
 	*/
 }
 
-bool	init_cubed(t_cubed *cubed, char *path_to_map)
-{
-	ft_memset(cubed, 0, sizeof(cubed));
-	cubed->map = create_map(path_to_map);
-	cubed->m_height = get_height(cubed->map);
-	cubed->m_width = get_width(cubed->map);
-	cubed->mlx = mlx_init(cubed->m_width, cubed->m_height, "minimap", true);
-	if (!cubed->mlx)
-		return (false);
-	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
-	cubed->p_dir = get_player_dir(cubed->map);
-	cubed->p_a = get_player_angle(cubed->p_dir);
-	cubed->p_y = get_player_y(cubed->map, cubed->p_dir);
-	cubed->p_x = get_player_x(cubed->map, cubed->p_y, cubed->p_dir);
-	return (true);
-}
+// bool	init_cubed(t_data *data, char *path_to_map)
+// {
+	// data->map = create_map(path_to_map);
+	// data->m_height = get_height(data->map);
+	// data->m_width = get_width(data->map);
+	// data->mlx = mlx_init(data->m_width, data->m_height, "minimap", true);
+	// if (!data->mlx)
+	// 	return (false);
+	// mlx_set_setting(MLX_STRETCH_IMAGE, 1);
+	// data->p_dir = get_player_dir(data->map);
 
-int main(int ac, char **av)
-{
-	t_cubed	cubed;
+	// data->p_a = get_player_angle(data->p_dir);
+	// data->p_y = get_player_y(data->map, data->p_dir);
+	// data->p_x = get_player_x(data->map, data->p_y, data->p_dir);
+	// return (true);
+// }
 
-	if (ac != 2)
-		return (1);
-	if (!init_cubed(&cubed, av[1]))
-		return (1);
-	if (!setup_images(&cubed))
-		terminate_free(&cubed, 1, "Error\nProblem with setup_images.\n");
-	if (!images_to_window(&cubed))
-		terminate_free(&cubed, 1, "Error\nProblem with opening the window.\n");
-	mlx_key_hook(cubed.mlx, &key_hook, &cubed);
-	mlx_loop_hook(cubed.mlx, &movement, &cubed);
-	mlx_close_hook(cubed.mlx, &close_window, &cubed);
-	mlx_loop(cubed.mlx);
-	terminate_free(&cubed, 0, NULL);
-}
+// int main(int ac, char **av)
+// {
+// 	t_data	data;
+
+// 	if (ac != 2)
+// 		return (1);
+// 	if (!init_cubed(&data, av[1]))
+// 		return (1);
+// 	if (!setup_images(&data))
+// 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
+// 	if (!images_to_window(&data))
+// 		terminate_free(&data, 1, "Error\nProblem with opening the window.\n");
+// 	mlx_key_hook(data.mlx, &key_hook, &data);
+// 	mlx_loop_hook(data.mlx, &movement, &data);
+// 	mlx_close_hook(data.mlx, &close_window, &data);
+// 	mlx_loop(data.mlx);
+// 	terminate_free(&data, 0, NULL);
+// }

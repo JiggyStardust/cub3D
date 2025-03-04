@@ -1,43 +1,40 @@
 #include "../includes/cub3d.h"
 
-static bool	draw_wf(t_cubed *cubed, char c, int x, int y)
+static bool	draw_wf(t_data *data, char c, int x, int y)
 {
 	mlx_image_t	*image;
 
-	if (c == '0' || c == cubed->p_dir)
-		image = cubed->f_img;
+	if (c == '0' || c == data->p_dir)
+		image = data->f_img;
 	else if (c == '1')
-		image = cubed->w_img;
+		image = data->w_img;
 	else
 		return (true);
-	if (mlx_image_to_window(cubed->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
+	if (mlx_image_to_window(data->mlx, image, x * TILE_MINI, y * TILE_MINI) == -1)
 		return (false);
 	return (true);
 }
 
-bool	images_to_window(t_cubed *cubed)
+bool	images_to_window(t_data *data)
 {
-	int	x;
-	int	y;
+	int			i;
+	t_position	pos;
 
-	y = 0;
-	while (cubed->map[y] != NULL)
+	i = 0;
+	while (i < data->map_info->width * data->map_info->height)
 	{
-		x = 0;
-		while (cubed->map[y][x] != '\0')
-		{
-			if (!draw_wf(cubed, cubed->map[y][x], x, y))
-				return (false);
-			x++;
-		}
-		y++;
+		pos = get_pos(data->map[i]);
+		if (!draw_wf(data, data->map[pos.row][[pos.col]], pos.col, pos.row))
+			return (false);
+		i++;
 	}
-	if (mlx_image_to_window(cubed->mlx, cubed->p_img, x * TILE_MINI, y * TILE_MINI) == -1)
+	// wtf miten taa on aiemmin toiminuu??? : D 
+	if (mlx_image_to_window(data->mlx, data->p_img, x * TILE_MINI, y * TILE_MINI) == -1)
 		return (false);
 	return (true);
 }
 
-/*
+/*	MITEN KAYTTAA GET_POS T HELMI
 int i;
 struct pos;
 

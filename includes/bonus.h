@@ -13,29 +13,9 @@
 # include "cub3d.h"
 # include <math.h>
 
-typedef struct s_cubed
-{
-	float	p_x; // player X position
-	float	p_y; // player Y position
-	float	p_d_x; // player delta X
-	float	p_d_y; // player delta Y
-	float	p_a; // player angle
-	int 	x; // player pos in X tiles
-	int		y; // player pos in Y tiles
-	char	p_dir; // marks player and beginning direction
-	char	**map;
-	int		m_height;
-	int		m_width;
-	mlx_t	*mlx;
-	mlx_image_t		*p_img; // player image
-	mlx_image_t		*f_img; // floor image
-	mlx_image_t		*w_img; // wall image
-} t_cubed;
-
-
 char	**create_map(char *path);
-bool	setup_images(t_cubed *cubed);
-void	terminate_free(t_cubed *cubed, int error, char *message);
+bool	setup_images(t_data *data);
+void	terminate_free(t_data *data, int error, char *message);
 
 char	get_player_dir(char **map);
 int		get_height(char **map);
@@ -44,9 +24,9 @@ float	get_player_x(char **map, int y, char p_dir);
 float	get_player_y(char **map, char p_dir);
 float	get_player_angle(char dir);
 
-bool	images_to_window(t_cubed *cubed);
+bool	images_to_window(t_data *data);
 
-// bool	move_player(t_cubed *cubed, int x, int y);
-void move_player(t_cubed *cubed);
+// bool	move_player(t_data *data, int x, int y);
+void move_player(t_data *data);
 
 #endif
