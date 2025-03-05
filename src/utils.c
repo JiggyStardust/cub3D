@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:46:53 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/05 11:29:29 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:21:37 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ t_position	get_pos(t_data *data, int i)
 	int	row;
 	int col;
 	
+	pos.col = 0;
 	pos.row = 0;
 	row = 0;
-	while (row < i)
+	while (row <= i)
 	{
 		pos.row++;
 		row += data->map_info.width;
 	}
-	pos.col = 0;
-	col = (pos.row - 1) * data->map_info.width;
 	pos.row--;
-	while (col++ < i - 1)
+	col = pos.row * data->map_info.width;
+	while (col++ < i)
 		pos.col++;
 	return (pos);
 }
