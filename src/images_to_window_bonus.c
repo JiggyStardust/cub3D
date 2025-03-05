@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:22:23 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/04 16:23:38 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/05 11:39:12 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	draw_floor_n_walls(t_data *data, enum e_type c, int x, int y)
 {
 	mlx_image_t	*image;
 
-	if (c == FLOOR || c == S || c == W || c == E || c == N)
+	if (c == FLOOR)
 		image = data->mini_f_img;
 	else if (c == WALL)
 		image = data->mini_w_img;

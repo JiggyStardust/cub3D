@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:46:53 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/04 15:41:11 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/05 11:29:29 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,23 @@ t_position	get_pos(t_data *data, int i)
 	return (pos);
 }
 
-enum e_type	player(char c)
+t_player	player(char c, int j, t_data *data)
 {
+	t_player	player;
+	t_position	pos;
+	
 	if (c == 'N')
-		return (N);
+		player.p_dir = 'N';
 	if (c == 'S')
-		return (S);
+		player.p_dir = 'S';
 	if (c == 'W')
-		return (W);
+		player.p_dir = 'W';
 	if (c == 'E')
-		return (E);
-	return (0);
+		player.p_dir = 'E';
+	pos = get_pos(data, j);
+	player.x = (float)pos.col;
+	player.y = (float)pos.row;
+	return (player);
 }
 
 int	to_map(t_data *data, char *line, int j)
@@ -80,7 +86,10 @@ int	to_map(t_data *data, char *line, int j)
 			else if (line[i] == '1')
 				data->map[j++] = WALL;
 			else if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' || line[i] == 'E')
-				data->map[j++] = player(line[i]);
+			{
+				data->player = player(line[i], j, data);
+				data->map[j++] = FLOOR; 
+			}
 			else
 				data->map[j++] = PADDING;
 		}
