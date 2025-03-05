@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/26 16:05:07 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:41:03 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "includes/cub3d.h"
 
 int	textures(char **info, t_data *data)
 {
@@ -113,7 +113,8 @@ int	get_map_size(t_data *data)
 	while (line)
 	{
 		j = 0;
-		if (line[j] == 'N' || line[j] == 'W' || line[j] == 'S' || line[j] == 'E' || line[j] == 'F' || line[j] == 'C' || line[j] == '\n')
+		if (line[j] == 'N' || line[j] == 'W' || line[j] == 'S' || line[j] == 'E'
+				 || line[j] == 'F' || line[j] == 'C' || line[j] == '\n')
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -164,7 +165,8 @@ int	get_map(t_data *data)
 	while (line)
 	{
 		i = 0;
-		if (line[i] == 'N' || line[i] == 'W' || line[i] == 'S' || line[i] == 'E' || line[i] == 'F' || line[i] == 'C' || line[i] == '\n')
+		if (line[i] == 'N' || line[i] == 'W' || line[i] == 'S' || line[i] == 'E'
+				|| line[i] == 'F' || line[i] == 'C' || line[i] == '\n')
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -178,7 +180,7 @@ int	get_map(t_data *data)
 	return (1);
 }
 
-#include <stdio.h>
+/*#include <stdio.h>
 
 void	type_check(t_data *data)
 {
@@ -200,7 +202,7 @@ void	type_check(t_data *data)
 	type = get_type(data, 1, 2);
 	printf("should be 2:\n");
 	printf("type: %d\n", type);	
-}
+}*/
 
 int	parsing(t_data *data, char **argv)
 {

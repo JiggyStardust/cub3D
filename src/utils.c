@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:46:53 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/02/26 16:03:16 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:41:11 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "includes/cub3d.h"
 
 void	free_2d_array(char **ptr)
 {
@@ -21,16 +21,16 @@ void	free_2d_array(char **ptr)
 		free(ptr[i]);
 	free(ptr);
 }
-#include <stdio.h>
-enum e_type	get_type(t_data *data, int row, int col)
-{
-	//return what type is in pos
-	int	i;
+// #include <stdio.h>
+// enum e_type	get_type(t_data *data, int row, int col)
+// {
+// 	//return what type is in pos
+// 	int	i;
 
-	i = ((row - 1) * data->map_info.width) + col - 1;
-	printf("i: %d\n", i);
-	return (data->map[i]);
-}
+// 	i = ((row - 1) * data->map_info.width) + col - 1;
+// 	printf("i: %d\n", i);
+// 	return (data->map[i]);
+// }
 
 t_position	get_pos(t_data *data, int i)
 {
@@ -47,7 +47,8 @@ t_position	get_pos(t_data *data, int i)
 	}
 	pos.col = 0;
 	col = (pos.row - 1) * data->map_info.width;
-	while (col++ <= i)
+	pos.row--;
+	while (col++ < i - 1)
 		pos.col++;
 	return (pos);
 }
