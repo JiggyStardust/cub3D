@@ -132,3 +132,23 @@ How to best enhance enum e_type	*map's features when checking for valid player m
 Remarks:
 - I have free_2d_array() in my libft
 - Is there a need to allocate +1 for map (not a char array)?
+
+
+----------------
+5th of March 2025
+----------------
+
+- Compared to main bonus has changes in moving_bonus.c. 
+Trying to figure out how to do wall checks with current map that isn't 2D array.
+
+But: If in index y = 3 and x = 3 an obstacle (WALL) exists, that means:
+
+	(x,3) == WALL, but the wall takes up the whole tile/index.
+	
+	So also y = 2,000001 == WALL AND 2,99999999999 == WALL.
+	
+	(3,y) == WALL, but the wall takes up the whole tile/index.
+
+	So also x = 3,000001 == WALL AND 3,99999999999 == WALL.
+
+I'll continue on this thought tomorrow, but checking x and checking y obstacles is slightly different

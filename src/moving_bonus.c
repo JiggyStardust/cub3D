@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/05 15:54:07 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:08:56 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	move_player(t_data *data)
 		y = data->player.y - data->player.d_y * move_speed;
 		i = get_index_of_rov_and_col(data, x, y);
 		printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
-		printf("future index i: %d\n", i);
+		printf("y: %f, x: %f, index i: %d\n", y, x, i);
 
 		// if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
 			data->player.y = y;
@@ -49,7 +49,7 @@ void	move_player(t_data *data)
 		y = data->player.y + data->player.d_y * move_speed;
 		i = get_index_of_rov_and_col(data, x, y);
 		printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
-		printf("future index i: %d\n", i);
+		printf("y: %f, x: %f, index i: %d\n", y, x, i);
 	//	if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
 			data->player.y = y;
 	//	if (data->map[(int)data->player.y][(int)x] != '1') How to do this check smoothly with current map?
