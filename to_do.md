@@ -1,0 +1,2 @@
+- free_2d_array -> from ** to *** so can set pointer to NULL (and move it to libft)
+- 
