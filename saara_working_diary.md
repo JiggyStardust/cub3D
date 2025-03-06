@@ -180,3 +180,15 @@ This means we can now detect if we are going to hit a wall or now, with the exce
 
 - To do: Now we can move and detect walls when pressing W and S (Forward and back) with rotation, but need to also update movement to left and right.
 
+- Started working on that, probably need another variables for delta_x and delta_y. We now have player.d_x and player.d_y which are based on forward and back movement:
+	`data->player.d_x = cos(data->player.angle) * move_speed;`
+	`data->player.d_y = sin(data->player.angle) * move_speed;`
+
+but for left and right movement it goes:
+
+	`data->player.d_x = cos(data->player.angle + PI / 2) * move_speed;`
+	`data->player.d_y = sin(data->player.angle + PI / 2) * move_speed;`
+
+Will continue working with this tomorrow.
+
+

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/05 11:42:26 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:11:30 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,20 +153,36 @@ bool	images_to_window(t_data *data);
 // moving_bonus.c
 
 /*******************************************************************************
- * We first update the players movements by calling move_player(data). Then we move
- * the player image by calling move_player_image().
+ * We first update the players movements by calling move_up_down(data) and 
+ * move_left_right. Then we move the player image by calling move_player_image().
  ******************************************************************************/
 void	movement(void *param);
+
 /*******************************************************************************
  * @param move_speed how many pixels we move (forward or backwards).
  * @param move_speed how many pixels we turn.
  * @param x players X position after potential move (if not hitting a wall)
  * @param y players Y position after potential move (if not hitting a wall)
+ * @param i index on the map (1D enum array), helps us define movement limitations
+ * (WALLS).
  * 
  * The function updates t_player's x, y, angle, delta_x and delta_y based on which keys are pressed.
- * W = forward, S = backwards, < = turn left, > = turn right.
+ * A = left, D = right, < rotate left, > rotate right.
  ******************************************************************************/
-void 	move_player(t_data *data);
+void	move_left_right(t_data *data);
+
+/*******************************************************************************
+ * @param move_speed how many pixels we move (forward or backwards).
+ * @param move_speed how many pixels we turn.
+ * @param x players X position after potential move (if not hitting a wall)
+ * @param y players Y position after potential move (if not hitting a wall)
+ * @param i index on the map (1D enum array), helps us define movement limitations
+ * (WALLS).
+ * 
+ * The function updates t_player's x, y, angle, delta_x and delta_y based on which keys are pressed.
+ * W = forward, S = backwards, < rotate left, > rotate right.
+ ******************************************************************************/
+void	move_up_down(t_data *data);
 /*******************************************************************************
  * We move the player picture using mlx_image_t's instances, which are created
  * when player image is drawn on top of the map with mlx_image_to_window()
