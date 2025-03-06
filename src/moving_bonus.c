@@ -6,17 +6,46 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/05 16:08:56 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:11:46 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-int		get_index_of_rov_and_col(t_data *data, float x, float y)
+int		get_index_of_rov_and_col(t_data *data, int x, int y, int forward)
 {
 	float	i;
 
-	i = y * data->map_info.width + (x + 1);
+	if (forward)
+	{
+		// printf("player angle: %f\n", data->player.angle);
+		if (data->player.angle > PI / 2 && data->player.angle < 3 * PI / 2)
+			x++;
+		if (data->player.angle > PI && data->player.angle < 2 * PI)
+			y++;
+	}
+	else
+	{
+		// printf("player angle: %f\n", data->player.angle);
+		if ((data->player.angle <= 2 * PI && data->player.angle > 3 * PI / 2) \
+			|| (data->player.angle >= 0 && data->player.angle < PI / 2))
+		{
+			// printf("x++\n");
+			x++;
+		}
+		// else
+		// // if (data->player.angle > PI / 2 && data->player.angle < 3 * PI / 2)
+		// {
+		// 	printf("x--\n");
+		// 	x--;
+		// }
+		if (data->player.angle < PI && data->player.angle > 0)
+		{
+			// printf("loooooool\n");
+			y++;
+		}
+	}
+	i = y * data->map_info.width + x;
 	return (i);
 }
 
@@ -34,26 +63,44 @@ void	move_player(t_data *data)
 	{
 		x = data->player.x - data->player.d_x * move_speed;
 		y = data->player.y - data->player.d_y * move_speed;
-		i = get_index_of_rov_and_col(data, x, y);
-		printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
-		printf("y: %f, x: %f, index i: %d\n", y, x, i);
-
+		i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(y), 1);
+		// printf("y: %f, x: %f, index i: %d\n", y, x, i);
+		
 		// if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
+		if (data->map[i] == FLOOR)
+		{	
 			data->player.y = y;
+		}
 		// if (data->map[(int)data->player.y][(int)x] != '1') How to do this check smoothly with current map?
+		i = get_index_of_rov_and_col(data, (int)(x), (int)(data->player.y), 1);
+		if (data->map[i] == FLOOR)
+		{
 			data->player.x = x;
+		}
+		i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
+		// printf("p_y: %f, p_x: %f, p_a: %f, index i: %d\n", data->player.y, data->player.x, data->player.angle, i);
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
 	{
 		x = data->player.x + data->player.d_x * move_speed;
 		y = data->player.y + data->player.d_y * move_speed;
-		i = get_index_of_rov_and_col(data, x, y);
-		printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
-		printf("y: %f, x: %f, index i: %d\n", y, x, i);
-	//	if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
+		i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(y), 0);
+		// printf("p_y: %f, p_x: %f, p_a: %f, index i: %d\n", data->player.y, data->player.x, data->player.angle, i);
+		// printf("y: %f, x: %f, index i: %d\n", y, x, i);
+
+		// if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
+		if (data->map[i] == FLOOR)
+		{	
 			data->player.y = y;
-	//	if (data->map[(int)data->player.y][(int)x] != '1') How to do this check smoothly with current map?
+		}
+		// if (data->map[(int)data->player.y][(int)x] != '1') How to do this check smoothly with current map?
+		i = get_index_of_rov_and_col(data, (int)(x), (int)(data->player.y), 0);
+		if (data->map[i] == FLOOR)
+		{
 			data->player.x = x;
+		}
+		i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 0);
+		// printf("p_y: %f, p_x: %f, p_a: %f, index i: %d\n", data->player.y, data->player.x, data->player.angle, i);
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
 	{
