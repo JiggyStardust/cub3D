@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/05 11:42:26 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:28:34 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ t_position	get_pos(t_data *data, int i);
 enum e_type	get_type(t_data *data, int row, int col);
 t_player    player(char c, int j, t_data *data);
 
+//validate.c
+int	is_valid(t_data *data);
 //init_utils_bonus.c 
 /*******************************************************************************
  * @param i the index on the map

@@ -6,13 +6,13 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/04 15:41:03 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:28:02 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-int	textures(char **info, t_data *data)
+/*int	textures(char **info, t_data *data)
 {
 	if (!ft_strncmp(info[0], "NO", 3))
 	{
@@ -39,6 +39,52 @@ int	textures(char **info, t_data *data)
 			return (0);
 	}
 	return (1);
+}*/
+
+int	add_texture(char *src, char **dest)
+{
+	if (*dest)
+	{
+		ft_putstr_fd("Found texture '", 2);
+		ft_putstr_fd(src, 2);
+		ft_putstr_fd("' multiple times\n", 2);
+		return (0);
+	}
+	*dest = ft_strdup(src);
+	if (!*dest)
+		return (ft_putstr_fd("Alloctation failed\n", 2), 0);
+	return (1);
+}
+
+int	textures(char **info, t_data *data)
+{
+	char	**texture;
+	
+	texture = ft_split(info[1], '\n');
+	if (!texture && ft_strncmp(info[0], "\n", 2))
+		return (0);
+	if (!ft_strncmp(info[0], "NO", 3))
+	{
+		if (!add_texture(texture[0], &data->map_info.NO))
+			return (free_2d_array(texture), 0);
+	}
+	else if (!ft_strncmp(info[0], "SO", 3))
+	{
+		if (!add_texture(texture[0], &data->map_info.SO))
+			return (free_2d_array(texture), 0);
+	}
+	else if (!ft_strncmp(info[0], "EA", 3))
+	{
+		if (!add_texture(texture[0], &data->map_info.EA))
+			return (free_2d_array(texture), 0);
+	}
+	else if (!ft_strncmp(info[0], "WE", 3))
+	{
+		if (!add_texture(texture[0], &data->map_info.WE))
+			return (free_2d_array(texture), 0);
+	}
+	free_2d_array(texture);
+	return (1);
 }
 
 int	get_color(char **info, t_data *data)
@@ -52,16 +98,40 @@ int	get_color(char **info, t_data *data)
 		return (free_2d_array(rgb), 0);
 	if (*info[0] == 'F')
 	{
+		if (data->map_info.floor_color.found)
+			return (free_2d_array(rgb), 0);
+		data->map_info.floor_color.found = 1;
 		data->map_info.floor_color.r = ft_atoi(rgb[0]);
 		data->map_info.floor_color.g = ft_atoi(rgb[1]);
 		data->map_info.floor_color.b = ft_atoi(rgb[2]);
 	}
 	else if (*info[0] == 'C')
 	{
+		if (data->map_info.ceiling_color.found)
+			return (free_2d_array(rgb), 0);
+		data->map_info.ceiling_color.found = 1;
 		data->map_info.ceiling_color.r = ft_atoi(rgb[0]);
 		data->map_info.ceiling_color.g = ft_atoi(rgb[1]);
 		data->map_info.ceiling_color.b = ft_atoi(rgb[2]);
 	}
+	free_2d_array(rgb);
+	return (1);
+}
+
+int	all_found(t_data *data)
+{
+	if (!data->map_info.NO)
+		return (0);
+	if (!data->map_info.SO)
+		return (0);
+	if (!data->map_info.EA)
+		return (0);
+	if (!data->map_info.WE)
+		return (0);
+	if (!data->map_info.floor_color.found)
+		return (0);
+	if (!data->map_info.ceiling_color.found)
+		return (0);
 	return (1);
 }
 
@@ -86,7 +156,7 @@ int	get_texture_and_color(t_data *data)
 			if (!get_color(info, data))
 				return (free_2d_array(info), 0);
 		}
-		else
+		else if (info[0][0] == 'N' || info[0][0] == 'S' || info[0][0] == 'W' || info[0][0] == 'E')
 		{
 			if (!textures(info, data))
 				return (free_2d_array(info), 0);
@@ -95,6 +165,8 @@ int	get_texture_and_color(t_data *data)
 		line = get_next_line(fd);
 	}
 	close(fd);
+	if (!all_found(data))
+		return (0);
 	return (1);
 }
 
@@ -215,6 +287,8 @@ int	parsing(t_data *data, char **argv)
 	if (!get_texture_and_color(data))
 		return (0);
 	if (!get_map(data))
+		return (0);
+	if (!is_valid(data))
 		return (0);
 	/*printf("north: %s\n", data->map_info.NO);
 	printf("south: %s\n", data->map_info.SO);
