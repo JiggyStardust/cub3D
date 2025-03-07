@@ -154,7 +154,7 @@ But: If in index y = 3 and x = 3 an obstacle (WALL) exists, that means:
 I'll continue on this thought tomorrow, but checking x and checking y obstacles is slightly different
 
 ----------------
-5th of March 2025
+6th of March 2025
 ----------------
 Start of the day:
 
@@ -191,4 +191,17 @@ but for left and right movement it goes:
 
 Will continue working with this tomorrow.
 
+----------------
+7th of March 2025
+----------------
 
+- Morning brain is amazing, in just 15 mins I managed to get our player move 
+with A and D keys to left and right in 90 deg difference compared to back and front.
+
+- I managed it now by locally calculating new delta_x's and delta_y's, but will probably add 
+new variables to struct once I know how to name them.
+
+- created a separate function turn_player(t_data *data) for updating players angle and player.delta_x and player.delta_y instead of
+handling it in the moving functions.
+
+- Added enum dir_type struct for moving direction, enums = "FORWARD, REVERSE, LEFT, RIGHT".

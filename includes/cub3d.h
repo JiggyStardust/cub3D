@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/06 17:11:30 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:53:55 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # define TILE_MINI 50
 # define RED 0xFF0000FF
 # define PI 3.14159265359
+# define MOVE_SPEED 0.1
+# define TURN_SPEED 0.05
 
 # include "../libft/libft.h"
 # include "MLX42/include/MLX42/MLX42.h"
@@ -68,6 +70,14 @@ enum	e_type
 	S,
 	W,
 	E
+};
+
+enum	dir_type
+{
+	FORWARD,
+	REVERSE,
+	LEFT,
+	RIGHT
 };
 
 typedef struct s_data
