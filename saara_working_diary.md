@@ -1,5 +1,5 @@
 ----------------
-th of February 2025
+24th of February 2025
 ----------------
 - Continued the research about the raycasting part. Sources so far: https://lodev.org/cgtutor/raycasting.html and https://www.youtube.com/watch?v=gYRrGTC7GtA
 - Doesn't run atm, a super basicc minimap is work in progress (trying to use my so_long as much as possible).
@@ -132,3 +132,76 @@ How to best enhance enum e_type	*map's features when checking for valid player m
 Remarks:
 - I have free_2d_array() in my libft
 - Is there a need to allocate +1 for map (not a char array)?
+
+
+----------------
+5th of March 2025
+----------------
+
+- Compared to main bonus has changes in moving_bonus.c. 
+Trying to figure out how to do wall checks with current map that isn't 2D array.
+
+But: If in index y = 3 and x = 3 an obstacle (WALL) exists, that means:
+
+	(x,3) == WALL, but the wall takes up the whole tile/index.
+	
+	So also y = 2,000001 == WALL AND 2,99999999999 == WALL.
+	
+	(3,y) == WALL, but the wall takes up the whole tile/index.
+
+	So also x = 3,000001 == WALL AND 3,99999999999 == WALL.
+
+I'll continue on this thought tomorrow, but checking x and checking y obstacles is slightly different
+
+----------------
+6th of March 2025
+----------------
+Start of the day:
+
+This morning I've drawn a fusion of a coordinate system and map (as a 2D array although our parsing handles map 1D).
+Checking x and checking y obstacles is slightly different depending on the direction (map->player.angle) you're approaching from.
+
+I'm not sure if I'm on the right track or making this too hard, but this is my hypothesis:
+
+When moving up (N) ergo: y_new < y_current && player.angle < PI (180°), it's enough to check if y_new != WALL.
+When moving down (S) ergo: y_new > y_current && player.angle > PI (180°), we need to check if y_new + 1 != WALL.
+
+
+When moving left (W) ergo: x_new < x_current && player.angle < PI/2 (90°) || player.angle > 3PI/2 (270°).
+When moving right (E) ergo: x_new > x_current && PI/2 (90°) < player.angle 3PI/2 (270°), we need to check if x_new - 1 = WALL.
+
+Remembering that if our player.angle reaches 2PI (360°), we will -= 2PI (360°) making it start again with 0.
+
+Update:
+
+We've finally managed to update function `int		get_index_of_rov_and_col(t_data *data, int x, int y, int forward)	`
+to succefully detect upcoming map index based on the direction (angle) we are headed to, and whether we are moving forward or backwards.
+This means we can now detect if we are going to hit a wall or now, with the exception of quoins (outward corners).
+
+- To do: Now we can move and detect walls when pressing W and S (Forward and back) with rotation, but need to also update movement to left and right.
+
+- Started working on that, probably need another variables for delta_x and delta_y. We now have player.d_x and player.d_y which are based on forward and back movement:
+	`data->player.d_x = cos(data->player.angle) * move_speed;`
+	`data->player.d_y = sin(data->player.angle) * move_speed;`
+
+but for left and right movement it goes:
+
+	`data->player.d_x = cos(data->player.angle + PI / 2) * move_speed;`
+	`data->player.d_y = sin(data->player.angle + PI / 2) * move_speed;`
+
+Will continue working with this tomorrow.
+
+----------------
+7th of March 2025
+----------------
+
+- Morning brain is amazing, in just 15 mins I managed to get our player move 
+with A and D keys to left and right in 90 deg difference compared to back and front.
+
+- I managed it now by locally calculating new delta_x's and delta_y's, but will probably add 
+new variables to struct once I know how to name them.
+
+- created a separate function turn_player(t_data *data) for updating players angle and player.delta_x and player.delta_y instead of
+handling it in the moving functions.
+
+- Added enum dir_type struct for moving direction, enums = "FORWARD, REVERSE, LEFT, RIGHT".
