@@ -1,3 +1,11 @@
+NO textures/mini_floor.png
+SO textures/mini_player.png
+WE textures/mini_wall.png
+EA textures/zoo.png
+
+F 200,10,0
+C 225,30,0
+
 111111111111111
 100000000000001
 100011101110001
