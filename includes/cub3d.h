@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 11:04:33 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 13:59:28 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CUB3D_H
 
 # define TILE_MINI 50
+# define HEIGHT 1500
+# define WIDTH 1500
 # define RED 0xFF0000FF
 # define PI 3.14159265359
 # define MOVE_SPEED 0.1
@@ -91,6 +93,8 @@ typedef struct s_data
 	mlx_image_t		*mini_p_img; // player image
 	mlx_image_t		*mini_f_img; // floor image
 	mlx_image_t		*mini_w_img; // wall image
+	mlx_image_t		*floor_img;
+	mlx_image_t		*ceiling_img;
 }	t_data;
 
 //main.c

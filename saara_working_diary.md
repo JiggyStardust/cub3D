@@ -205,3 +205,9 @@ new variables to struct once I know how to name them.
 handling it in the moving functions.
 
 - Added enum dir_type struct for moving direction, enums = "FORWARD, REVERSE, LEFT, RIGHT".
+
+----------------
+8th of March 2025
+----------------
+
+- Floor and ceiling are drawn, now we start to build the raycaster logic together.

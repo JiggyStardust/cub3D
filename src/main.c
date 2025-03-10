@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 12:05:46 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:28:23 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,55 @@ void	cleanup(t_data *data)
 		free(data->map_info.EA);
 }
 
+void	raycaster(t_data *data)
+{
+	float	dir_x;
+	float	dir_y;
+	float	plane_x;
+	float	plane_y;
+	float 	camera_x;
+	float	ray_dir_x;
+	float 	ray_dir_y;
+	int		map
+
+	if (data->player.p_dir == 'N')
+	{
+		dir_x = 0;
+		dir_y = -1;
+		plane_x = 0.66;
+		plane_y = 0;
+	}
+	if (data->player.p_dir == 'S')
+	{
+		dir_x = 0;
+		dir_y = 1;
+		plane_x = 0.66;
+		plane_y = 0;
+	}
+	if (data->player.p_dir == 'W')
+	{
+		dir_x = -1;
+		dir_y = 0;
+		plane_x = 0;
+		plane_y = 0.66;
+	}
+	if (data->player.p_dir == 'E')
+	{
+		dir_x = 1;
+		dir_y = 0;
+		plane_x = 0;
+		plane_y = 0,66;
+	}
+	for(int x = 0; x < WIDTH; x++)
+    {
+      camera_x = 2 * x / (float)WIDTH - 1; //x-coordinate in camera space
+      ray_dir_x = dir_x + plane_x * camera_x;
+      ray_dir_y = dir_y + plane_y * camera_x;
+
+	}
+
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -52,16 +101,14 @@ int	main(int argc, char **argv)
 	init_data(&data);
 	if (!parsing(&data, argv))
 		return (cleanup(&data), 1);
-	data.mlx = mlx_init(data.map_info.width * TILE_MINI, data.map_info.height * TILE_MINI, "minimap", true);
+	data.mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", true);
 	if (!data.mlx)
 		return (false);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
-
 	data.player.angle = get_player_angle(data.player.p_dir);
-	//get_player_x_y(data.map, &data);
-	// printf("x: %f, d: %f, player angle: %f\n", data.player.x, data.player.y, data.player.angle);
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
+	raycaster(&data);
 	if (!images_to_window(&data))
 		terminate_free(&data, 1, "Error\nProblem with opening the window.\n");
 	mlx_key_hook(data.mlx, &key_hook, &data);
