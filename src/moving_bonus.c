@@ -98,6 +98,7 @@ void	move_left_right(t_data *data)
 		i = get_index_of_rov_and_col(data, (int)(x), (int)(data->player.y), 2);
 		if (data->map[i] == FLOOR)
 			data->player.x = x;
+		
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
 	{

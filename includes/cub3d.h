@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/07 10:53:55 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:04:33 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_player
 	float	d_y; // player delta Y
 	float	angle; // player angle
 	char	p_dir;
+	int	found;
 }	t_player;
 
 typedef struct s_position
@@ -103,6 +104,8 @@ t_position	get_pos(t_data *data, int i);
 enum e_type	get_type(t_data *data, int row, int col);
 t_player    player(char c, int j, t_data *data);
 
+//validate.c
+int	is_valid(t_data *data);
 //init_utils_bonus.c 
 /*******************************************************************************
  * @param i the index on the map

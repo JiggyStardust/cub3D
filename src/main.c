@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/05 11:44:10 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:05:46 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	init_data(t_data *data)
 	data->map_info.floor_color.found = 0;
 	data->map_info.ceiling_color.found = 0;
 	data->map = NULL;
+	data->player.found = 0;
 }
 
 void	cleanup(t_data *data)
@@ -50,7 +51,7 @@ int	main(int argc, char **argv)
 		return (ft_putstr_fd("Example: ./cub3D file.cub\n", 2), 1);
 	init_data(&data);
 	if (!parsing(&data, argv))
-		return (ft_putstr_fd("Example: ./cub3D file.cub\n", 2), 1);
+		return (cleanup(&data), 1);
 	data.mlx = mlx_init(data.map_info.width * TILE_MINI, data.map_info.height * TILE_MINI, "minimap", true);
 	if (!data.mlx)
 		return (false);

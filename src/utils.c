@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:46:53 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/05 12:21:37 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:06:07 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,13 @@ int	to_map(t_data *data, char *line, int j)
 				data->map[j++] = WALL;
 			else if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' || line[i] == 'E')
 			{
-				data->player = player(line[i], j, data);
+				if (!data->player.found)
+				{
+					data->player = player(line[i], j, data);
+					data->player.found = 1;
+				}
+				else
+					return (ft_putstr_fd("Player in map multiple times\n", 2), 0);
 				data->map[j++] = FLOOR; 
 			}
 			else

@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/03/04 17:02:24 by sniemela         ###   ########.fr        #
+#    Updated: 2025/03/06 15:29:08 by hpirkola         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ CC = cc
 SOURCES = \
 	main.c \
 	parsing.c \
+	validate.c \
 	utils.c \
 	hooks_bonus.c \
 	image_handling_bonus.c \
