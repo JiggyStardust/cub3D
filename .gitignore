@@ -1,5 +1,5 @@
 obj/
 MLX42
 cub3D
-libft
 *.o 
+libft.a
