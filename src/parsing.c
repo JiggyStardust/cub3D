@@ -6,40 +6,11 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/06 15:28:02 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:07:24 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
-
-/*int	textures(char **info, t_data *data)
-{
-	if (!ft_strncmp(info[0], "NO", 3))
-	{
-		data->map_info.NO = ft_strdup(info[1]);
-		if (!data->map_info.NO)
-			return (0);
-	}
-	else if (!ft_strncmp(info[0], "SO", 3))
-	{
-		data->map_info.SO = ft_strdup(info[1]);
-		if (!data->map_info.SO)
-			return (0);
-	}
-	else if (!ft_strncmp(info[0], "EA", 3))
-	{
-		data->map_info.EA = ft_strdup(info[1]);
-		if (!data->map_info.EA)
-			return (0);
-	}
-	else if (!ft_strncmp(info[0], "WE", 3))
-	{
-		data->map_info.WE = ft_strdup(info[1]);
-		if (!data->map_info.WE)
-			return (0);
-	}
-	return (1);
-}*/
 
 int	add_texture(char *src, char **dest)
 {
@@ -87,6 +58,17 @@ int	textures(char **info, t_data *data)
 	return (1);
 }
 
+int	set_color(char **rgb, t_rgb *colors)
+{
+	colors->found = 1;
+	colors->r = ft_atoi(rgb[0]);
+	colors->g = ft_atoi(rgb[1]);
+	colors->b = ft_atoi(rgb[2]);
+	if (colors->r > 255 || colors->r < 0 || colors->g > 255 || colors->g < 0 || colors->b > 255 || colors->b < 0)
+		return (ft_putstr_fd("Color out of range\n", 2), 0);
+	return (1);
+}
+
 int	get_color(char **info, t_data *data)
 {
 	char	**rgb;
@@ -100,19 +82,15 @@ int	get_color(char **info, t_data *data)
 	{
 		if (data->map_info.floor_color.found)
 			return (free_2d_array(rgb), 0);
-		data->map_info.floor_color.found = 1;
-		data->map_info.floor_color.r = ft_atoi(rgb[0]);
-		data->map_info.floor_color.g = ft_atoi(rgb[1]);
-		data->map_info.floor_color.b = ft_atoi(rgb[2]);
+		if (!set_color(rgb, &data->map_info.floor_color))
+			return (free_2d_array(rgb), 0);
 	}
 	else if (*info[0] == 'C')
 	{
 		if (data->map_info.ceiling_color.found)
 			return (free_2d_array(rgb), 0);
-		data->map_info.ceiling_color.found = 1;
-		data->map_info.ceiling_color.r = ft_atoi(rgb[0]);
-		data->map_info.ceiling_color.g = ft_atoi(rgb[1]);
-		data->map_info.ceiling_color.b = ft_atoi(rgb[2]);
+		if (!set_color(rgb, &data->map_info.ceiling_color))
+			return (free_2d_array(rgb), 0);
 	}
 	free_2d_array(rgb);
 	return (1);
@@ -154,12 +132,18 @@ int	get_texture_and_color(t_data *data)
 		if (!ft_strncmp(info[0], "F", 2) || !ft_strncmp(info[0], "C", 2))
 		{
 			if (!get_color(info, data))
+			{
+				close(fd);
 				return (free_2d_array(info), 0);
+			}
 		}
 		else if (info[0][0] == 'N' || info[0][0] == 'S' || info[0][0] == 'W' || info[0][0] == 'E')
 		{
 			if (!textures(info, data))
+			{
+				close(fd);
 				return (free_2d_array(info), 0);
+			}
 		}
 		free_2d_array(info);
 		line = get_next_line(fd);

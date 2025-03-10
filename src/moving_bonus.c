@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/04 16:44:58 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:43:59 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,23 @@ void	move_player(t_data *data)
 	float	turn_speed = 0.1;
 	float	x;
 	float	y;
-
-	// printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
+	int	i;
+	//printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
 
 	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
 	{
 		x = data->player.x - data->player.d_x * move_speed;
 		y = data->player.y - data->player.d_y * move_speed;
 
-		// if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
+		/*// if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
 			data->player.y = y;
 		// if (data->map[(int)data->player.y][(int)x] != '1') How to do this check smoothly with current map?
+			data->player.x = x;*/
+		i = y * data->map_info.width + data->player.x + 1;
+		if (data->map[i] == FLOOR)
+			data->player.y = y;
+		i = data->player.y * data->map_info.width + x + 1;
+		if (data->map[i] == FLOOR)
 			data->player.x = x;
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
@@ -36,10 +42,17 @@ void	move_player(t_data *data)
 		x = data->player.x + data->player.d_x * move_speed;
 		y = data->player.y + data->player.d_y * move_speed;
 
-	//	if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
+	/*//	if (data->map[(int)y][(int)data->player.x] != '1') How to do this check smoothly with current map?
 			data->player.y = y;
 	//	if (data->map[(int)data->player.y][(int)x] != '1') How to do this check smoothly with current map?
+			data->player.x = x;*/
+		i = y * data->map_info.width + data->player.x + 1;
+		if (data->map[i] == FLOOR)
+			data->player.y = y;
+		i = data->player.y * data->map_info.width + x + 1;
+		if (data->map[i] == FLOOR)
 			data->player.x = x;
+		
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
 	{

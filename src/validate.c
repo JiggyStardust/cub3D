@@ -6,7 +6,7 @@
 /*   By: hpirkola <hpirkola@student.hive.fi>         #+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:21:08 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/06 18:34:22 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 10:51:11 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,6 @@ int	is_valid(t_data *data)
 	//if player is missing -> return 0 //checked
 	//if other characters than 01NSEW -> return 0 //checked
 	//if colors are in the range (0 - 255 or something like that)
+	//if player is in the map twice
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/06 15:28:34 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:04:33 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_player
 	float	d_y; // player delta Y
 	float	angle; // player angle
 	char	p_dir;
+	int	found;
 }	t_player;
 
 typedef struct s_position
