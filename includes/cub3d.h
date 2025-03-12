@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/12 19:11:14 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:40:01 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define CUB3D_H
 
 # define TILE_MINI 50
-# define HEIGHT 1500
-# define WIDTH 1500
+# define HEIGHT 1518
+# define WIDTH 1518
 # define RED 0xFF0000FF
 # define PI 3.14159265359
 # define MOVE_SPEED 0.1
@@ -219,7 +219,7 @@ void	move_up_down(t_data *data);
 void	move_player_image(t_data *data);
 
 
-mlx_image_t *draw_ray(t_data *data, t_ray ray);
+mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
 int		get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
 
 #endif

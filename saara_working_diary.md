@@ -211,3 +211,10 @@ handling it in the moving functions.
 ----------------
 
 - Floor and ceiling are drawn, now we start to build the raycaster logic together.
+
+----------------
+12th of March 2025
+----------------
+
+- What a day, we got raycasting to work on the minimap (2D raycasting),
+- We started to implement logic for drawing 3D world with one color. It's fisheyed (Euclidean) now and only works with player == N.

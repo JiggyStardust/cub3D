@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/12 19:09:05 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:55:49 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,56 +42,68 @@ void	cleanup(t_data *data)
 		free(data->map_info.EA);
 }
 
-t_ray	raycaster(t_data *data)
+mlx_image_t	*raycaster(t_data *data)
 {
 	t_ray 		ray;
 	int			xy;
 	float		map_x;
 	float		map_y;
+	int			i;
+	mlx_image_t *img;
 
+	img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	ray.x = data->player.x;
 	ray.y = data->player.y;
-	map_x = ray.x;
-	map_y = ray.y;
 	ray.angle = data->player.angle - (33.0 / 180 * PI);
 	if (ray.angle == 2 * PI)
 		ray.angle = 0;
 	else if (ray.angle < 0)
 		ray.angle += 2 * PI;
-	xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
-	while (data->map[xy] == FLOOR)
+	i = 0;
+	while (i < WIDTH)
 	{
-		map_x -= cos(ray.angle);
-		map_y -= sin(ray.angle);
-		xy = get_index_of_rov_and_col(data, (int)map_x, (int)map_y, 1);
+		map_x = ray.x;
+		map_y = ray.y;
+		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
+		while (data->map[xy] == FLOOR)
+		{
+			map_x -= cos(ray.angle);
+			map_y -= sin(ray.angle);
+			xy = get_index_of_rov_and_col(data, (int)map_x, (int)map_y, 1);
+		}
+		ray.dx = fabsf(map_x - ray.x);
+		ray.dy = fabsf(map_y - ray.y);
+		ray.len = sqrt(pow(ray.dx, 2) + pow(ray.dy, 2)) * cos(PI / 2 - ray.angle);
+		draw_ray(data, ray, i, img);
+		ray.angle += (1.0/180 * PI);
+		if (ray.angle == 2 * PI)
+			ray.angle = 0;
+		i += WIDTH / 66;
 	}
-	ray.dx = fabsf(map_x - ray.x);
-	ray.dy = fabsf(map_y - ray.y);
-	ray.len = sqrt(pow(ray.dx, 2) + pow(ray.dy, 2)) * cos(PI / 2 - ray.angle);
-	return (ray);
+	return (img);
 }
 
-mlx_image_t *draw_ray(t_data *data, t_ray ray)
+mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img)
 {
-	mlx_image_t *img;
 
 	float	center;
 	int		wall_height;
 	int		y;
+	int		x;
+	(void)data;
 
-	img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	center = HEIGHT / 2;
 	wall_height = HEIGHT / ray.len;
-	y = center - wall_height / 2;
-	while (y <= center + wall_height / 2)
+	x = 0;
+	while (x < WIDTH / 66)
 	{
-		int x = 0;
-		while (x < WIDTH)
+		y = center - wall_height / 2;
+		while (y <= center + wall_height / 2)
 		{
-			mlx_put_pixel(img, x, y, RED);
-			x++;
+			mlx_put_pixel(img, i + x, y, RED);
+			y++;
 		}
-		y++;
+		x++;
 	}
 	return (img);
 }
@@ -99,7 +111,6 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray)
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	t_ray	ray;
 	mlx_image_t *rimg;
 
 	//check if map is valid and parse
@@ -115,8 +126,7 @@ int	main(int argc, char **argv)
 	data.player.angle = get_player_angle(data.player.p_dir);
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
-	ray = raycaster(&data);
-	rimg = draw_ray(&data, ray);
+	rimg = raycaster(&data);
 	if (!images_to_window(&data, rimg))
 		terminate_free(&data, 1, "Error\nProblem with opening the window.\n");
 	mlx_key_hook(data.mlx, &key_hook, &data);
