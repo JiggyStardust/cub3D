@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 16:28:23 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:09:05 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,58 +42,65 @@ void	cleanup(t_data *data)
 		free(data->map_info.EA);
 }
 
-void	raycaster(t_data *data)
+t_ray	raycaster(t_data *data)
 {
-	float	dir_x;
-	float	dir_y;
-	float	plane_x;
-	float	plane_y;
-	float 	camera_x;
-	float	ray_dir_x;
-	float 	ray_dir_y;
-	int		map
+	t_ray 		ray;
+	int			xy;
+	float		map_x;
+	float		map_y;
 
-	if (data->player.p_dir == 'N')
+	ray.x = data->player.x;
+	ray.y = data->player.y;
+	map_x = ray.x;
+	map_y = ray.y;
+	ray.angle = data->player.angle - (33.0 / 180 * PI);
+	if (ray.angle == 2 * PI)
+		ray.angle = 0;
+	else if (ray.angle < 0)
+		ray.angle += 2 * PI;
+	xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
+	while (data->map[xy] == FLOOR)
 	{
-		dir_x = 0;
-		dir_y = -1;
-		plane_x = 0.66;
-		plane_y = 0;
+		map_x -= cos(ray.angle);
+		map_y -= sin(ray.angle);
+		xy = get_index_of_rov_and_col(data, (int)map_x, (int)map_y, 1);
 	}
-	if (data->player.p_dir == 'S')
-	{
-		dir_x = 0;
-		dir_y = 1;
-		plane_x = 0.66;
-		plane_y = 0;
-	}
-	if (data->player.p_dir == 'W')
-	{
-		dir_x = -1;
-		dir_y = 0;
-		plane_x = 0;
-		plane_y = 0.66;
-	}
-	if (data->player.p_dir == 'E')
-	{
-		dir_x = 1;
-		dir_y = 0;
-		plane_x = 0;
-		plane_y = 0,66;
-	}
-	for(int x = 0; x < WIDTH; x++)
-    {
-      camera_x = 2 * x / (float)WIDTH - 1; //x-coordinate in camera space
-      ray_dir_x = dir_x + plane_x * camera_x;
-      ray_dir_y = dir_y + plane_y * camera_x;
+	ray.dx = fabsf(map_x - ray.x);
+	ray.dy = fabsf(map_y - ray.y);
+	ray.len = sqrt(pow(ray.dx, 2) + pow(ray.dy, 2)) * cos(PI / 2 - ray.angle);
+	return (ray);
+}
 
-	}
+mlx_image_t *draw_ray(t_data *data, t_ray ray)
+{
+	mlx_image_t *img;
 
+	float	center;
+	int		wall_height;
+	int		y;
+
+	img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	center = HEIGHT / 2;
+	wall_height = HEIGHT / ray.len;
+	y = center - wall_height / 2;
+	while (y <= center + wall_height / 2)
+	{
+		int x = 0;
+		while (x < WIDTH)
+		{
+			mlx_put_pixel(img, x, y, RED);
+			x++;
+		}
+		y++;
+	}
+	return (img);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
+	t_ray	ray;
+	mlx_image_t *rimg;
 
 	//check if map is valid and parse
 	if (argc != 2)
@@ -108,8 +115,9 @@ int	main(int argc, char **argv)
 	data.player.angle = get_player_angle(data.player.p_dir);
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
-	raycaster(&data);
-	if (!images_to_window(&data))
+	ray = raycaster(&data);
+	rimg = draw_ray(&data, ray);
+	if (!images_to_window(&data, rimg))
 		terminate_free(&data, 1, "Error\nProblem with opening the window.\n");
 	mlx_key_hook(data.mlx, &key_hook, &data);
 	mlx_loop_hook(data.mlx, &movement, &data);

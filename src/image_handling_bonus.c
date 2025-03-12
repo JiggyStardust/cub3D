@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:27:59 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/10 14:21:32 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:36:33 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,52 @@ mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 	return (img);
 }
 
+// void draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
+// {
+// 	int center_x = TILE_MINI / 2;
+// 	int center_y = TILE_MINI / 2;
+// 	int	y;
+// 	int	x;
+
+// 	mlx_delete_image(data->mlx, data->p_img);
+// 	data->p_img = mlx_new_image(data->mlx, TILE_MINI, TILE_MINI);
+// 	y = -6;
+// 	while (y <= 6)
+// 	{
+// 		x = -6;
+// 		while (x <= 6)
+// 		{
+// 			mlx_put_pixel(data->p_img, center_x + x, center_y + y, 0xFF0000FF);
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	mlx_image_to_window(data->mlx, data->p_img, data->player.x * TILE_MINI, data->player.y * TILE_MINI);
+// }
+
+mlx_image_t *draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
+{
+	mlx_image_t *img;
+	int	y;
+	int	x;
+
+	img = mlx_new_image(data->mlx, 13, 13);
+	if (!img)
+		return (NULL);
+	y = 0;
+	while (y <= 12)
+	{
+		x = 0;
+		while (x <= 12)
+		{
+			mlx_put_pixel(img, x, y, 0xFF0000FF);
+			x++;
+		}
+		y++;
+	}
+	return (img);
+}
+
 bool	setup_images(t_data *data)
 {
 	data->ceiling_img = draw_background(data, data->map_info.ceiling_color);
@@ -77,7 +123,10 @@ bool	setup_images(t_data *data)
 	data->mini_w_img = png_to_resized_img(data, "./textures/mini_wall.png");
 	if (!data->mini_w_img)
 		return (false);
-	data->mini_p_img = png_to_resized_img(data, "./textures/mini_player.png");
+	// data->mini_p_img = png_to_resized_img(data, "./textures/mini_player.png");
+	// if (!data->mini_p_img)
+	// 	return (false);
+	data->mini_p_img = draw_player(data);
 	if (!data->mini_p_img)
 		return (false);
 	return (true);

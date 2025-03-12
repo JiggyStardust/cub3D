@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:22:23 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/10 14:56:39 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:10:21 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool	draw_floor_n_walls(t_data *data, enum e_type c, int x, int y)
 	return (true);
 }
 
-bool	images_to_window(t_data *data)
+bool	images_to_window(t_data *data, mlx_image_t *ray)
 {
 	int			i;
 	t_position	pos;
@@ -44,6 +44,7 @@ bool	images_to_window(t_data *data)
 			return (false);
 		i++;
 	}
+	mlx_image_to_window(data->mlx, ray, 0, 0);
 	if (mlx_image_to_window(data->mlx, data->mini_p_img, data->player.x \
 			* TILE_MINI, data->player.y * TILE_MINI) == -1)
 		return (false);

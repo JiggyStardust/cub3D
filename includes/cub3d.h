@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 13:59:28 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/12 19:11:14 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,16 @@ typedef struct	s_rgb
 	int	g;
 	int	b;
 }	t_rgb;
+
+typedef struct	s_ray
+{
+	float	dx;
+	float	dy;
+	float	x;
+	float	y;
+	float	len;
+	float	angle;
+}	t_ray;
 
 typedef struct s_player
 {
@@ -95,6 +105,7 @@ typedef struct s_data
 	mlx_image_t		*mini_w_img; // wall image
 	mlx_image_t		*floor_img;
 	mlx_image_t		*ceiling_img;
+	mlx_image_t		*ray;
 }	t_data;
 
 //main.c
@@ -165,7 +176,8 @@ void	key_hook(mlx_key_data_t keydata, void *param);
  * static function draw_floor_n_walls(). 
  * Lastly draws the player image @param mini_p_img on top.
  ******************************************************************************/
-bool	images_to_window(t_data *data);
+// bool	images_to_window(t_data *data);
+bool	images_to_window(t_data *data, mlx_image_t *ray);
 
 // moving_bonus.c
 
@@ -205,5 +217,9 @@ void	move_up_down(t_data *data);
  * when player image is drawn on top of the map with mlx_image_to_window()
  ******************************************************************************/
 void	move_player_image(t_data *data);
+
+
+mlx_image_t *draw_ray(t_data *data, t_ray ray);
+int		get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
 
 #endif
