@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/12 19:55:49 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:19:39 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,58 @@ void	cleanup(t_data *data)
 		free(data->map_info.EA);
 }
 
+float	get_ray_length(t_ray *ray, float map_x, float map_y, int i)
+{
+	float	hypotenuse;
+	int		x;
+	int		y;
+	float	deg;
+
+	x = (int)map_x;
+	y = (int)map_y;
+	// if ((float)map_x < ray->x && fmodf((float)map_x, (int)map_x) != 0)
+	// 	map_x++;
+	// if ((float)map_y < ray->y && fmodf((float)map_y, (int)map_y) != 0)
+	// 	map_y++;
+	ray->dx = fabsf(map_x - ray->x);
+	printf("i: %d\ndx: %f\n", i, ray->dx);
+	ray->dy = fabsf(map_y - ray->y);
+	printf("dy: %f\n\n", ray->dy);
+	hypotenuse = sqrt(pow(ray->dx, 2) + pow(ray->dy, 2)); // * cos(PI / 2 - ray.angle); it wasn't supposed to be rayangle, i feel silly
+	// printf("hyp1: %f\n", hypotenuse);
+	deg = fabs(33.0 - i) / 180 * PI;
+	// hypotenuse = hypotenuse * cos(deg);
+	// printf("hyp2: %f\n", hypotenuse);
+	// printf("the i: %d, abs division: %f\nthe multiplier: %f\n", i, deg, cos(deg));
+	return (hypotenuse);
+}
+
+mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img)
+{
+
+	float	center;
+	float	wall_height;
+	int		y;
+	int		x;
+	(void)data;
+
+	center = HEIGHT / 2;
+	wall_height = HEIGHT / ray.len; // don't divide by float, slight pixel changes are seen.
+	// printf("raylen = %f\n", ray.len);
+	x = 0;
+	while (x <= WIDTH / 67)
+	{
+		y = center - wall_height / 2;
+		while (y <= center + wall_height / 2)
+		{
+			mlx_put_pixel(img, WIDTH * i / 67 + x, y, RED);
+			y++;
+		}
+		x++;
+	}
+	return (img);
+}
+
 mlx_image_t	*raycaster(t_data *data)
 {
 	t_ray 		ray;
@@ -60,7 +112,7 @@ mlx_image_t	*raycaster(t_data *data)
 	else if (ray.angle < 0)
 		ray.angle += 2 * PI;
 	i = 0;
-	while (i < WIDTH)
+	while (i < 33)
 	{
 		map_x = ray.x;
 		map_y = ray.y;
@@ -69,44 +121,36 @@ mlx_image_t	*raycaster(t_data *data)
 		{
 			map_x -= cos(ray.angle);
 			map_y -= sin(ray.angle);
-			xy = get_index_of_rov_and_col(data, (int)map_x, (int)map_y, 1);
+			xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
 		}
-		ray.dx = fabsf(map_x - ray.x);
-		ray.dy = fabsf(map_y - ray.y);
-		ray.len = sqrt(pow(ray.dx, 2) + pow(ray.dy, 2)) * cos(PI / 2 - ray.angle);
+		ray.len = get_ray_length(&ray, map_x, map_y, i);
 		draw_ray(data, ray, i, img);
 		ray.angle += (1.0/180 * PI);
 		if (ray.angle == 2 * PI)
 			ray.angle = 0;
-		i += WIDTH / 66;
+		i++;
 	}
-	return (img);
-}
-
-mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img)
-{
-
-	float	center;
-	int		wall_height;
-	int		y;
-	int		x;
-	(void)data;
-
-	center = HEIGHT / 2;
-	wall_height = HEIGHT / ray.len;
-	x = 0;
-	while (x < WIDTH / 66)
+	while (i <= 66)
 	{
-		y = center - wall_height / 2;
-		while (y <= center + wall_height / 2)
+		map_x = ray.x;
+		map_y = ray.y;
+		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
+		while (data->map[xy] == FLOOR)
 		{
-			mlx_put_pixel(img, i + x, y, RED);
-			y++;
+			map_x += cos(ray.angle);
+			map_y -= sin(ray.angle);
+			xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
 		}
-		x++;
+		ray.len = get_ray_length(&ray, map_x, map_y, i);
+		draw_ray(data, ray, i, img);
+		ray.angle += (1.0/180 * PI);
+		if (ray.angle == 2 * PI)
+			ray.angle = 0;
+		i++;
 	}
 	return (img);
 }
+
 
 int	main(int argc, char **argv)
 {

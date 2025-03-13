@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/12 17:01:58 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:38:53 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	draw_minimap_rays(t_data *data)
 		ray_angle = 0;
 	else if (ray_angle < 0)
 		ray_angle += 2 * PI;
-	while (i < 66)
+	while (i <= 66)
 	{
 		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
 		map_y = ray_y;
