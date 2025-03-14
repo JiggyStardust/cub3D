@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:02:38 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/12 13:19:01 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:38:01 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void	get_player_x_y(enum e_type *map, t_data *data)
 float	get_player_angle(char dir)
 {
 	if (dir == 'N')
-		return ((PI) / 2);
+		return ((3 * PI) / 2);
 	else if (dir == 'W')
 		return (0.0);
 	else if (dir == 'S')
-		return ((3 * PI) / 2);
+		return (PI / 2);
 	else
 		return (PI);
 }

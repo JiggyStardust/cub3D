@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/14 11:36:27 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/14 16:17:16 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,30 +42,30 @@ void	cleanup(t_data *data)
 		free(data->map_info.EA);
 }
 
-float	get_ray_length(t_ray *ray, float map_x, float map_y, int i, t_data *data)
-{
-	float	hypotenuse;
-	int		x;
-	int		y;
+// float	get_ray_length(t_ray *ray, float map_x, float map_y, int i, t_data *data)
+// {
+// 	float	hypotenuse;
+// 	int		x;
+// 	int		y;
 
-	x = (int)map_x;
-	y = (int)map_y;
-	(void)i;
-	// if ((float)map_x < ray->x && fmodf((float)map_x, (int)map_x) != 0)
-	// 	map_x++;
-	// if ((float)map_y < ray->y && fmodf((float)map_y, (int)map_y) != 0)
-	// 	map_y++;
-	ray->dx = fabsf(map_x - ray->x);
-	printf("i: %d\ndx: %f\n", i, ray->dx);
-	ray->dy = fabsf(map_y - ray->y);
-	printf("dy: %f\n", ray->dy);
-	hypotenuse = sqrt(pow(ray->dx, 2) + pow(ray->dy, 2)); // * cos(PI / 2 - ray.angle); it wasn't supposed to be rayangle, i feel silly
-	// printf("\n\nhyp1: %f\n", hypotenuse);
-	hypotenuse = hypotenuse * cos(data->player.angle - ray->angle);
-	// printf("hyp2: %f\n", hypotenuse);
-	// printf("the i: %d, abs division: %f\nthe multiplier: %f\n", i, deg, cos(deg));
-	return (hypotenuse);
-}
+// 	x = (int)map_x;
+// 	y = (int)map_y;
+// 	(void)i;
+// 	// if ((float)map_x < ray->x && fmodf((float)map_x, (int)map_x) != 0)
+// 	// 	map_x++;
+// 	// if ((float)map_y < ray->y && fmodf((float)map_y, (int)map_y) != 0)
+// 	// 	map_y++;
+// 	ray->dx = fabsf(map_x - ray->x);
+// 	printf("i: %d\ndx: %f\n", i, ray->dx);
+// 	ray->dy = fabsf(map_y - ray->y);
+// 	printf("dy: %f\n", ray->dy);
+// 	hypotenuse = sqrt(pow(ray->dx, 2) + pow(ray->dy, 2)); // * cos(PI / 2 - ray.angle); it wasn't supposed to be rayangle, i feel silly
+// 	// printf("\n\nhyp1: %f\n", hypotenuse);
+// 	hypotenuse = hypotenuse * cos(data->player.angle - ray->angle);
+// 	// printf("hyp2: %f\n", hypotenuse);
+// 	// printf("the i: %d, abs division: %f\nthe multiplier: %f\n", i, deg, cos(deg));
+// 	return (hypotenuse);
+// }
 
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 {
@@ -87,12 +87,70 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 	return (img);
 }
 
+float	cast_ray(t_data *data, t_ray *ray)
+{
+	int		map_x;
+	int		map_y;
+	float	delta_x;
+	float	delta_y;
+	float	side_dist_x;
+	float	side_dist_y;
+	int		step_x;
+	int		step_y;
+
+	map_x = (int)ray->x;
+	map_y = (int)ray->y;
+
+	if (cos(ray->angle) != 0)
+		delta_x = fabs(1 / cos(ray->angle));
+	if (sin(ray->angle) != 0)
+		delta_y = fabs(1 / sin(ray->angle));
+	if (cos(ray->angle) > 0)
+		step_x = 1;
+	else
+		step_x = -1;
+
+	if (sin(ray->angle) > 0)
+		step_y = 1;
+	else
+		step_y = -1;
+		
+	// Calculate initial side distances
+	if (step_x > 0)
+		side_dist_x = (map_x + 1.0 - ray->x) * delta_x;
+	else
+		side_dist_x = (ray->x - map_x) * delta_x;
+
+	if (step_y > 0)
+		side_dist_y = (map_y + 1.0 - ray->y) * delta_y;
+	else
+		side_dist_y = (ray->y - map_y) * delta_y;
+	
+	// DDA loop
+	while (data->map[map_y * data->map_info.width + map_x] == FLOOR)
+	{
+		if (side_dist_x < side_dist_y)
+		{
+			side_dist_x += delta_x;
+			map_x += step_x;
+		}
+		else if (side_dist_x > side_dist_y)
+		{
+			side_dist_y += delta_y;
+			map_y += step_y;
+		}
+	}
+	// Assign the correct ray length
+	if (side_dist_x < side_dist_y)
+		return (fabs(side_dist_x));
+	else
+		return (fabs(side_dist_y));
+}
+
+
 mlx_image_t	*raycaster(t_data *data)
 {
 	t_ray 		ray;
-	int			xy;
-	float		map_x;
-	float		map_y;
 	int			i;
 	mlx_image_t *img;
 
@@ -100,35 +158,75 @@ mlx_image_t	*raycaster(t_data *data)
 	ray.x = data->player.x;
 	ray.y = data->player.y;
 	ray.angle = data->player.angle - (33.0 / 180 * PI);
+
+	// Ensure angle is within 0 to 2*PI range
 	if (ray.angle > 2 * PI)
 		ray.angle -= 2 * PI;
 	else if (ray.angle < 0)
 		ray.angle += 2 * PI;
+
 	i = 0;
 	while (i < WIDTH)
 	{
-		map_x = ray.x;
-		map_y = ray.y;
-		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
-		while (data->map[xy] == FLOOR)
-		{
-			xy = get_index_of_rov_and_col(data, (int)(map_x - cos(ray.angle) * 0.01), (int)(map_y - sin(ray.angle) * 0.01), 1);
-			if (data->map[xy] == FLOOR)
-			{
-				map_y -= sin(ray.angle) * 0.01;
-				map_x -= cos(ray.angle) * 0.01;
-			}
-		}
-		ray.len = get_ray_length(&ray, map_x, map_y, i, data);
+		// Cast a ray and determine its length
+		ray.len = cast_ray(data, &ray);
+		printf("ray len: %f\n", ray.len);
+		ray.len *= cos(data->player.angle - ray.angle);
+		// Draw the wall slice based on ray length
 		draw_ray(data, ray, i, img);
+
+		// Move to the next ray angle
 		ray.angle += ((66.0 / 180 * PI) / WIDTH);
 		if (ray.angle > 2 * PI)
 			ray.angle -= 2 * PI;
-		// printf("ray.angle: %f, player.angle: %f\n\n", ray.angle, data->player.angle);
 		i++;
 	}
 	return (img);
 }
+
+
+// mlx_image_t	*raycaster(t_data *data)
+// {
+// 	t_ray 		ray;
+// 	int			xy;
+// 	float		map_x;
+// 	float		map_y;
+// 	int			i;
+// 	mlx_image_t *img;
+
+// 	img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+// 	ray.x = data->player.x;
+// 	ray.y = data->player.y;
+// 	ray.angle = data->player.angle - (33.0 / 180 * PI);
+// 	if (ray.angle > 2 * PI)
+// 		ray.angle -= 2 * PI;
+// 	else if (ray.angle < 0)
+// 		ray.angle += 2 * PI;
+// 	i = 0;
+// 	while (i < WIDTH)
+// 	{
+// 		map_x = ray.x;
+// 		map_y = ray.y;
+// 		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
+// 		while (data->data->map[xy] == FLOOR)
+// 		{
+// 			xy = get_index_of_rov_and_col(data, (int)(map_x - cos(ray.angle) * 0.01), (int)(map_y - sin(ray.angle) * 0.01), 1);
+// 			if (data->data->map[xy] == FLOOR)
+// 			{
+// 				map_y -= sin(ray.angle) * 0.01;
+// 				map_x -= cos(ray.angle) * 0.01;
+// 			}
+// 		}
+// 		ray.len = get_ray_length(&ray, map_x, map_y, i, data);
+// 		draw_ray(data, ray, i, img);
+// 		ray.angle += ((66.0 / 180 * PI) / WIDTH);
+// 		if (ray.angle > 2 * PI)
+// 			ray.angle -= 2 * PI;
+// 		// printf("ray.angle: %f, player.angle: %f\n\n", ray.angle, data->player.angle);
+// 		i++;
+// 	}
+// 	return (img);
+// }
 
 
 int	main(int argc, char **argv)
@@ -147,6 +245,8 @@ int	main(int argc, char **argv)
 		return (false);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
 	data.player.angle = get_player_angle(data.player.p_dir);
+	data.player.d_x = cos(data.player.angle) * MOVE_SPEED;
+	data.player.d_y = sin(data.player.angle) * MOVE_SPEED;
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
 	rimg = raycaster(&data);
