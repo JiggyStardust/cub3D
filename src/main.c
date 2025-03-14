@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/13 18:19:39 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:06:42 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ float	get_ray_length(t_ray *ray, float map_x, float map_y, int i)
 	hypotenuse = sqrt(pow(ray->dx, 2) + pow(ray->dy, 2)); // * cos(PI / 2 - ray.angle); it wasn't supposed to be rayangle, i feel silly
 	// printf("hyp1: %f\n", hypotenuse);
 	deg = fabs(33.0 - i) / 180 * PI;
-	// hypotenuse = hypotenuse * cos(deg);
-	// printf("hyp2: %f\n", hypotenuse);
+	hypotenuse = hypotenuse * cos(deg);
+	printf("hyp2: %f\n", hypotenuse);
 	// printf("the i: %d, abs division: %f\nthe multiplier: %f\n", i, deg, cos(deg));
 	return (hypotenuse);
 }
@@ -112,24 +112,26 @@ mlx_image_t	*raycaster(t_data *data)
 	else if (ray.angle < 0)
 		ray.angle += 2 * PI;
 	i = 0;
-	while (i < 33)
-	{
-		map_x = ray.x;
-		map_y = ray.y;
-		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
-		while (data->map[xy] == FLOOR)
-		{
-			map_x -= cos(ray.angle);
-			map_y -= sin(ray.angle);
-			xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
-		}
-		ray.len = get_ray_length(&ray, map_x, map_y, i);
-		draw_ray(data, ray, i, img);
-		ray.angle += (1.0/180 * PI);
-		if (ray.angle == 2 * PI)
-			ray.angle = 0;
-		i++;
-	}
+	// while (i < 33)
+	// {
+	// 	map_x = ray.x;
+	// 	map_y = ray.y;
+	// 	xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
+	// 	while (data->map[xy] == FLOOR)
+	// 	{
+	// 		// map_x -= cos(ray.angle);
+	// 		// map_y -= sin(ray.angle);
+	// 		xy = get_index_of_rov_and_col(data, map_x - cos(ray.angle), map_y - sin(ray.angle), 1);
+	// 		if (data->map[xy] == FLOOR)
+
+	// 	}
+	// 	ray.len = get_ray_length(&ray, map_x, map_y, i);
+	// 	draw_ray(data, ray, i, img);
+	// 	ray.angle += (1.0/180 * PI);
+	// 	if (ray.angle == 2 * PI)
+	// 		ray.angle = 0;
+	// 	i++;
+	// }
 	while (i <= 66)
 	{
 		map_x = ray.x;
@@ -137,9 +139,12 @@ mlx_image_t	*raycaster(t_data *data)
 		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
 		while (data->map[xy] == FLOOR)
 		{
-			map_x += cos(ray.angle);
-			map_y -= sin(ray.angle);
-			xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
+			xy = get_index_of_rov_and_col(data, map_x - cos(ray.angle) * 0.01, map_y - sin(ray.angle) * 0.01, 1);
+			if (data->map[xy] == FLOOR)
+			{
+				map_x -= cos(ray.angle) * 0.01;
+				map_y -= sin(ray.angle) * 0.01;
+			}
 		}
 		ray.len = get_ray_length(&ray, map_x, map_y, i);
 		draw_ray(data, ray, i, img);
