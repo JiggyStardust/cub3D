@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/14 16:17:16 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:56:30 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_data(t_data *data)
 	data->map_info.ceiling_color.found = 0;
 	data->map = NULL;
 	data->player.found = 0;
+	data->view = NULL;
 }
 
 void	cleanup(t_data *data)
@@ -74,18 +75,65 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 	float	wall_height;
 	int		y;
 	(void)data;
+	uint32_t	color;
 
 	center = HEIGHT / 2;
 	wall_height = HEIGHT / ray.len;
-	printf("raylen = %f\n", ray.len);
+	// printf("raylen = %f\n", ray.len);
 	y = center - wall_height / 2;
+	if (ray.shade)
+		color = RED;
+	else
+		color = DARK_RED;
 	while (y <= center + wall_height / 2)
 	{
-		mlx_put_pixel(img, x, y, RED);
+		mlx_put_pixel(img, x, y, color);
 		y++;
 	}
 	return (img);
 }
+
+// float	cast_ray(t_data *data, t_ray *ray)
+// {
+// 	int		map_x;
+// 	int		map_y;
+// 	float	delta_x;
+// 	float	delta_y;
+// 	float	side_dist_x;
+// 	float	side_dist_y;
+// 	int		step_x;
+// 	int		step_y;
+
+// 	map_x = (int)ray->x;
+// 	map_y = (int)ray->y;
+
+// 	delta_x = (cos(ray->angle) != 0) ? fabs(1 / cos(ray->angle)) : INFINITY;
+// 	delta_y = (sin(ray->angle) != 0) ? fabs(1 / sin(ray->angle)) : INFINITY;
+
+// 	step_x = (cos(ray->angle) > 0) ? 1 : -1;
+// 	step_y = (sin(ray->angle) > 0) ? 1 : -1;
+
+// 	side_dist_x = (step_x > 0) ? (map_x + 1.0 - ray->x) * delta_x : (ray->x - map_x) * delta_x;
+// 	side_dist_y = (step_y > 0) ? (map_y + 1.0 - ray->y) * delta_y : (ray->y - map_y) * delta_y;
+
+// 	// DDA loop: Step through the grid until we hit a wall
+// 	while (data->map[map_y * data->map_info.width + map_x] == FLOOR)
+// 	{
+// 		if (side_dist_x < side_dist_y)  // Move in X direction
+// 		{
+// 			map_x += step_x;
+// 			side_dist_x += delta_x;
+// 		}
+// 		else  // Move in Y direction
+// 		{
+// 			map_y += step_y;
+// 			side_dist_y += delta_y;
+// 		}
+// 	}
+
+// 	// Return the final distance to the wall
+// 	return (side_dist_x < side_dist_y) ? side_dist_x : side_dist_y;
+// }
 
 float	cast_ray(t_data *data, t_ray *ray)
 {
@@ -97,6 +145,7 @@ float	cast_ray(t_data *data, t_ray *ray)
 	float	side_dist_y;
 	int		step_x;
 	int		step_y;
+	int		last;
 
 	map_x = (int)ray->x;
 	map_y = (int)ray->y;
@@ -106,42 +155,65 @@ float	cast_ray(t_data *data, t_ray *ray)
 	if (sin(ray->angle) != 0)
 		delta_y = fabs(1 / sin(ray->angle));
 	if (cos(ray->angle) > 0)
+	{
 		step_x = 1;
-	else
-		step_x = -1;
-
-	if (sin(ray->angle) > 0)
-		step_y = 1;
-	else
-		step_y = -1;
-		
-	// Calculate initial side distances
-	if (step_x > 0)
 		side_dist_x = (map_x + 1.0 - ray->x) * delta_x;
-	else
+	}
+	else if (cos(ray->angle) < 0)
+	{
+		step_x = -1;
 		side_dist_x = (ray->x - map_x) * delta_x;
-
-	if (step_y > 0)
-		side_dist_y = (map_y + 1.0 - ray->y) * delta_y;
+	}
 	else
+	{
+		step_x = INFINITY;
+		side_dist_x = INFINITY;
+		delta_y = INFINITY;
+	}
+	if (sin(ray->angle) > 0)
+	{
+		step_y = 1;
+		side_dist_y = (map_y + 1.0 - ray->y) * delta_y;
+	}
+	else if ((sin(ray->angle) < 0))
+	{
+		step_y = -1;
 		side_dist_y = (ray->y - map_y) * delta_y;
+	}
+	else
+	{
+		step_y = INFINITY;
+		side_dist_y = INFINITY;
+		delta_y = INFINITY;
+	}
 	
 	// DDA loop
-	while (data->map[map_y * data->map_info.width + map_x] == FLOOR)
+	int xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
+	while (data->map[xy] == FLOOR)
 	{
-		if (side_dist_x < side_dist_y)
+		if (side_dist_x < side_dist_y)  // Move in X direction
 		{
-			side_dist_x += delta_x;
 			map_x += step_x;
+			side_dist_x += delta_x;
+			last = 0;
 		}
-		else if (side_dist_x > side_dist_y)
+		else  // Move in Y direction
 		{
-			side_dist_y += delta_y;
 			map_y += step_y;
+			side_dist_y += delta_y;
+			last = 1;
 		}
+		xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
 	}
-	// Assign the correct ray length
-	if (side_dist_x < side_dist_y)
+	// printf("side_dist_x: %f\n", side_dist_x);
+	// printf("side_dist_y: %f\n\n", side_dist_y);
+
+	if (last == 0)
+		side_dist_x -= delta_x;
+	else if (last == 1)
+		side_dist_y -= delta_y;
+	ray->shade = last;
+	if (fabs(side_dist_x) < fabs(side_dist_y))
 		return (fabs(side_dist_x));
 	else
 		return (fabs(side_dist_y));
@@ -152,9 +224,11 @@ mlx_image_t	*raycaster(t_data *data)
 {
 	t_ray 		ray;
 	int			i;
-	mlx_image_t *img;
+	//mlx_image_t *img;
 
-	img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	if (data->view != NULL)
+		mlx_delete_image(data->mlx, data->view);
+	data->view = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	ray.x = data->player.x;
 	ray.y = data->player.y;
 	ray.angle = data->player.angle - (33.0 / 180 * PI);
@@ -169,11 +243,12 @@ mlx_image_t	*raycaster(t_data *data)
 	while (i < WIDTH)
 	{
 		// Cast a ray and determine its length
+		// printf("i: %d\n", i);
 		ray.len = cast_ray(data, &ray);
-		printf("ray len: %f\n", ray.len);
 		ray.len *= cos(data->player.angle - ray.angle);
+		// printf("ray len: %f\n", ray.len);
 		// Draw the wall slice based on ray length
-		draw_ray(data, ray, i, img);
+		draw_ray(data, ray, i, data->view);
 
 		// Move to the next ray angle
 		ray.angle += ((66.0 / 180 * PI) / WIDTH);
@@ -181,58 +256,14 @@ mlx_image_t	*raycaster(t_data *data)
 			ray.angle -= 2 * PI;
 		i++;
 	}
-	return (img);
+	return (data->view);
 }
-
-
-// mlx_image_t	*raycaster(t_data *data)
-// {
-// 	t_ray 		ray;
-// 	int			xy;
-// 	float		map_x;
-// 	float		map_y;
-// 	int			i;
-// 	mlx_image_t *img;
-
-// 	img = mlx_new_image(data->mlx, WIDTH, HEIGHT);
-// 	ray.x = data->player.x;
-// 	ray.y = data->player.y;
-// 	ray.angle = data->player.angle - (33.0 / 180 * PI);
-// 	if (ray.angle > 2 * PI)
-// 		ray.angle -= 2 * PI;
-// 	else if (ray.angle < 0)
-// 		ray.angle += 2 * PI;
-// 	i = 0;
-// 	while (i < WIDTH)
-// 	{
-// 		map_x = ray.x;
-// 		map_y = ray.y;
-// 		xy = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 1);
-// 		while (data->data->map[xy] == FLOOR)
-// 		{
-// 			xy = get_index_of_rov_and_col(data, (int)(map_x - cos(ray.angle) * 0.01), (int)(map_y - sin(ray.angle) * 0.01), 1);
-// 			if (data->data->map[xy] == FLOOR)
-// 			{
-// 				map_y -= sin(ray.angle) * 0.01;
-// 				map_x -= cos(ray.angle) * 0.01;
-// 			}
-// 		}
-// 		ray.len = get_ray_length(&ray, map_x, map_y, i, data);
-// 		draw_ray(data, ray, i, img);
-// 		ray.angle += ((66.0 / 180 * PI) / WIDTH);
-// 		if (ray.angle > 2 * PI)
-// 			ray.angle -= 2 * PI;
-// 		// printf("ray.angle: %f, player.angle: %f\n\n", ray.angle, data->player.angle);
-// 		i++;
-// 	}
-// 	return (img);
-// }
 
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	mlx_image_t *rimg;
+	//mlx_image_t *rimg;
 
 	//check if map is valid and parse
 	if (argc != 2)
@@ -249,8 +280,8 @@ int	main(int argc, char **argv)
 	data.player.d_y = sin(data.player.angle) * MOVE_SPEED;
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
-	rimg = raycaster(&data);
-	if (!images_to_window(&data, rimg))
+	data.view = raycaster(&data);
+	if (!images_to_window(&data))
 		terminate_free(&data, 1, "Error\nProblem with opening the window.\n");
 	mlx_key_hook(data.mlx, &key_hook, &data);
 	mlx_loop_hook(data.mlx, &movement, &data);

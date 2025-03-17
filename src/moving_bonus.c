@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/14 15:15:51 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:43:49 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,6 @@ int		get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear)
 {
 	float	i;
 	(void)gear;
-
-	// printf("player angle: %f\n", data->player.angle);
-	// if (gear == FORWARD)
-	// {
-	// 	if (data->player.angle > PI / 2 && data->player.angle < 3 * PI / 2)
-	// 		x++;
-	// 	if (data->player.angle > PI && data->player.angle < 2 * PI)
-	// 		y++;
-	// }
-	// else if (gear == REVERSE)
-	// {
-	// 	if (data->player.angle > 3 * PI / 2 || data->player.angle < PI / 2)
-	// 		x++;
-	// 	if (data->player.angle < PI && data->player.angle > 0)
-	// 		y++;
-	// }
-	// else if (gear == LEFT)
-	// {
-	// 	if (data->player.angle < 2 * PI && data->player.angle > PI)
-	// 		x++;
-	// 	if (data->player.angle < PI / 2 || data->player.angle > 3 * PI / 2)
-	// 		y++;
-	// }
-	// else if (gear == RIGHT)
-	// {
-	// 	if (data->player.angle > 0 && data->player.angle < PI)
-	// 		x++;
-	// 	if (data->player.angle > PI / 2 && data->player.angle < 3 * PI / 2)
-	// 		y++;
-	// }
 	i = y * data->map_info.width + x;
 	return (i);
 }
@@ -56,7 +26,6 @@ void	move_up_down(t_data *data)
 	float	y;
 	int		i;
 
-	printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
 	{
 		x = data->player.x - data->player.d_x;
@@ -162,13 +131,13 @@ void	turn_player(t_data *data)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
 	{
-		data->player.angle += TURN_SPEED;
+		data->player.angle -= TURN_SPEED;
 		if (data->player.angle < 0)
 		data->player.angle += 2 * PI;
 	}
 	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 	{
-		data->player.angle -= TURN_SPEED;
+		data->player.angle += TURN_SPEED;
 		if (data->player.angle > 2 * PI)
 			data->player.angle -= 2 * PI;
 	}
@@ -190,6 +159,8 @@ void	movement(void *param)
 	move_up_down(data);
 	move_left_right(data);
 	turn_player(data);
+	data->view = raycaster(data);
+	mlx_image_to_window(data->mlx, data->view, 0, 0);
 	move_player_image(data); // moving player pixture using instances
 	draw_minimap_rays(data); // using mlx_put_pixel
 }
