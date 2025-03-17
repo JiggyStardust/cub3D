@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:22:23 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/05 11:39:12 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:25:37 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ bool	images_to_window(t_data *data)
 	t_position	pos;
 
 	i = 0;
+	if (mlx_image_to_window(data->mlx, data->ceiling_img, 0, 0) == -1)
+		return (false);
+	if (mlx_image_to_window(data->mlx, data->floor_img, 0, HEIGHT / 2) == -1)
+		return (false);
 	while (i < data->map_info.width * data->map_info.height)
 	{
 		pos = get_pos(data, i);
@@ -40,22 +44,9 @@ bool	images_to_window(t_data *data)
 			return (false);
 		i++;
 	}
+	mlx_image_to_window(data->mlx, data->view, 0, 0);
 	if (mlx_image_to_window(data->mlx, data->mini_p_img, data->player.x \
 			* TILE_MINI, data->player.y * TILE_MINI) == -1)
 		return (false);
 	return (true);
 }
-
-/*	MITEN KAYTTAA GET_POS T HELMI
-int i;
-struct pos;
-
-i = 0;
-while (i < width * height)
-{
-	pos = get_pos(map[i]);
-	pos.row = y;
-	pos.col = x;
-	i++;
-}
-*/

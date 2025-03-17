@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 11:04:33 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:57:29 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 # define CUB3D_H
 
 # define TILE_MINI 50
+# define HEIGHT 1518
+# define WIDTH 1518
 # define RED 0xFF0000FF
+# define DARK_RED 0x8B0000FF
 # define PI 3.14159265359
 # define MOVE_SPEED 0.1
 # define TURN_SPEED 0.05
@@ -32,6 +35,17 @@ typedef struct	s_rgb
 	int	g;
 	int	b;
 }	t_rgb;
+
+typedef struct	s_ray
+{
+	float	dx;
+	float	dy;
+	float	x;
+	float	y;
+	float	len;
+	float	angle;
+	int		shade;
+}	t_ray;
 
 typedef struct s_player
 {
@@ -91,6 +105,10 @@ typedef struct s_data
 	mlx_image_t		*mini_p_img; // player image
 	mlx_image_t		*mini_f_img; // floor image
 	mlx_image_t		*mini_w_img; // wall image
+	mlx_image_t		*floor_img;
+	mlx_image_t		*ceiling_img;
+	mlx_image_t		*ray;
+	mlx_image_t		*view;
 }	t_data;
 
 //main.c
@@ -161,6 +179,7 @@ void	key_hook(mlx_key_data_t keydata, void *param);
  * static function draw_floor_n_walls(). 
  * Lastly draws the player image @param mini_p_img on top.
  ******************************************************************************/
+// bool	images_to_window(t_data *data);
 bool	images_to_window(t_data *data);
 
 // moving_bonus.c
@@ -202,4 +221,8 @@ void	move_up_down(t_data *data);
  ******************************************************************************/
 void	move_player_image(t_data *data);
 
+
+mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
+int		get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
+mlx_image_t	*raycaster(t_data *data);
 #endif

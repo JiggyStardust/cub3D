@@ -205,3 +205,39 @@ new variables to struct once I know how to name them.
 handling it in the moving functions.
 
 - Added enum dir_type struct for moving direction, enums = "FORWARD, REVERSE, LEFT, RIGHT".
+
+----------------
+8th of March 2025
+----------------
+
+- Floor and ceiling are drawn, now we start to build the raycaster logic together.
+
+----------------
+12th of March 2025
+----------------
+
+- What a day, we got raycasting to work on the minimap (2D raycasting),
+- We started to implement logic for drawing 3D world with one color. It's fisheyed (Euclidean) now and only works with player == N.
+
+----------------
+13th of March 2025
+----------------
+
+- Shorter work day, continued working with the 3D drawing (not moving yet, just displaying the starting positions POV).
+- Faced problems with fisheye and reverse fisheye. Wall check not using DDA, but our own way.
+
+----------------
+14th of March 2025
+----------------
+
+- Euclidean effect and some other probles were succesfully fixed in the morning. It managed to paint the picture better than ever before.
+- How ever, there were some minor errors when objects were nearer, as the surface wasnt 100% even (roughness caused by a couple of pixels here and there) which might have been due to some sort of rounding error.
+- I started modifying the wall check, as I knew it must be the problem. Eventually gave up with our idea and tryid to start implementing DDA.
+
+- To the newest version I also updated the diretions/angles as we had our movements etc accustomed to a mirror image of the directions.
+
+- The picture is now in some ways more accurate, but also there's an error with the DDA implementation. It detects hitting a vertical wall when it should be just horizontal walls. So once that's fixed, I'm confident we're close to the final solution.
+
+
+
+
