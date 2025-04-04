@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/17 13:57:29 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:01:32 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define PI 3.14159265359
 # define MOVE_SPEED 0.1
 # define TURN_SPEED 0.05
+# define VERTICAL 0
+# define HORIZONTAL 1
 
 # include "../libft/libft.h"
 # include "MLX42/include/MLX42/MLX42.h"
@@ -34,6 +36,7 @@ typedef struct	s_rgb
 	int	r;
 	int	g;
 	int	b;
+	int a;
 }	t_rgb;
 
 typedef struct	s_ray
@@ -44,7 +47,7 @@ typedef struct	s_ray
 	float	y;
 	float	len;
 	float	angle;
-	int		shade;
+	int		side;
 }	t_ray;
 
 typedef struct s_player
@@ -100,6 +103,9 @@ typedef struct s_data
 	char	*file;
 	t_map	map_info;
 	enum e_type	*map;
+	double	text_x;
+	double	text_y;
+	mlx_texture_t *texture;
 	t_player	player;
 	mlx_t	*mlx;
 	mlx_image_t		*mini_p_img; // player image

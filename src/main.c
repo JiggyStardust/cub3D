@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/17 13:56:30 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:02:01 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,27 +68,57 @@ void	cleanup(t_data *data)
 // 	return (hypotenuse);
 // }
 
+uint32_t get_pixel(mlx_texture_t *texture, int xy)
+{
+	t_rgb color;
+	
+	color.r = texture->pixels[xy];
+	color.g = texture->pixels[xy + 1];
+	color.b = texture->pixels[xy + 2];
+	color.a = texture->pixels[xy + 3];
+	return (color.r << 24 | color.g << 16 | color.b << 8 | color.a);
+}
+
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 {
 
 	float	center;
 	float	wall_height;
 	int		y;
-	(void)data;
+	uint32_t	text_x;
+	double	step;
 	uint32_t	color;
 
 	center = HEIGHT / 2;
 	wall_height = HEIGHT / ray.len;
 	// printf("raylen = %f\n", ray.len);
+	//(twidth * ty + tx) * 4
 	y = center - wall_height / 2;
-	if (ray.shade)
+	if (y < 0)
+		y = 0;
+	//get texture_x based on vertical and horizontal hits (ray.side)
+	//text_x = get_x(x, ray, data->texture);
+	if (data->text_x < 0)
+		data->text_x = 0;
+	if (data->text_x >= data->texture->height)
+		data->text_x = data->texture->height - 1;
+	text_x = (uint32_t) data->text_x;
+	step = (double) data->texture->height / wall_height;
+	data->text_y = (y - HEIGHT / 2 + wall_height / 2) * step;
+	/*if (ray.side)
 		color = RED;
 	else
-		color = DARK_RED;
+		color = DARK_RED;*/
 	while (y <= center + wall_height / 2)
 	{
+		if (data->text_y >= data->texture->height)
+			data->text_y = data->texture->height - 1;
+		color = get_pixel(data->texture, (data->texture->width * (uint32_t) data->text_y + text_x) * 4);
 		mlx_put_pixel(img, x, y, color);
+		data->text_y += step;
 		y++;
+		if (y == HEIGHT)
+			break ;
 	}
 	return (img);
 }
@@ -145,7 +175,7 @@ float	cast_ray(t_data *data, t_ray *ray)
 	float	side_dist_y;
 	int		step_x;
 	int		step_y;
-	int		last;
+	//int		last;
 
 	map_x = (int)ray->x;
 	map_y = (int)ray->y;
@@ -195,24 +225,32 @@ float	cast_ray(t_data *data, t_ray *ray)
 		{
 			map_x += step_x;
 			side_dist_x += delta_x;
-			last = 0;
+			ray->side = VERTICAL; //vertical
 		}
 		else  // Move in Y direction
 		{
 			map_y += step_y;
 			side_dist_y += delta_y;
-			last = 1;
+			ray->side = HORIZONTAL; //horizontal
 		}
 		xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
 	}
 	// printf("side_dist_x: %f\n", side_dist_x);
 	// printf("side_dist_y: %f\n\n", side_dist_y);
-
-	if (last == 0)
+	data->text_x = map_x * data->texture->width;
+	if (ray->side == VERTICAL)
+	{
 		side_dist_x -= delta_x;
-	else if (last == 1)
+		if (step_x > 0)
+			data->text_x = data->texture->width - data->text_x - 1;
+	}
+	else if (ray->side == HORIZONTAL)
+	{
 		side_dist_y -= delta_y;
-	ray->shade = last;
+		if (step_y < 0)
+			data->text_x = data->texture->width - data->text_x - 1;
+	}
+	//ray->shade = last;
 	if (fabs(side_dist_x) < fabs(side_dist_y))
 		return (fabs(side_dist_x));
 	else
@@ -263,7 +301,6 @@ mlx_image_t	*raycaster(t_data *data)
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	//mlx_image_t *rimg;
 
 	//check if map is valid and parse
 	if (argc != 2)
@@ -278,6 +315,7 @@ int	main(int argc, char **argv)
 	data.player.angle = get_player_angle(data.player.p_dir);
 	data.player.d_x = cos(data.player.angle) * MOVE_SPEED;
 	data.player.d_y = sin(data.player.angle) * MOVE_SPEED;
+	data.texture = mlx_load_png("./textures/zoo.png");
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
 	data.view = raycaster(&data);
