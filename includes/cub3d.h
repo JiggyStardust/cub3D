@@ -45,6 +45,8 @@ typedef struct	s_ray
 	float	dy;
 	float	x;
 	float	y;
+	double	end_x;
+	double	end_y;
 	float	len;
 	float	angle;
 	int		side;
@@ -103,8 +105,8 @@ typedef struct s_data
 	char	*file;
 	t_map	map_info;
 	enum e_type	*map;
-	double	text_x;
-	double	text_y;
+	int	text_x;
+	uint32_t	text_y;
 	mlx_texture_t *texture;
 	t_player	player;
 	mlx_t	*mlx;

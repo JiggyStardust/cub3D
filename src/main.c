@@ -72,19 +72,21 @@ uint32_t get_pixel(mlx_texture_t *texture, int xy)
 {
 	t_rgb color;
 	
-	color.r = texture->pixels[xy];
-	color.g = texture->pixels[xy + 1];
-	color.b = texture->pixels[xy + 2];
-	color.a = texture->pixels[xy + 3];
+	color.r = texture->pixels[xy * 4];
+	color.g = texture->pixels[xy * 4 + 1];
+	color.b = texture->pixels[xy * 4 + 2];
+	color.a = texture->pixels[xy * 4 + 3];
 	return (color.r << 24 | color.g << 16 | color.b << 8 | color.a);
 }
+#include <stdio.h>
 
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 {
 
 	float	center;
 	float	wall_height;
-	int		y;
+	int		wall_top;
+	double	t_pos;
 	uint32_t	text_x;
 	double	step;
 	uint32_t	color;
@@ -93,31 +95,48 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 	wall_height = HEIGHT / ray.len;
 	// printf("raylen = %f\n", ray.len);
 	//(twidth * ty + tx) * 4
-	y = center - wall_height / 2;
-	if (y < 0)
-		y = 0;
+	wall_top = center - wall_height / 2;
+	if (wall_top < 0)
+		wall_top = 0;
 	//get texture_x based on vertical and horizontal hits (ray.side)
 	//text_x = get_x(x, ray, data->texture);
+	if (ray.side == VERTICAL)
+		ray.end_x = ray.y + ray.len * cos(ray.angle);
+	else
+		ray.end_x = ray.x + ray.len * sin(ray.angle);
+	ray.end_x -= floor((ray.end_x));
+	data->text_x = ray.end_x * (double)data->texture->width;
+	if ((ray.side == VERTICAL && cos(ray.angle) > 0) || (ray.side == HORIZONTAL && sin(ray.angle) < 0))
+	{
+		data->text_x = data->texture->width - data->text_x - 1;
+	}
 	if (data->text_x < 0)
+	{
 		data->text_x = 0;
-	if (data->text_x >= data->texture->height)
-		data->text_x = data->texture->height - 1;
+	}
+	//printf("texture width: %d\n", data->texture->width);
+	//printf("x is: %d\n", x);
+	if (data->text_x >= data->texture->width)
+		data->text_x = data->texture->width - 1;
 	text_x = (uint32_t) data->text_x;
 	step = (double) data->texture->height / wall_height;
-	data->text_y = (y - HEIGHT / 2 + wall_height / 2) * step;
+	t_pos = (wall_top - HEIGHT / 2 + wall_height / 2) * step;
 	/*if (ray.side)
 		color = RED;
 	else
 		color = DARK_RED;*/
-	while (y <= center + wall_height / 2)
+	while (wall_top <= center + wall_height / 2)
 	{
+		data->text_y = (uint32_t) t_pos;
+		if (data->text_y < 0)
+			data->text_y = 0;
 		if (data->text_y >= data->texture->height)
-			data->text_y = data->texture->height - 1;
-		color = get_pixel(data->texture, (data->texture->width * (uint32_t) data->text_y + text_x) * 4);
-		mlx_put_pixel(img, x, y, color);
-		data->text_y += step;
-		y++;
-		if (y == HEIGHT)
+			data->text_y = (uint32_t) data->texture->height - 1;
+		color = get_pixel(data->texture, (data->texture->width * data->text_y + text_x));
+		mlx_put_pixel(img, x, wall_top, color);
+		t_pos += step;
+		wall_top++;
+		if (wall_top == HEIGHT)
 			break ;
 	}
 	return (img);
@@ -237,18 +256,20 @@ float	cast_ray(t_data *data, t_ray *ray)
 	}
 	// printf("side_dist_x: %f\n", side_dist_x);
 	// printf("side_dist_y: %f\n\n", side_dist_y);
-	data->text_x = map_x * data->texture->width;
+	//data->text_x = map_x * (double)data->texture->width;
+	//ray->end_x = map_x;
+	ray->end_y = map_y;
 	if (ray->side == VERTICAL)
 	{
 		side_dist_x -= delta_x;
-		if (step_x > 0)
-			data->text_x = data->texture->width - data->text_x - 1;
+		//if (cos(ray->angle) > 0)
+			//data->text_x = data->texture->width - data->text_x - 1;
 	}
 	else if (ray->side == HORIZONTAL)
 	{
 		side_dist_y -= delta_y;
-		if (step_y < 0)
-			data->text_x = data->texture->width - data->text_x - 1;
+		//if (sin(ray->angle) < 0)
+			//data->text_x = data->texture->width - data->text_x - 1;
 	}
 	//ray->shade = last;
 	if (fabs(side_dist_x) < fabs(side_dist_y))

@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/03/06 15:29:08 by hpirkola         ###   ########.fr        #
+#    Updated: 2025/04/06 11:28:15 by hpirkola         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,17 @@ MLX42_LIB = $(MLX42_DIR)/build/libmlx42.a
 
 INCLUDE = -I. -I$(LIBFT_DIR) -I$(MLX42_DIR)/include -I~/.brew/Cellar/glfw/3.3.8/include/
 
-all: $(NAME)
+REQUIRED_PACKAGES = build-essential libx11-dev libglfw3 xorg-dev
+CHECK_PACKAGES_CMD = dpkg -l | grep -E '$(subst $(space),|,$(REQUIRED_PACKAGES))'
+
+all: check_packages $(NAME)
+
+check_packages:
+	@if ! $(CHECK_PACKAGES_CMD) > /dev/null; then \
+		echo "$(CYAN_BOLD)Required packages not installed.$(RESET)"; \
+		echo "\n\nPlease install: $(REQUIRED_PACKAGES)"; \
+		exit 1; \
+	fi
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX42_LIB)
 	@$(CUB3D)
