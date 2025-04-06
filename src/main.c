@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/04 12:02:01 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/06 15:40:01 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 	//get texture_x based on vertical and horizontal hits (ray.side)
 	//text_x = get_x(x, ray, data->texture);
 	if (ray.side == VERTICAL)
-		ray.end_x = ray.y + ray.len * cos(ray.angle);
+		ray.end_x = ray.y + ray.len * sin(ray.angle);
 	else
-		ray.end_x = ray.x + ray.len * sin(ray.angle);
+		ray.end_x = ray.x + ray.len * cos(ray.angle);
 	ray.end_x -= floor((ray.end_x));
 	data->text_x = ray.end_x * (double)data->texture->width;
 	if ((ray.side == VERTICAL && cos(ray.angle) > 0) || (ray.side == HORIZONTAL && sin(ray.angle) < 0))
