@@ -48,6 +48,7 @@ typedef struct	s_ray
 	double	end_x;
 	double	end_y;
 	float	len;
+	float	len2;
 	float	angle;
 	int		side;
 }	t_ray;

@@ -68,15 +68,17 @@ void	cleanup(t_data *data)
 // 	return (hypotenuse);
 // }
 
-uint32_t get_pixel(mlx_texture_t *texture, int xy)
+void get_pixel(mlx_texture_t *texture, uint32_t *color, int xy)
 {
-	t_rgb color;
+	t_rgb rgb;
 	
-	color.r = texture->pixels[xy * 4];
-	color.g = texture->pixels[xy * 4 + 1];
-	color.b = texture->pixels[xy * 4 + 2];
-	color.a = texture->pixels[xy * 4 + 3];
-	return (color.r << 24 | color.g << 16 | color.b << 8 | color.a);
+	if (xy + 3 >= (texture->width * texture->height))
+		return ;
+	rgb.r = texture->pixels[xy * 4];
+	rgb.g = texture->pixels[xy * 4 + 1];
+	rgb.b = texture->pixels[xy * 4 + 2];
+	rgb.a = texture->pixels[xy * 4 + 3];
+	*color = (rgb.r << 24 | rgb.g << 16 | rgb.b << 8 | rgb.a);
 }
 #include <stdio.h>
 
@@ -101,9 +103,9 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 	//get texture_x based on vertical and horizontal hits (ray.side)
 	//text_x = get_x(x, ray, data->texture);
 	if (ray.side == VERTICAL)
-		ray.end_x = ray.y + ray.len * sin(ray.angle);
+		ray.end_x = ray.y + ray.len2 * sin(ray.angle);
 	else
-		ray.end_x = ray.x + ray.len * cos(ray.angle);
+		ray.end_x = ray.x + ray.len2 * cos(ray.angle);
 	ray.end_x -= floor((ray.end_x));
 	data->text_x = ray.end_x * (double)data->texture->width;
 	if ((ray.side == VERTICAL && cos(ray.angle) > 0) || (ray.side == HORIZONTAL && sin(ray.angle) < 0))
@@ -132,7 +134,7 @@ mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 			data->text_y = 0;
 		if (data->text_y >= data->texture->height)
 			data->text_y = (uint32_t) data->texture->height - 1;
-		color = get_pixel(data->texture, (data->texture->width * data->text_y + text_x));
+		get_pixel(data->texture, &color, (data->texture->width * data->text_y + text_x));
 		mlx_put_pixel(img, x, wall_top, color);
 		t_pos += step;
 		wall_top++;
@@ -304,6 +306,7 @@ mlx_image_t	*raycaster(t_data *data)
 		// Cast a ray and determine its length
 		// printf("i: %d\n", i);
 		ray.len = cast_ray(data, &ray);
+		ray.len2 = ray.len;
 		ray.len *= cos(data->player.angle - ray.angle);
 		// printf("ray len: %f\n", ray.len);
 		// Draw the wall slice based on ray length
