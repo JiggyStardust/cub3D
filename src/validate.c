@@ -69,11 +69,7 @@ int valid_map2(enum e_type *map, int width, int height)
 		if ((i + 1) < (width * height) && !check_type(map[i], map[i + 1]))
 			return (0);
 		if (i < (width * (height - 1)) && !check_type(map[i], map[i + width]))
-		{
-			printf("i: %d\n", i);
-			printf("i2 type: %d\n", map[i + width]);
 			return (0);
-		}
 	}
 	return (1);
 }
@@ -92,7 +88,6 @@ int	load_textures(t_data *data)
 	data->textures.EA = mlx_load_png(data->map_info.EA);
 	if (!data->textures.EA)
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	//data->texture = data->textures.NO;
 	return (1);
 }
 
@@ -123,6 +118,6 @@ int	is_valid(t_data *data)
 	//if other characters than 01NSEW -> return 0 //checked
 	//if colors are in the range (0 - 255 or something like that) //checked
 	//if player is in the map twice //checked
-	//no newline at the end of map  ????????????????????????
+	//no newline at the end of map //checked
 	return (1);
 }

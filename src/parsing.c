@@ -30,7 +30,7 @@ int	add_texture(char *src, char **dest)
 int	textures(char **info, t_data *data)
 {
 	char	**texture;
-	
+
 	texture = ft_split(info[1], '\n');
 	if (!texture && ft_strncmp(info[0], "\n", 2))
 		return (0);
@@ -64,7 +64,8 @@ int	set_color(char **rgb, t_rgb *colors)
 	colors->r = ft_atoi(rgb[0]);
 	colors->g = ft_atoi(rgb[1]);
 	colors->b = ft_atoi(rgb[2]);
-	if (colors->r > 255 || colors->r < 0 || colors->g > 255 || colors->g < 0 || colors->b > 255 || colors->b < 0)
+	if (colors->r > 255 || colors->r < 0 || colors->g > 255 || \
+		colors->g < 0 || colors->b > 255 || colors->b < 0)
 		return (ft_putstr_fd("Color out of range\n", 2), 0);
 	return (1);
 }
@@ -75,20 +76,29 @@ int	get_color(char **info, t_data *data)
 
 	rgb = ft_split(info[1], ',');
 	if (!rgb)
-		return (0);
+		return (ft_putstr_fd("Allocation failed\n", 2), 0);
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
+	{
+		ft_putstr_fd("Color value missing\n", 2);
 		return (free_2d_array(rgb), 0);
+	}
 	if (*info[0] == 'F')
 	{
 		if (data->map_info.floor_color.found)
+		{
+			ft_putstr_fd("Color found multiple times\n", 2);
 			return (free_2d_array(rgb), 0);
+		}
 		if (!set_color(rgb, &data->map_info.floor_color))
 			return (free_2d_array(rgb), 0);
 	}
 	else if (*info[0] == 'C')
 	{
 		if (data->map_info.ceiling_color.found)
+		{
+			ft_putstr_fd("Color found multiple times\n", 2);
 			return (free_2d_array(rgb), 0);
+		}
 		if (!set_color(rgb, &data->map_info.ceiling_color))
 			return (free_2d_array(rgb), 0);
 	}
@@ -115,20 +125,20 @@ int	all_found(t_data *data)
 
 int	get_texture_and_color(t_data *data)
 {
-	int	fd;
+	int		fd;
 	char	*line;
 	char	**info;
 
 	fd = open(data->file, O_RDONLY);
 	if (fd == -1)
-		return (0);
+		return (ft_putstr_fd("Opening of file failed\n", 2), 0);
 	line = get_next_line(fd);
 	while (line)
 	{
 		info = ft_split(line, ' ');
 		free(line);
 		if (!info)
-			return (0);
+			return (ft_putstr_fd("Allocation failed\n", 2), 0);
 		if (!ft_strncmp(info[0], "F", 2) || !ft_strncmp(info[0], "C", 2))
 		{
 			if (!get_color(info, data))
@@ -137,7 +147,8 @@ int	get_texture_and_color(t_data *data)
 				return (free_2d_array(info), 0);
 			}
 		}
-		else if (info[0][0] == 'N' || info[0][0] == 'S' || info[0][0] == 'W' || info[0][0] == 'E')
+		else if (info[0][0] == 'N' || info[0][0] == 'S' \
+			|| info[0][0] == 'W' || info[0][0] == 'E')
 		{
 			if (!textures(info, data))
 			{
@@ -156,21 +167,21 @@ int	get_texture_and_color(t_data *data)
 
 int	get_map_size(t_data *data)
 {
-	int	i;
-	int	j;
-	int	fd;
+	int		i;
+	int		j;
+	int		fd;
 	char	*line;
 
 	i = 0;
 	fd = open(data->file, O_RDONLY);
 	if (fd == -1)
-		return (0);
+		return (ft_putstr_fd("Opening of file failed", 2), 0);
 	line = get_next_line(fd);
 	while (line)
 	{
 		j = 0;
 		if (line[j] == 'N' || line[j] == 'W' || line[j] == 'S' || line[j] == 'E'
-				 || line[j] == 'F' || line[j] == 'C' || line[j] == '\n')
+			|| line[j] == 'F' || line[j] == 'C' || line[j] == '\n')
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -191,7 +202,6 @@ int	get_map_size(t_data *data)
 
 int	check_file_format(char *file, char *format)
 {
-	//if ending is not .cub, file is in wrong format
 	int		i;
 
 	i = ft_strlen(file) - 4;
@@ -220,19 +230,20 @@ int	get_map(t_data *data)
 	int		i;
 	int		j;
 
-	data->map = malloc(sizeof(enum e_type) * (data->map_info.height * data->map_info.width + 1));
+	data->map = malloc(sizeof(enum e_type) * \
+		(data->map_info.height * data->map_info.width + 1));
 	if (!data->map)
-		return (0);
+		return (ft_putstr_fd("Allocation failed\n", 2), 0);
 	fd = open(data->file, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return (ft_putstr_fd("Opening of file failed\n", 2), 0);
 	j = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
 		i = 0;
-		if (line[i] == 'N' || line[i] == 'W' || line[i] == 'S' || line[i] == 'E'
-				|| line[i] == 'F' || line[i] == 'C' || line[i] == '\n')
+		if (line[i] == 'N' || line[i] == 'W' || line[i] == 'S' || line[i] == 'E' \
+			|| line[i] == 'F' || line[i] == 'C' || line[i] == '\n')
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -244,37 +255,12 @@ int	get_map(t_data *data)
 			return (ft_putstr_fd("Invalid map \n", 2), 0);
 		line = get_next_line(fd);
 	}
-	close(fd);	
+	close(fd);
 	return (1);
 }
 
-/*#include <stdio.h>
-
-void	type_check(t_data *data)
-{
-	t_position	pos;
-	enum e_type	type;
-
-	pos = get_pos(data, 5);
-	printf("should be 1, 6:\n");
-	printf("row: %d, column: %d\n", pos.row, pos.col);
-	pos = get_pos(data, 34);
-	printf("should be 4, 5:\n");
-	printf("row: %d, column: %d\n", pos.row, pos.col);
-	type = get_type(data, 2, 6);
-	printf("should be 0:\n");
-	printf("type: %d\n", type);
-	type = get_type(data, 4, 6);
-	printf("should be 1:\n");
-	printf("type: %d\n", type);
-	type = get_type(data, 1, 2);
-	printf("should be 2:\n");
-	printf("type: %d\n", type);	
-}*/
-
 int	parsing(t_data *data, char **argv)
 {
-	//check file name is in .cub format
 	if (!check_file_format(argv[1], ".cub"))
 		return (0);
 	data->file = argv[1];
@@ -286,13 +272,12 @@ int	parsing(t_data *data, char **argv)
 		return (0);
 	if (!is_valid(data))
 		return (0);
-	/*printf("north: %s\n", data->map_info.NO);
-	printf("south: %s\n", data->map_info.SO);
-	printf("west: %s\n", data->map_info.WE);
-	printf("east: %s\n", data->map_info.EA);
-	printf("height: %d\n", data->map_info.height);
-	printf("width: %d\n", data->map_info.width);*/
-	/*int	i;
+	return (1);
+}
+/*
+void	draw_map(t_data *data)
+{
+	int	i;
 	int	j;
 	int	h;
 
@@ -304,8 +289,5 @@ int	parsing(t_data *data, char **argv)
 		while (++h < data->map_info.width)
 			printf("%d", data->map[++j]);
 		printf("\n");
-	}*/
-	/*type_check(data);*/
-	//check if map is valid
-	return (1);
-}
+	}
+}*/

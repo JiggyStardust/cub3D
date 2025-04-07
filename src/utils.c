@@ -101,15 +101,8 @@ int	to_map(t_data *data, char *line, int j)
 			else
 				return (-1);
 		}
-		else if (i < data->map_info.width)
-		{
-			while (i < data->map_info.width)
-			{
-				data->map[j++] = PADDING;
-				i++;
-			}
-			i--;
-		}
+		else
+			break ;
 		i++;
 	}
 	if (i < data->map_info.width)
