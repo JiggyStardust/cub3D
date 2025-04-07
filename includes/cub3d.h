@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/07 14:22:42 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 17:46:38 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct	s_ray
 	float	dy;
 	float	x;
 	float	y;
+	float	dist_x;
+	float	dist_y;
 	double	end_x;
 	double	end_y;
 	float	len;
@@ -142,6 +144,23 @@ t_player    player(char c, int j, t_data *data);
 
 //validate.c
 int	is_valid(t_data *data);
+
+
+//raycasting.c
+/*******************************************************************************
+ *  Calculates the length until a wall is hit using DDA (digital differential 
+ * analysis) algorithm.
+ ******************************************************************************/
+float	cast_ray(t_data *data, t_ray *ray);
+
+/*******************************************************************************
+ * Creates the game image using mlx_new_image(), creates a @param ray and 
+ * proceeds to calculate the length of every individual ray at a time and drawd
+ * the textures based on the rays length.
+ ******************************************************************************/
+mlx_image_t	*raycaster(t_data *data);
+
+
 //init_utils_bonus.c 
 /*******************************************************************************
  * @param i the index on the map
