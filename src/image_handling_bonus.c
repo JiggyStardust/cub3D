@@ -6,37 +6,37 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:27:59 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/12 12:36:33 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:36:38 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-static mlx_image_t	*png_to_resized_img(t_data *data, const char *path_text)
-{
-	mlx_texture_t	*text;
-	mlx_image_t		*img;
+// static mlx_image_t	*png_to_resized_img(t_data *data, const char *path_text)
+// {
+// 	mlx_texture_t	*text;
+// 	mlx_image_t		*img;
 
-	text = mlx_load_png(path_text);
-	if (!text)
-		return (NULL);
-	img = mlx_texture_to_image(data->mlx, text);
-	if (!img)
-	{
-		mlx_delete_texture(text);
-		return (NULL);
-	}
-	mlx_delete_texture(text);
-	if (img->width != TILE_MINI || img->height != TILE_MINI)
-	{
-		if (!mlx_resize_image(img, TILE_MINI, TILE_MINI))
-		{
-			mlx_delete_image(data->mlx, img);
-			return (NULL);
-		}
-	}
-	return (img);
-}
+// 	text = mlx_load_png(path_text);
+// 	if (!text)
+// 		return (NULL);
+// 	img = mlx_texture_to_image(data->mlx, text);
+// 	if (!img)
+// 	{
+// 		mlx_delete_texture(text);
+// 		return (NULL);
+// 	}
+// 	mlx_delete_texture(text);
+// 	if (img->width != data->tile_mini || img->height != data->tile_mini)
+// 	{
+// 		if (!mlx_resize_image(img, data->tile_mini, data->tile_mini))
+// 		{
+// 			mlx_delete_image(data->mlx, img);
+// 			return (NULL);
+// 		}
+// 	}
+// 	return (img);
+// }
 
 mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 {
@@ -63,30 +63,32 @@ mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 	return (img);
 }
 
-// void draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
-// {
-// 	int center_x = TILE_MINI / 2;
-// 	int center_y = TILE_MINI / 2;
-// 	int	y;
-// 	int	x;
+void	 draw_minimap(t_data *data, enum e_type c, int x, int y)
+{
+	uint32_t	color;
+	int			i;
+	int			j;
 
-// 	mlx_delete_image(data->mlx, data->p_img);
-// 	data->p_img = mlx_new_image(data->mlx, TILE_MINI, TILE_MINI);
-// 	y = -6;
-// 	while (y <= 6)
-// 	{
-// 		x = -6;
-// 		while (x <= 6)
-// 		{
-// 			mlx_put_pixel(data->p_img, center_x + x, center_y + y, 0xFF0000FF);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	mlx_image_to_window(data->mlx, data->p_img, data->player.x * TILE_MINI, data->player.y * TILE_MINI);
-// }
+	if (c == FLOOR)
+		color = (uint32_t)((255 << 24) | (255 << 16) | (255 << 8) | 255);
+	else if (c == WALL)
+		color = (uint32_t)((0 << 24) | (0 << 16) | (0 << 8) | 255);
+	else
+		return ;
+	i = 0;
+	while (i < data->tile_mini)
+	{
+		j = 0;
+		while (j < data->tile_mini)
+		{
+			mlx_put_pixel(data->minimap, x * data->tile_mini + j, y * data->tile_mini + i, color);
+			j++;
+		}
+		i++;
+	}
+}
 
-mlx_image_t *draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
+mlx_image_t *draw_player(t_data *data)
 {
 	mlx_image_t *img;
 	int	y;
@@ -109,25 +111,48 @@ mlx_image_t *draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_w
 	return (img);
 }
 
+int		define_minimap_tile(int map_width, int map_height)
+{
+	int	tile;
+
+	tile = 30;
+	while (map_height * tile < 450)
+		tile++;
+	while (map_width * tile > WIDTH)
+		tile--;
+	if (tile < 30)
+		tile = 0;
+	return (tile);
+}
+
 bool	setup_images(t_data *data)
 {
+	int			i;
+	t_position	pos;
+
+	i = 0;
+	data->tile_mini = define_minimap_tile(data->map_info.width, data->map_info.height);
+	printf("tile_size: %d\n", data->tile_mini);
 	data->ceiling_img = draw_background(data, data->map_info.ceiling_color);
 	if (!data->ceiling_img)
 		return (false);
 	data->floor_img = draw_background(data, data->map_info.floor_color);
 	if (!data->floor_img)
 		return (false);
-	data->mini_f_img = png_to_resized_img(data, "./textures/mini_floor.png");
-	if (!data->mini_f_img)
+	data->minimap = mlx_new_image(data->mlx, data->map_info.width * data->tile_mini, data->map_info.height * data->tile_mini);
+	if (data->tile_mini && !data->minimap)
 		return (false);
-	data->mini_w_img = png_to_resized_img(data, "./textures/mini_wall.png");
-	if (!data->mini_w_img)
-		return (false);
-	// data->mini_p_img = png_to_resized_img(data, "./textures/mini_player.png");
-	// if (!data->mini_p_img)
-	// 	return (false);
-	data->mini_p_img = draw_player(data);
-	if (!data->mini_p_img)
-		return (false);
+	if (data->minimap)
+	{
+		while (i < data->map_info.width * data->map_info.height)
+		{
+			pos = get_pos(data, i);
+			draw_minimap(data, data->map[i], pos.col, pos.row);
+			i++;
+		}
+		data->mini_p_img = draw_player(data);
+		if (!data->mini_p_img)
+			return (false);
+	}
 	return (true);
 }
