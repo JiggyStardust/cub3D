@@ -99,17 +99,17 @@ int	get_color(char **info, t_data *data)
 int	all_found(t_data *data)
 {
 	if (!data->map_info.NO)
-		return (0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.SO)
-		return (0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.EA)
-		return (0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.WE)
-		return (0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.floor_color.found)
-		return (0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.ceiling_color.found)
-		return (0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	return (1);
 }
 
@@ -176,7 +176,7 @@ int	get_map_size(t_data *data)
 			line = get_next_line(fd);
 			continue ;
 		}
-		while (line[j] != '\n')
+		while (line[j] && line[j] != '\n')
 			j++;
 		if (j > data->map_info.width)
 			data->map_info.width = j;
@@ -189,17 +189,27 @@ int	get_map_size(t_data *data)
 	return (1);
 }
 
-static int	check_file_format(char *file)
+int	check_file_format(char *file, char *format)
 {
 	//if ending is not .cub, file is in wrong format
 	int		i;
 
 	i = ft_strlen(file) - 4;
 	if (i < 0)
+	{
+		ft_putstr_fd("Expected file format: ", 2);
+		ft_putstr_fd(format, 2);
+		ft_putstr_fd("\n", 2);
 		return (0);
+	}
 	file += i;
-	if (ft_strncmp(file, ".cub", 5))
+	if (ft_strncmp(file, format, 5))
+	{	
+		ft_putstr_fd("Expected file format: ", 2);
+		ft_putstr_fd(format, 2);
+		ft_putstr_fd("\n", 2);
 		return (0);
+	}
 	return (1);
 }
 
@@ -230,6 +240,8 @@ int	get_map(t_data *data)
 		}
 		j = to_map(data, line, j);
 		free(line);
+		if (j < 0)
+			return (ft_putstr_fd("Invalid map \n", 2), 0);
 		line = get_next_line(fd);
 	}
 	close(fd);	
@@ -263,7 +275,7 @@ void	type_check(t_data *data)
 int	parsing(t_data *data, char **argv)
 {
 	//check file name is in .cub format
-	if (!check_file_format(argv[1]))
+	if (!check_file_format(argv[1], ".cub"))
 		return (0);
 	data->file = argv[1];
 	if (!get_map_size(data))
@@ -279,8 +291,8 @@ int	parsing(t_data *data, char **argv)
 	printf("west: %s\n", data->map_info.WE);
 	printf("east: %s\n", data->map_info.EA);
 	printf("height: %d\n", data->map_info.height);
-	printf("width: %d\n", data->map_info.width);
-	int	i;
+	printf("width: %d\n", data->map_info.width);*/
+	/*int	i;
 	int	j;
 	int	h;
 
@@ -292,8 +304,8 @@ int	parsing(t_data *data, char **argv)
 		while (++h < data->map_info.width)
 			printf("%d", data->map[++j]);
 		printf("\n");
-	}
-	type_check(data);*/
+	}*/
+	/*type_check(data);*/
 	//check if map is valid
 	return (1);
 }

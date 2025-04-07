@@ -96,8 +96,10 @@ int	to_map(t_data *data, char *line, int j)
 					return (ft_putstr_fd("Player in map multiple times\n", 2), 0);
 				data->map[j++] = FLOOR; 
 			}
-			else
+			else if (line[i] == ' ' || line[i] == '\0')
 				data->map[j++] = PADDING;
+			else
+				return (-1);
 		}
 		else if (i < data->map_info.width)
 		{
@@ -106,8 +108,17 @@ int	to_map(t_data *data, char *line, int j)
 				data->map[j++] = PADDING;
 				i++;
 			}
+			i--;
 		}
 		i++;
+	}
+	if (i < data->map_info.width)
+	{
+		while (i < data->map_info.width)
+		{
+			data->map[j++] = PADDING;
+			i++;
+		}
 	}
 	return (j);
 }
