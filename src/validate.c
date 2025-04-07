@@ -12,24 +12,31 @@
 
 #include "../includes/cub3d.h"
 
+void	permission_denied(char *file)
+{
+	ft_putstr_fd("No permission to file or file doesn't exist <", 2);
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(">\n", 2);
+}
+
 int	access_textures(t_map map)
 {
 	int	fd;
 
 	fd = open(map.NO, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return (permission_denied(map.NO), 0);
 	close(fd);
 	fd = open(map.SO, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return (permission_denied(map.SO), 0);
 	close(fd);
 	fd = open(map.WE, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return (permission_denied(map.WE), 0);
 	fd = open(map.EA, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return (permission_denied(map.EA), 0);
 	return (1);
 }
 
@@ -52,62 +59,40 @@ int	check_type(enum e_type cur_type, enum e_type pre_type)
 	return (1);
 }
 
-int	check_box(int i, t_data *data, enum e_type type)
+int valid_map2(enum e_type *map, int width, int height)
 {
-	//i++, i--, i+width, i-width
-	t_position	pos;
-	
-	pos = get_pos(data, i);
-	//checks the outer edges
-	if (pos.col == data->map_info.width - 1 && pos.row == data->map_info.height - 1)
-		return (1);
-	if ((pos.col == 0 || pos.row == 0) && (data->map[i] != PADDING && data->map[i] != WALL))
-		return (0);
-	if ((pos.col == data->map_info.width - 1 || pos.row == data->map_info.height - 1) && (data->map[i] != PADDING && data->map[i] != WALL))
-		return (0);
-	if (!check_type(data->map[i], type))
-		return (0);
-	//box above
-	//if (pos.row > 0)
-	//{
-	//	if (!check_box((i - data->map_info.width), data, data->map[i]))
-	//		return (0);
-	//}
-	//box on the left
-	//if (pos.col > 0)
-	//{
-	//	if (!check_box((i - 1), data, data->map[i]))
-	//		return (0);
-	//}
-	//box on the right
-	if (pos.col < data->map_info.width - 1)
+	int	i;
+
+	i = -1;
+	while (++i < width * height)
 	{
-		if (!check_box((i + 1), data, data->map[i]))
+		if ((i + 1) < (width * height) && !check_type(map[i], map[i + 1]))
 			return (0);
-	}
-	//box below
-	if (pos.row < data->map_info.height - 1)
-	{
-		if (!check_box((i + data->map_info.width), data, data->map[i]))
+		if (i < (width * (height - 1)) && !check_type(map[i], map[i + width]))
+		{
+			printf("i: %d\n", i);
+			printf("i2 type: %d\n", map[i + width]);
 			return (0);
+		}
 	}
 	return (1);
 }
 
-int	valid_map(t_data *data)
+int	load_textures(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	if (data->map[i] != WALL && data->map[i] != PADDING)
-		return (0);
-	//recursively check each box
-	//box on the right
-	if (!check_box((i + 1), data, data->map[i]))
-		return (0);
-	//box below
-	if (!check_box((i + data->map_info.width), data, data->map[i]))
-		return (0);
+	data->textures.NO = mlx_load_png(data->map_info.NO);
+	if (!data->textures.NO)
+		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
+	data->textures.SO = mlx_load_png(data->map_info.SO);
+	if (!data->textures.SO)
+		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
+	data->textures.WE = mlx_load_png(data->map_info.WE);
+	if (!data->textures.WE)
+		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
+	data->textures.EA = mlx_load_png(data->map_info.EA);
+	if (!data->textures.EA)
+		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
+	//data->texture = data->textures.NO;
 	return (1);
 }
 
@@ -116,15 +101,28 @@ int	is_valid(t_data *data)
 	//if a texture is missing //checked
 	//if duplicates in textures and colors -> return 0 //checked
 	//if can't open textures -> return 0 //checked
+	if (!data->player.found)
+		return (ft_putstr_fd("Player missing\n", 2), 0);
+	if (!check_file_format(data->map_info.NO, ".png"))
+		return (0);
+	if (!check_file_format(data->map_info.SO, ".png"))
+		return (0);
+	if (!check_file_format(data->map_info.WE, ".png"))
+		return (0);
+	if (!check_file_format(data->map_info.EA, ".png"))
+		return (0);
 	if (!access_textures(data->map_info))
 		return (0);
-	if (!valid_map(data))
+	if (!valid_map2(data->map, data->map_info.width, data->map_info.height))
+		return (ft_putstr_fd("Invalid map\n", 2), 0);
+	if (!load_textures(data))
 		return (0);
-	//if texture files are .png
+	//if texture files are .png //checked
 	//if wall is missing -> return 0 //checked
 	//if player is missing -> return 0 //checked
 	//if other characters than 01NSEW -> return 0 //checked
-	//if colors are in the range (0 - 255 or something like that)
-	//if player is in the map twice
+	//if colors are in the range (0 - 255 or something like that) //checked
+	//if player is in the map twice //checked
+	//no newline at the end of map  ????????????????????????
 	return (1);
 }

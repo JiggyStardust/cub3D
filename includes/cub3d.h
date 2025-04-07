@@ -39,6 +39,14 @@ typedef struct	s_rgb
 	int a;
 }	t_rgb;
 
+typedef struct s_textures
+{
+	mlx_texture_t	*NO;
+	mlx_texture_t	*SO;
+	mlx_texture_t	*WE;
+	mlx_texture_t	*EA;
+}	t_textures;
+
 typedef struct	s_ray
 {
 	float	dx;
@@ -106,8 +114,7 @@ typedef struct s_data
 	char	*file;
 	t_map	map_info;
 	enum e_type	*map;
-	int	text_x;
-	uint32_t	text_y;
+	t_textures textures;
 	mlx_texture_t *texture;
 	t_player	player;
 	mlx_t	*mlx;
@@ -123,6 +130,7 @@ typedef struct s_data
 //main.c
 //parsing.c
 int		parsing(t_data *data, char **argv);
+int	check_file_format(char *file, char *format);
 
 //utils.c
 void	free_2d_array(char **ptr);
