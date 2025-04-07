@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/07 14:05:34 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:29:29 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,10 +155,15 @@ void	movement(void *param)
 	turn_player(data);
 	data->view = raycaster(data);
 	mlx_image_to_window(data->mlx, data->view, 0, 0);
+	if (data->minimap)
 	move_player_image(data);
-	draw_minimap_rays(data);
+	if (data->minimap)
+		draw_minimap_rays(data);
 	mlx_set_instance_depth(data->view->instances, 3);
-	mlx_set_instance_depth(data->minimap->instances, 4);
-	mlx_set_instance_depth(data->mini_p_img->instances, 5);
-	mlx_set_instance_depth(data->ray->instances, 6);
+	if (data->minimap)
+	{
+		 mlx_set_instance_depth(data->minimap->instances, 4);
+		mlx_set_instance_depth(data->mini_p_img->instances, 5);
+		mlx_set_instance_depth(data->ray->instances, 6);
+	}
 }
