@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/04 12:01:32 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:22:42 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define TILE_MINI 50
 # define HEIGHT 1518
 # define WIDTH 1518
 # define RED 0xFF0000FF
@@ -107,6 +106,7 @@ typedef struct s_data
 	t_map	map_info;
 	enum e_type	*map;
 	int	text_x;
+	int	tile_mini;
 	uint32_t	text_y;
 	mlx_texture_t *texture;
 	t_player	player;
@@ -114,6 +114,7 @@ typedef struct s_data
 	mlx_image_t		*mini_p_img; // player image
 	mlx_image_t		*mini_f_img; // floor image
 	mlx_image_t		*mini_w_img; // wall image
+	mlx_image_t		*minimap;
 	mlx_image_t		*floor_img;
 	mlx_image_t		*ceiling_img;
 	mlx_image_t		*ray;
