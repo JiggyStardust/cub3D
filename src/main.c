@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/07 10:35:47 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:32:31 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,7 +313,7 @@ mlx_image_t	*raycaster(t_data *data)
 
 		// Move to the next ray angle
 		ray.angle += ((66.0 / 180 * PI) / WIDTH);
-		if (ray.angle > 2 * PI)
+		if (ray.angle >= 2 * PI)
 			ray.angle -= 2 * PI;
 		i++;
 	}

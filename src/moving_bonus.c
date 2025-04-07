@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/07 11:43:10 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:05:34 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	move_up_down(t_data *data)
 		if (data->map[i] == FLOOR)
 			data->player.x = x;
 	}
-//	i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 0); // for me ssage printing.
 }
 
 void	draw_minimap_rays(t_data *data)
@@ -58,8 +57,8 @@ void	draw_minimap_rays(t_data *data)
 	float	ray_angle;
 	float	ray_x;
 	float	ray_y;
-	float		map_x;
-	float		map_y;
+	float	map_x;
+	float	map_y;
 	int		xy;
 
 	i = 0;
@@ -82,15 +81,14 @@ void	draw_minimap_rays(t_data *data)
 			map_x += cos(ray_angle) * 0.01;
 			map_y += sin(ray_angle) * 0.01;
 			xy = get_index_of_rov_and_col(data, (int)map_x, (int)map_y, 1);
-			mlx_put_pixel(data->ray, map_x * TILE_MINI - 5, map_y * TILE_MINI - 5, RED);
+			mlx_put_pixel(data->ray, map_x * data->tile_mini - 5, map_y * data->tile_mini - 5, RED);
 		}
 		ray_angle += (1.0/180 * PI);
-		if (ray_angle == 2 * PI)
-			ray_angle = 0;
+		if (ray_angle >= 2 * PI)
+			ray_angle -= 2 * PI;
 		i++;
 	}
 	mlx_image_to_window(data->mlx, data->ray, data->player.x, data->player.y);
-	// ray_len = sqrt(pow(abs(ray_x - map_x), 2) + pow(fabs(ray_y - map_y), 2));
 }
 
 void	move_left_right(t_data *data)
@@ -99,18 +97,16 @@ void	move_left_right(t_data *data)
 	float	y;
 	int		i;
 
-	// printf("p_y: %f, p_x: %f, p_a: %f\n", data->player.y, data->player.x, data->player.angle);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
 	{
-		x = data->player.x - cos(data->player.angle + PI / 2) * MOVE_SPEED; // make own variable to player.d_x for moving right and left
-		y = data->player.y - sin(data->player.angle + PI / 2) * MOVE_SPEED; // make own variable to player.d_y for moving right and left
+		x = data->player.x - cos(data->player.angle + PI / 2) * MOVE_SPEED;
+		y = data->player.y - sin(data->player.angle + PI / 2) * MOVE_SPEED;
 		i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(y), 2);
 		if (data->map[i] == FLOOR)
 			data->player.y = y;
 		i = get_index_of_rov_and_col(data, (int)(x), (int)(data->player.y), 2);
 		if (data->map[i] == FLOOR)
 			data->player.x = x;
-		
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
 	{
@@ -123,9 +119,7 @@ void	move_left_right(t_data *data)
 		if (data->map[i] == FLOOR)
 			data->player.x = x;
 	}
-	// i = get_index_of_rov_and_col(data, (int)(data->player.x), (int)(data->player.y), 0); // for message_printing.
 }
-
 
 void	turn_player(t_data *data)
 {
@@ -147,8 +141,8 @@ void	turn_player(t_data *data)
 
 void	move_player_image(t_data *data)
 {
-	data->mini_p_img->instances[0].x = data->player.x * TILE_MINI;
-	data->mini_p_img->instances[0].y = data->player.y * TILE_MINI;
+	data->mini_p_img->instances[0].x = data->player.x * data->tile_mini;
+	data->mini_p_img->instances[0].y = data->player.y * data->tile_mini;
 }
 
 void	movement(void *param)
@@ -161,10 +155,8 @@ void	movement(void *param)
 	turn_player(data);
 	data->view = raycaster(data);
 	mlx_image_to_window(data->mlx, data->view, 0, 0);
-	move_player_image(data); // moving player pixture using instances
-	draw_minimap_rays(data); // using mlx_put_pixel
-	// mlx_set_instance_depth(data->mini_f_img->instances, 150);
-	// mlx_set_instance_depth(data->mini_w_img->instances, 151);
+	move_player_image(data);
+	draw_minimap_rays(data);
 	mlx_set_instance_depth(data->view->instances, 3);
 	mlx_set_instance_depth(data->minimap->instances, 4);
 	mlx_set_instance_depth(data->mini_p_img->instances, 5);
