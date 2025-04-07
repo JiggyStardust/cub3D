@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/06 15:40:01 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:35:47 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void get_pixel(mlx_texture_t *texture, uint32_t *color, int xy)
 	rgb.a = texture->pixels[xy * 4 + 3];
 	*color = (rgb.r << 24 | rgb.g << 16 | rgb.b << 8 | rgb.a);
 }
-#include <stdio.h>
 
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
 {

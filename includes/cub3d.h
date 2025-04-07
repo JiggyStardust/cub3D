@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/04 12:01:32 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/07 10:40:00 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ typedef struct s_data
 	mlx_image_t		*mini_p_img; // player image
 	mlx_image_t		*mini_f_img; // floor image
 	mlx_image_t		*mini_w_img; // wall image
+	mlx_image_t		*minimap;
 	mlx_image_t		*floor_img;
 	mlx_image_t		*ceiling_img;
 	mlx_image_t		*ray;

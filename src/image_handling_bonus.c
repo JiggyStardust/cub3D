@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:27:59 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/12 12:36:33 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:38:35 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,29 +63,6 @@ mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 	return (img);
 }
 
-// void draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
-// {
-// 	int center_x = TILE_MINI / 2;
-// 	int center_y = TILE_MINI / 2;
-// 	int	y;
-// 	int	x;
-
-// 	mlx_delete_image(data->mlx, data->p_img);
-// 	data->p_img = mlx_new_image(data->mlx, TILE_MINI, TILE_MINI);
-// 	y = -6;
-// 	while (y <= 6)
-// 	{
-// 		x = -6;
-// 		while (x <= 6)
-// 		{
-// 			mlx_put_pixel(data->p_img, center_x + x, center_y + y, 0xFF0000FF);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	mlx_image_to_window(data->mlx, data->p_img, data->player.x * TILE_MINI, data->player.y * TILE_MINI);
-// }
-
 mlx_image_t *draw_player(t_data *data) // Using mlx_put_pixel and mlx_image_to_window
 {
 	mlx_image_t *img;
@@ -117,12 +94,15 @@ bool	setup_images(t_data *data)
 	data->floor_img = draw_background(data, data->map_info.floor_color);
 	if (!data->floor_img)
 		return (false);
-	data->mini_f_img = png_to_resized_img(data, "./textures/mini_floor.png");
-	if (!data->mini_f_img)
+	data->minimap = mlx_new_image(data->mlx, data->map_info.width * TILE_MINI, data->map_info.height * TILE_MINI);
+	if (!data->minimap)
 		return (false);
-	data->mini_w_img = png_to_resized_img(data, "./textures/mini_wall.png");
-	if (!data->mini_w_img)
-		return (false);
+	// data->mini_f_img = png_to_resized_img(data, "./textures/mini_floor.png");
+	// if (!data->mini_f_img)
+	// 	return (false);
+	// data->mini_w_img = png_to_resized_img(data, "./textures/mini_wall.png");
+	// if (!data->mini_w_img)
+	// 	return (false);
 	// data->mini_p_img = png_to_resized_img(data, "./textures/mini_player.png");
 	// if (!data->mini_p_img)
 	// 	return (false);

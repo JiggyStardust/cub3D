@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/17 13:43:49 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:43:10 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,9 +163,10 @@ void	movement(void *param)
 	mlx_image_to_window(data->mlx, data->view, 0, 0);
 	move_player_image(data); // moving player pixture using instances
 	draw_minimap_rays(data); // using mlx_put_pixel
-	mlx_set_instance_depth(data->mini_f_img->instances, 150);
-	mlx_set_instance_depth(data->mini_w_img->instances, 151);
-	mlx_set_instance_depth(data->mini_p_img->instances, 152);
-	mlx_set_instance_depth(data->ray->instances, 153);
+	// mlx_set_instance_depth(data->mini_f_img->instances, 150);
+	// mlx_set_instance_depth(data->mini_w_img->instances, 151);
 	mlx_set_instance_depth(data->view->instances, 3);
+	mlx_set_instance_depth(data->minimap->instances, 4);
+	mlx_set_instance_depth(data->mini_p_img->instances, 5);
+	mlx_set_instance_depth(data->ray->instances, 6);
 }
