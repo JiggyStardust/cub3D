@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:30:25 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 13:01:34 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:26:01 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	dda(t_data *data, t_ray *ray, int step_x, int step_y)
 
 	map_x = (int)ray->x;
 	map_y = (int)ray->y;
-	xy = get_index_of_rov_and_col(data, map_x, map_y);
+	xy = get_index(data, map_x, map_y);
 	while (data->map[xy] == FLOOR)
 	{
 		if (ray->dist_x < ray->dist_y)
@@ -35,7 +35,7 @@ void	dda(t_data *data, t_ray *ray, int step_x, int step_y)
 			ray->dist_y += ray->dy;
 			ray->side = HORIZONTAL;
 		}
-		xy = get_index_of_rov_and_col(data, map_x, map_y);
+		xy = get_index(data, map_x, map_y);
 	}
 	ray->end_y = map_y;
 }
@@ -56,9 +56,9 @@ static void	calc_step_x(t_data *data, t_ray *ray, int *step_x)
 	}
 	else
 	{
-		*step_x = INFINITY; // is this the right approach?
-		ray->dist_x = INFINITY; // is this the right approach?
-		ray->dx = INFINITY; // is this the right approach?
+		*step_x = INFINITY;
+		ray->dist_x = INFINITY;
+		ray->dx = INFINITY;
 	}
 }
 
@@ -78,9 +78,9 @@ static void	calc_step_y(t_data *data, t_ray *ray, int *step_y)
 	}
 	else
 	{
-		*step_y = INFINITY; // is this the right approach?
-		ray->dist_y = INFINITY; // is this the right approach?
-		ray->dy = INFINITY; // is this the right approach?
+		*step_y = INFINITY;
+		ray->dist_y = INFINITY;
+		ray->dy = INFINITY;
 	}
 }
 
@@ -104,8 +104,8 @@ float	cast_ray(t_data *data, t_ray *ray)
 
 mlx_image_t	*raycaster(t_data *data)
 {
-	t_ray 		ray;
-	int			i;
+	t_ray	ray;
+	int		i;
 
 	if (data->view != NULL)
 		mlx_delete_image(data->mlx, data->view);

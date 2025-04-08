@@ -1,51 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_utils_bonus.c                                 :+:      :+:    :+:   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 17:02:38 by sniemela          #+#    #+#             */
-/*   Updated: 2025/03/14 14:38:01 by sniemela         ###   ########.fr       */
+/*   Created: 2025/04/08 15:49:10 by sniemela          #+#    #+#             */
+/*   Updated: 2025/04/08 15:52:12 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-// int	get_width(char **map)
-// {
-// 	int	width;
-// 	int	i;
-
-// 	i = 0;
-// 	width = (int)ft_strlen(map[i]);
-// 	while (map[i])
-// 	{
-// 		if ((int)ft_strlen(map[i]) > width)
-// 			width = ft_strlen(map[i]);
-// 		i++;
-// 	}
-// 	width *= TILE_MINI;
-// 	return (width);
-// }
-
-// int	get_height(char **map)
-// {
-// 	int	i;
-// 	int	height;
-
-// 	i = 0;
-// 	while (map[i] != NULL)
-// 		i++;
-// 	height = i * TILE_MINI;
-// 	return (height);
-// }
-
 void	get_player_x_y(enum e_type *map, t_data *data)
 {
-	int	i;
-	int	size;
-	t_position pos;
+	int			i;
+	int			size;
+	t_position	pos;
 
 	i = 0;
 	size = data->map_info.height * data->map_info.width;
@@ -70,4 +41,25 @@ float	get_player_angle(char dir)
 		return (PI / 2);
 	else
 		return (PI);
+}
+
+t_player	player(char c, int j, t_data *data)
+{
+	t_player	player;
+	t_position	pos;
+
+	if (c == 'N')
+		player.p_dir = 'N';
+	if (c == 'S')
+		player.p_dir = 'S';
+	if (c == 'W')
+		player.p_dir = 'W';
+	if (c == 'E')
+		player.p_dir = 'E';
+	pos = get_pos(data, j);
+	player.x = (float)pos.col;
+	player.y = (float)pos.row;
+	player.found = 1;
+	data->map[j] = FLOOR;
+	return (player);
 }

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 10:28:12 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:32:06 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_data(t_data *data)
 	data->player.found = 0;
 	data->view = NULL;
 	data->ray = NULL;
+	data->minimap = NULL;
 }
 
 void	init_player(t_data *data)
@@ -33,6 +34,8 @@ void	init_player(t_data *data)
 	data->player.angle = get_player_angle(data->player.p_dir);
 	data->player.d_x = cos(data->player.angle) * MOVE_SPEED;
 	data->player.d_y = sin(data->player.angle) * MOVE_SPEED;
+	data->player.d_lr_x = cos(data->player.angle + PI / 2) * MOVE_SPEED;
+	data->player.d_lr_y = sin(data->player.angle + PI / 2) * MOVE_SPEED;
 }
 
 void	cleanup(t_data *data)

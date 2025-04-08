@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 13:01:16 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:52:53 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,12 @@ typedef struct s_player
 {
 	float	x;
 	float	y;
-	float	d_x; // player delta X
-	float	d_y; // player delta Y
+	float	d_x;
+	float	d_y;
+	float	d_lr_x; // player  left right delta x
+	float	d_lr_y; // player left right delta y
+	float	new_x;
+	float	new_y;
 	float	angle; // player angle
 	char	p_dir;
 	int	found;
@@ -102,6 +106,7 @@ enum	e_type
 	E
 };
 
+// unnecessary ??
 enum	dir_type
 {
 	FORWARD,
@@ -113,13 +118,13 @@ enum	dir_type
 typedef struct s_data
 {
 	char			*file;
-	t_map			map_info;
+	int				tile;
 	enum e_type		*map;
-	t_textures 		textures;
-	int				tile_mini;
-	mlx_texture_t 	*texture;
+	t_map			map_info;
 	t_player		player;
+	t_textures 		textures;
 	mlx_t			*mlx;
+	mlx_texture_t 	*texture;
 	mlx_image_t		*minimap;
 	mlx_image_t		*floor_img;
 	mlx_image_t		*ceiling_img;
@@ -141,7 +146,6 @@ int			get_map(t_data *data);
 //utils.c
 void		free_2d_array(char **ptr);
 t_position	get_pos(t_data *data, int i);
-t_player    player(char c, int j, t_data *data);
 int			add_texture(char *src, char **dest);
 int			set_color(char **rgb, t_rgb *colors);
 int			is_texture_or_color(char *line);
@@ -178,7 +182,7 @@ float	cast_ray(t_data *data, t_ray *ray);
  ******************************************************************************/
 mlx_image_t	*raycaster(t_data *data);
 
-//init_utils_bonus.c 
+//init_utils.c 
 /*******************************************************************************
  * @param i the index on the map
  * @param size map arrays size (height*width)
@@ -194,6 +198,8 @@ void		get_player_x_y(enum e_type *map, t_data *data);
  * in the beginning. Angle is handled in radians.
  ******************************************************************************/
 float		get_player_angle(char dir);
+
+t_player    player(char c, int j, t_data *data);
 
 // image_handling_bonus.c
 /*******************************************************************************
@@ -278,13 +284,11 @@ void		move_player_image(t_data *data);
 
 
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
-//int			get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
-int		get_index_of_rov_and_col(t_data *data, int x, int y);
+int		get_index(t_data *data, int x, int y);
 mlx_image_t	*raycaster(t_data *data);
 
 
 void	draw_minimap_rays(t_data *data);
-// void	draw_minimap_ray_line(t_data *data, t_ray ray);
 
 
 #endif
