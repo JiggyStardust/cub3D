@@ -6,11 +6,21 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:23:21 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/07 15:08:44 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 10:50:20 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
+
+void	free_2d_array(char **ptr)
+{
+	int	i;
+
+	i = -1;
+	while (ptr && ptr[++i])
+		free(ptr[i]);
+	free(ptr);
+}
 
 static void	delete_images(t_data *data)
 {
