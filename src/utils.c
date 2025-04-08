@@ -12,30 +12,34 @@
 
 #include "includes/cub3d.h"
 
-
-int		get_index_of_rov_and_col(t_data *data, int x, int y)
+int	get_index_of_rov_and_col(t_data *data, int x, int y)
 {
 	float	i;
+
 	i = y * data->map_info.width + x;
 	return (i);
 }
-// #include <stdio.h>
-// enum e_type	get_type(t_data *data, int row, int col)
-// {
-// 	//return what type is in pos
-// 	int	i;
 
-// 	i = ((row - 1) * data->map_info.width) + col - 1;
-// 	printf("i: %d\n", i);
-// 	return (data->map[i]);
-// }
+int	is_texture_or_color(char *line)
+{
+	int	j;
+
+	j = 0;
+	if (line[j] == 'N' || line[j] == 'W' || line[j] == 'S' || line[j] == 'E'
+		|| line[j] == 'F' || line[j] == 'C' || line[j] == '\n')
+	{
+		free(line);
+		return (1);
+	}
+	return (0);
+}
 
 t_position	get_pos(t_data *data, int i)
 {
 	t_position	pos;
-	int	row;
-	int col;
-	
+	int			row;
+	int			col;
+
 	pos.col = 0;
 	pos.row = 0;
 	row = 0;
@@ -55,7 +59,7 @@ t_player	player(char c, int j, t_data *data)
 {
 	t_player	player;
 	t_position	pos;
-	
+
 	if (c == 'N')
 		player.p_dir = 'N';
 	if (c == 'S')
@@ -67,49 +71,36 @@ t_player	player(char c, int j, t_data *data)
 	pos = get_pos(data, j);
 	player.x = (float)pos.col;
 	player.y = (float)pos.row;
+	player.found = 1;
+	data->map[j] = FLOOR;
 	return (player);
 }
 
-int	to_map(t_data *data, char *line, int j)
+int	add_texture(char *src, char **dest)
 {
-	int	i;
+	if (*dest)
+	{
+		ft_putstr_fd("Found texture '", 2);
+		ft_putstr_fd(src, 2);
+		ft_putstr_fd("' multiple times\n", 2);
+		return (0);
+	}
+	*dest = ft_strdup(src);
+	if (!*dest)
+		return (ft_putstr_fd("Alloctation failed\n", 2), 0);
+	return (1);
+}
 
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] != '\n')
-		{
-			if (line[i] == '0')
-				data->map[j++] = FLOOR;
-			else if (line[i] == '1')
-				data->map[j++] = WALL;
-			else if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' || line[i] == 'E')
-			{
-				if (!data->player.found)
-				{
-					data->player = player(line[i], j, data);
-					data->player.found = 1;
-				}
-				else
-					return (ft_putstr_fd("Player in map multiple times\n", 2), 0);
-				data->map[j++] = FLOOR; 
-			}
-			else if (line[i] == ' ' || line[i] == '\0')
-				data->map[j++] = PADDING;
-			else
-				return (-1);
-		}
-		else
-			break ;
-		i++;
-	}
-	if (i < data->map_info.width)
-	{
-		while (i < data->map_info.width)
-		{
-			data->map[j++] = PADDING;
-			i++;
-		}
-	}
-	return (j);
+int	set_color(char **rgb, t_rgb *colors)
+{
+	if (colors->found == 1)
+		return (ft_putstr_fd("Color found multiple times\n", 2), 0);
+	colors->found = 1;
+	colors->r = ft_atoi(rgb[0]);
+	colors->g = ft_atoi(rgb[1]);
+	colors->b = ft_atoi(rgb[2]);
+	if (colors->r > 255 || colors->r < 0 || colors->g > 255 || \
+		colors->g < 0 || colors->b > 255 || colors->b < 0)
+		return (ft_putstr_fd("Color out of range\n", 2), 0);
+	return (1);
 }

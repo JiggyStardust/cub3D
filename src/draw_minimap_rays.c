@@ -43,7 +43,8 @@ void	draw_minimap_rays(t_data *data)
 {
 	float	ray_angle;
 
-	mlx_delete_image(data->mlx, data->ray);
+	if (data->ray)
+		mlx_delete_image(data->mlx, data->ray);
 	data->ray = mlx_new_image(data->mlx, WIDTH, HEIGHT);
 	ray_angle = data->player.angle - (33.0 / 180 * PI);
 	if (ray_angle >= 2 * PI)

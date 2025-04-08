@@ -25,6 +25,14 @@ void	init_data(t_data *data)
 	data->map = NULL;
 	data->player.found = 0;
 	data->view = NULL;
+	data->ray = NULL;
+}
+
+void	init_player(t_data *data)
+{
+	data->player.angle = get_player_angle(data->player.p_dir);
+	data->player.d_x = cos(data->player.angle) * MOVE_SPEED;
+	data->player.d_y = sin(data->player.angle) * MOVE_SPEED;
 }
 
 void	cleanup(t_data *data)
@@ -33,12 +41,20 @@ void	cleanup(t_data *data)
 		free(data->map);
 	if (data->map_info.NO)
 		free(data->map_info.NO);
+	if (data->textures.NO)
+		mlx_delete_texture(data->textures.NO);
 	if (data->map_info.SO)
 		free(data->map_info.SO);
+	if (data->textures.SO)
+		mlx_delete_texture(data->textures.SO);
 	if (data->map_info.WE)
 		free(data->map_info.WE);
+	if (data->textures.WE)
+		mlx_delete_texture(data->textures.WE);
 	if (data->map_info.EA)
 		free(data->map_info.EA);
+	if (data->textures.EA)
+		mlx_delete_texture(data->textures.EA);
 }
 
 int	main(int argc, char **argv)
@@ -50,13 +66,11 @@ int	main(int argc, char **argv)
 	init_data(&data);
 	if (!parsing(&data, argv))
 		return (cleanup(&data), 1);
+	init_player(&data);
 	data.mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", true);
 	if (!data.mlx)
 		return (false);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
-	data.player.angle = get_player_angle(data.player.p_dir);
-	data.player.d_x = cos(data.player.angle) * MOVE_SPEED;
-	data.player.d_y = sin(data.player.angle) * MOVE_SPEED;
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
 	data.view = raycaster(&data);

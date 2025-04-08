@@ -40,10 +40,6 @@ int	access_textures(t_map map)
 	return (1);
 }
 
-//FLOOR -> WALL and FLOOR
-//WALL -> anything is ok
-//PADDING -> wall and padding is ok
-
 int	check_type(enum e_type cur_type, enum e_type pre_type)
 {
 	if (pre_type == FLOOR)
@@ -59,10 +55,23 @@ int	check_type(enum e_type cur_type, enum e_type pre_type)
 	return (1);
 }
 
-int valid_map2(enum e_type *map, int width, int height)
+int	valid_map(enum e_type *map, int width, int height)
 {
 	int	i;
+	int	j;
 
+	i = -1;
+	while (++i < height)
+	{
+		j = -1;
+		while (++j < width)
+		{
+			if ((i == 0 || i == height - 1) && map[i * width + j] == FLOOR)
+				return (0);
+			if ((j == 0 || j == width -1) && map[i * width + j] == FLOOR)
+				return (0);
+		}
+	}
 	i = -1;
 	while (++i < width * height)
 	{
@@ -74,28 +83,8 @@ int valid_map2(enum e_type *map, int width, int height)
 	return (1);
 }
 
-int	load_textures(t_data *data)
-{
-	data->textures.NO = mlx_load_png(data->map_info.NO);
-	if (!data->textures.NO)
-		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	data->textures.SO = mlx_load_png(data->map_info.SO);
-	if (!data->textures.SO)
-		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	data->textures.WE = mlx_load_png(data->map_info.WE);
-	if (!data->textures.WE)
-		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	data->textures.EA = mlx_load_png(data->map_info.EA);
-	if (!data->textures.EA)
-		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	return (1);
-}
-
 int	is_valid(t_data *data)
 {
-	//if a texture is missing //checked
-	//if duplicates in textures and colors -> return 0 //checked
-	//if can't open textures -> return 0 //checked
 	if (!data->player.found)
 		return (ft_putstr_fd("Player missing\n", 2), 0);
 	if (!check_file_format(data->map_info.NO, ".png"))
@@ -108,16 +97,9 @@ int	is_valid(t_data *data)
 		return (0);
 	if (!access_textures(data->map_info))
 		return (0);
-	if (!valid_map2(data->map, data->map_info.width, data->map_info.height))
+	if (!valid_map(data->map, data->map_info.width, data->map_info.height))
 		return (ft_putstr_fd("Invalid map\n", 2), 0);
 	if (!load_textures(data))
 		return (0);
-	//if texture files are .png //checked
-	//if wall is missing -> return 0 //checked
-	//if player is missing -> return 0 //checked
-	//if other characters than 01NSEW -> return 0 //checked
-	//if colors are in the range (0 - 255 or something like that) //checked
-	//if player is in the map twice //checked
-	//no newline at the end of map //checked
 	return (1);
 }
