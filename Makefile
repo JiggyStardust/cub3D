@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/04/07 12:45:47 by hpirkola         ###   ########.fr        #
+#    Updated: 2025/04/08 09:45:20 by hpirkola         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,9 @@ SOURCES = main.c \
 	parsing.c \
 	terminate_n_free_bonus.c \
 	utils.c \
-	validate.c
+	validate.c \
+	map.c \
+	textures_and_colors.c
 
 SRCDIR = src
 OBJDIR = obj

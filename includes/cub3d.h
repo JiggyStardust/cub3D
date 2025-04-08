@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/07 14:22:42 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 09:46:19 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@
 # include <math.h>
 # include <fcntl.h>
 
-typedef struct	s_rgb
+typedef struct s_rgb
 {
 	int	found;
 	int	r;
 	int	g;
 	int	b;
-	int a;
+	int	a;
 }	t_rgb;
 
 typedef struct s_textures
@@ -130,18 +130,30 @@ typedef struct s_data
 
 //main.c
 //parsing.c
-int		parsing(t_data *data, char **argv);
-int	check_file_format(char *file, char *format);
+int			parsing(t_data *data, char **argv);
+int			check_file_format(char *file, char *format);
+int			all_found(t_data *data);
+
+//map.c
+int			get_map_size(t_data *data);
+int			get_map(t_data *data);
+//int			to_map(t_data *data, char *line, int j);
 
 //utils.c
-void	free_2d_array(char **ptr);
-int		to_map(t_data *data, char *line, int j);
+void		free_2d_array(char **ptr);
 t_position	get_pos(t_data *data, int i);
-enum e_type	get_type(t_data *data, int row, int col);
 t_player    player(char c, int j, t_data *data);
+int			add_texture(char *src, char **dest);
+int			set_color(char **rgb, t_rgb *colors);
+int			is_texture_or_color(char *line);
+void	read_to_end(int fd);
+
+//textures_and_colors.c
+int			get_texture_and_color(t_data *data);
+int			load_textures(t_data *data);
 
 //validate.c
-int	is_valid(t_data *data);
+int			is_valid(t_data *data);
 //init_utils_bonus.c 
 /*******************************************************************************
  * @param i the index on the map
@@ -152,19 +164,19 @@ int	is_valid(t_data *data);
  * calling get_pos(data, i). We then update player.y (pos.row) and player.x 
  * (pos.col) into t_data struct.
  ******************************************************************************/
-void	get_player_x_y(enum e_type *map, t_data *data);
+void		get_player_x_y(enum e_type *map, t_data *data);
 /*******************************************************************************
  *  Updates @param angle of t_player, which is the direction the player is faced
  * in the beginning. Angle is handled in radians.
  ******************************************************************************/
-float	get_player_angle(char dir);
+float		get_player_angle(char dir);
 
 // image_handling_bonus.c
 /*******************************************************************************
  * Set's up minimap's images by converting minimap textures into mlx_image_t images,
  * resizing them if necessary and finally saves them into t_data struct.
  ******************************************************************************/
-bool	setup_images(t_data *data);
+bool		setup_images(t_data *data);
 
 // terminate_n_free.c
 /*******************************************************************************
@@ -174,14 +186,14 @@ bool	setup_images(t_data *data);
  * Frees allocated memory, deletes pictures, prints a message (optional) and exits
  * with the exit status defined by the caller.
  ******************************************************************************/
-void	terminate_free(t_data *data, int error, char *message);
+void		terminate_free(t_data *data, int error, char *message);
 
 // hooks_bonus.c
 /*******************************************************************************
  *  Hook for closing the window. The function calls terminate_free() which frees
  * 	allocated memory, deletes pictures and exits.
  ******************************************************************************/
-void	close_window(void *param);
+void		close_window(void *param);
 /*******************************************************************************
  * If ESC is pressed, we close the window by calling terminate_free() which frees
  * 	allocated memory, deletes pictures and exits.
@@ -189,7 +201,7 @@ void	close_window(void *param);
  * Later the action for shooting, opening doors etc bonus stuff might be handled
  * here aswell.
  ******************************************************************************/
-void	key_hook(mlx_key_data_t keydata, void *param);
+void		key_hook(mlx_key_data_t keydata, void *param);
 
 // images_to_window_bonus.c
 /*******************************************************************************
@@ -198,7 +210,7 @@ void	key_hook(mlx_key_data_t keydata, void *param);
  * Lastly draws the player image @param mini_p_img on top.
  ******************************************************************************/
 // bool	images_to_window(t_data *data);
-bool	images_to_window(t_data *data);
+bool		images_to_window(t_data *data);
 
 // moving_bonus.c
 
@@ -206,7 +218,7 @@ bool	images_to_window(t_data *data);
  * We first update the players movements by calling move_up_down(data) and 
  * move_left_right. Then we move the player image by calling move_player_image().
  ******************************************************************************/
-void	movement(void *param);
+void		movement(void *param);
 
 /*******************************************************************************
  * @param move_speed how many pixels we move (forward or backwards).
@@ -219,7 +231,7 @@ void	movement(void *param);
  * The function updates t_player's x, y, angle, delta_x and delta_y based on which keys are pressed.
  * A = left, D = right, < rotate left, > rotate right.
  ******************************************************************************/
-void	move_left_right(t_data *data);
+void		move_left_right(t_data *data);
 
 /*******************************************************************************
  * @param move_speed how many pixels we move (forward or backwards).
@@ -232,15 +244,15 @@ void	move_left_right(t_data *data);
  * The function updates t_player's x, y, angle, delta_x and delta_y based on which keys are pressed.
  * W = forward, S = backwards, < rotate left, > rotate right.
  ******************************************************************************/
-void	move_up_down(t_data *data);
+void		move_up_down(t_data *data);
 /*******************************************************************************
  * We move the player picture using mlx_image_t's instances, which are created
  * when player image is drawn on top of the map with mlx_image_to_window()
  ******************************************************************************/
-void	move_player_image(t_data *data);
+void		move_player_image(t_data *data);
 
 
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
-int		get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
+int			get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
 mlx_image_t	*raycaster(t_data *data);
 #endif
