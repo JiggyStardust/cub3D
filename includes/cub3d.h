@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 09:46:19 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:03:28 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct	s_ray
 	float	dy;
 	float	x;
 	float	y;
+	float	dist_x;
+	float	dist_y;
 	double	end_x;
 	double	end_y;
 	float	len;
@@ -154,6 +156,31 @@ int			load_textures(t_data *data);
 
 //validate.c
 int			is_valid(t_data *data);
+
+
+
+//drawing.c
+
+/*******************************************************************************
+ *  Draws the walls using textures, mlx_put_pixel() and the ray length we've 
+ * gotten from cast_ray.
+ ******************************************************************************/
+mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img);
+
+//raycasting.c
+/*******************************************************************************
+ *  Calculates the length until a wall is hit using DDA (digital differential 
+ * analysis) algorithm.
+ ******************************************************************************/
+float	cast_ray(t_data *data, t_ray *ray);
+
+/*******************************************************************************
+ * Creates the game image using mlx_new_image(), creates a @param ray and 
+ * proceeds to calculate the length of every individual ray at a time and drawd
+ * the textures based on the rays length.
+ ******************************************************************************/
+mlx_image_t	*raycaster(t_data *data);
+
 //init_utils_bonus.c 
 /*******************************************************************************
  * @param i the index on the map
@@ -252,7 +279,15 @@ void		move_up_down(t_data *data);
 void		move_player_image(t_data *data);
 
 
+
 mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
-int			get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
+//int			get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
+int		get_index_of_rov_and_col(t_data *data, int x, int y);
 mlx_image_t	*raycaster(t_data *data);
+
+
+void	draw_minimap_rays(t_data *data);
+// void	draw_minimap_ray_line(t_data *data, t_ray ray);
+
+
 #endif
