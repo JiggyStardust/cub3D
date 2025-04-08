@@ -43,7 +43,9 @@ SOURCES = main.c \
 	raycasting.c \
 	terminate_n_free_bonus.c \
 	utils.c \
-	validate.c
+	validate.c \
+	map.c \
+	textures_and_colors.c
 
 SRCDIR = src
 OBJDIR = obj
