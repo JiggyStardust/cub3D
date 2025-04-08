@@ -12,10 +12,10 @@
 
 #include "includes/cub3d.h"
 
-
-int		get_index_of_rov_and_col(t_data *data, int x, int y)
+int	get_index_of_rov_and_col(t_data *data, int x, int y)
 {
 	float	i;
+
 	i = y * data->map_info.width + x;
 	return (i);
 }

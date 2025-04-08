@@ -25,6 +25,9 @@ void	init_data(t_data *data)
 	data->map = NULL;
 	data->player.found = 0;
 	data->view = NULL;
+	data.player.angle = get_player_angle(data.player.p_dir);
+	data.player.d_x = cos(data.player.angle) * MOVE_SPEED;
+	data.player.d_y = sin(data.player.angle) * MOVE_SPEED;
 }
 
 void	cleanup(t_data *data)
@@ -54,9 +57,6 @@ int	main(int argc, char **argv)
 	if (!data.mlx)
 		return (false);
 	mlx_set_setting(MLX_STRETCH_IMAGE, 1);
-	data.player.angle = get_player_angle(data.player.p_dir);
-	data.player.d_x = cos(data.player.angle) * MOVE_SPEED;
-	data.player.d_y = sin(data.player.angle) * MOVE_SPEED;
 	if (!setup_images(&data))
 		terminate_free(&data, 1, "Error\nProblem with setup_images.\n");
 	data.view = raycaster(&data);
