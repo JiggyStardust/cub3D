@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 10:27:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 14:46:31 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:08:41 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ static void	choose_texture(t_data *data, t_ray ray)
 	if (ray.side == VERTICAL)
 	{
 		if (cos(ray.angle) > 0)
-			data->texture = data->textures.EA;
+			data->texture = data->textures.ea;
 		else
-			data->texture = data->textures.WE;
+			data->texture = data->textures.we;
 	}
 	else
 	{
 		if (sin(ray.angle) < 0)
-			data->texture = data->textures.NO;
+			data->texture = data->textures.no;
 		else
-			data->texture = data->textures.SO;
+			data->texture = data->textures.so;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 15:52:53 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:05:46 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ typedef struct s_rgb
 
 typedef struct s_textures
 {
-	mlx_texture_t	*NO;
-	mlx_texture_t	*SO;
-	mlx_texture_t	*WE;
-	mlx_texture_t	*EA;
+	mlx_texture_t	*no;
+	mlx_texture_t	*so;
+	mlx_texture_t	*we;
+	mlx_texture_t	*ea;
 }	t_textures;
 
-typedef struct	s_ray
+typedef struct s_ray
 {
 	float	dx;
 	float	dy;
@@ -68,13 +68,13 @@ typedef struct s_player
 	float	y;
 	float	d_x;
 	float	d_y;
-	float	d_lr_x; // player  left right delta x
-	float	d_lr_y; // player left right delta y
+	float	d_lr_x;
+	float	d_lr_y;
 	float	new_x;
 	float	new_y;
-	float	angle; // player angle
+	float	angle;
 	char	p_dir;
-	int	found;
+	int		found;
 }	t_player;
 
 typedef struct s_position
@@ -85,12 +85,12 @@ typedef struct s_position
 
 typedef struct s_map
 {
-	int	height;
-	int	width;
-	char	*NO;
-	char	*SO;
-	char	*WE;
-	char	*EA;
+	int		height;
+	int		width;
+	char	*no;
+	char	*so;
+	char	*we;
+	char	*ea;
 	t_rgb	floor_color;
 	t_rgb	ceiling_color;
 }	t_map;
@@ -106,15 +106,6 @@ enum	e_type
 	E
 };
 
-// unnecessary ??
-enum	dir_type
-{
-	FORWARD,
-	REVERSE,
-	LEFT,
-	RIGHT
-};
-
 typedef struct s_data
 {
 	char			*file;
@@ -122,9 +113,9 @@ typedef struct s_data
 	enum e_type		*map;
 	t_map			map_info;
 	t_player		player;
-	t_textures 		textures;
+	t_textures		textures;
 	mlx_t			*mlx;
-	mlx_texture_t 	*texture;
+	mlx_texture_t	*texture;
 	mlx_image_t		*minimap;
 	mlx_image_t		*floor_img;
 	mlx_image_t		*ceiling_img;
@@ -149,7 +140,7 @@ t_position	get_pos(t_data *data, int i);
 int			add_texture(char *src, char **dest);
 int			set_color(char **rgb, t_rgb *colors);
 int			is_texture_or_color(char *line);
-void	read_to_end(int fd);
+void		read_to_end(int fd);
 
 //textures_and_colors.c
 int			get_texture_and_color(t_data *data);
@@ -158,28 +149,26 @@ int			load_textures(t_data *data);
 //validate.c
 int			is_valid(t_data *data);
 
-
-
 //drawing.c
 
 /*******************************************************************************
  *  Draws the walls using textures, mlx_put_pixel() and the ray length we've 
  * gotten from cast_ray.
- ******************************************************************************/
-mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img);
+ *****************************************************************************/
+mlx_image_t	*draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img);
 
 //raycasting.c
 /*******************************************************************************
  *  Calculates the length until a wall is hit using DDA (digital differential 
  * analysis) algorithm.
- ******************************************************************************/
-float	cast_ray(t_data *data, t_ray *ray);
+ *****************************************************************************/
+float		cast_ray(t_data *data, t_ray *ray);
 
 /*******************************************************************************
  * Creates the game image using mlx_new_image(), creates a @param ray and 
  * proceeds to calculate the length of every individual ray at a time and drawd
  * the textures based on the rays length.
- ******************************************************************************/
+ *****************************************************************************/
 mlx_image_t	*raycaster(t_data *data);
 
 //init_utils.c 
@@ -188,41 +177,40 @@ mlx_image_t	*raycaster(t_data *data);
  * @param size map arrays size (height*width)
  * @param pos a struct which portrays index position in columns and rows.
  * 
- * We search for player enum (S, W, N or E) on the map array, then get position by 
- * calling get_pos(data, i). We then update player.y (pos.row) and player.x 
+ * We search for player enum (S, W, N or E) on the map array, then get position 
+ * by calling get_pos(data, i). We then update player.y (pos.row) and player.x 
  * (pos.col) into t_data struct.
- ******************************************************************************/
+ *****************************************************************************/
 void		get_player_x_y(enum e_type *map, t_data *data);
 /*******************************************************************************
  *  Updates @param angle of t_player, which is the direction the player is faced
  * in the beginning. Angle is handled in radians.
- ******************************************************************************/
+ *****************************************************************************/
 float		get_player_angle(char dir);
 
-t_player    player(char c, int j, t_data *data);
+t_player	player(char c, int j, t_data *data);
 
 // image_handling_bonus.c
 /*******************************************************************************
- * Set's up minimap's images by converting minimap textures into mlx_image_t images,
- * resizing them if necessary and finally saves them into t_data struct.
- ******************************************************************************/
+ * Set's up minimap's images by converting minimap textures into mlx_image_t 
+ * images, resizing them if necessary and finally saves them into t_data struct.
+ *****************************************************************************/
 bool		setup_images(t_data *data);
 
 // terminate_n_free.c
 /*******************************************************************************
  * @param error if set to 0, the program was succesful / no error encountered.
  * @param message optional message for signaling specific error for example.
- * 
- * Frees allocated memory, deletes pictures, prints a message (optional) and exits
- * with the exit status defined by the caller.
- ******************************************************************************/
+ * * Frees allocated memory, deletes pictures, prints a message (optional) and
+ * exits with the exit status defined by the caller.
+ *****************************************************************************/
 void		terminate_free(t_data *data, int error, char *message);
 
 // hooks_bonus.c
 /*******************************************************************************
  *  Hook for closing the window. The function calls terminate_free() which frees
  * 	allocated memory, deletes pictures and exits.
- ******************************************************************************/
+ *****************************************************************************/
 void		close_window(void *param);
 /*******************************************************************************
  * If ESC is pressed, we close the window by calling terminate_free() which frees
@@ -230,15 +218,15 @@ void		close_window(void *param);
  * 
  * Later the action for shooting, opening doors etc bonus stuff might be handled
  * here aswell.
- ******************************************************************************/
+ *****************************************************************************/
 void		key_hook(mlx_key_data_t keydata, void *param);
 
 // images_to_window_bonus.c
 /*******************************************************************************
- *  First draws minimaps floor and wall tiles index (x and y) at a time by calling a
- * static function draw_floor_n_walls(). 
+ * First draws minimaps floor and wall tiles index (x and y) at a time by 
+ * calling a static function draw_floor_n_walls(). 
  * Lastly draws the player image @param mini_p_img on top.
- ******************************************************************************/
+ *****************************************************************************/
 // bool	images_to_window(t_data *data);
 bool		images_to_window(t_data *data);
 
@@ -246,8 +234,9 @@ bool		images_to_window(t_data *data);
 
 /*******************************************************************************
  * We first update the players movements by calling move_up_down(data) and 
- * move_left_right. Then we move the player image by calling move_player_image().
- ******************************************************************************/
+ * move_left_right. Then we move the player image by calling 
+ * move_player_image().
+ *****************************************************************************/
 void		movement(void *param);
 
 /*******************************************************************************
@@ -255,12 +244,12 @@ void		movement(void *param);
  * @param move_speed how many pixels we turn.
  * @param x players X position after potential move (if not hitting a wall)
  * @param y players Y position after potential move (if not hitting a wall)
- * @param i index on the map (1D enum array), helps us define movement limitations
+ * @param i index on the map (1D enum array), helps us define movement limits
  * (WALLS).
  * 
- * The function updates t_player's x, y, angle, delta_x and delta_y based on which keys are pressed.
- * A = left, D = right, < rotate left, > rotate right.
- ******************************************************************************/
+ * The function updates t_player's x, y, angle, delta_x and delta_y based on 
+ * which keys are pressed. A = left, D = right, < rotate left, > rotate right.
+ *****************************************************************************/
 void		move_left_right(t_data *data);
 
 /*******************************************************************************
@@ -268,27 +257,22 @@ void		move_left_right(t_data *data);
  * @param move_speed how many pixels we turn.
  * @param x players X position after potential move (if not hitting a wall)
  * @param y players Y position after potential move (if not hitting a wall)
- * @param i index on the map (1D enum array), helps us define movement limitations
+ * @param i index on the map (1D enum array), helps us define movement limits
  * (WALLS).
  * 
- * The function updates t_player's x, y, angle, delta_x and delta_y based on which keys are pressed.
- * W = forward, S = backwards, < rotate left, > rotate right.
- ******************************************************************************/
+ * The function updates t_player's x, y, angle, delta_x and delta_y based on 
+ * which keys are pressed. W = forward, S = backwards, < rotate left, > rotate 
+ * right.
+ *****************************************************************************/
 void		move_up_down(t_data *data);
 /*******************************************************************************
  * We move the player picture using mlx_image_t's instances, which are created
  * when player image is drawn on top of the map with mlx_image_to_window()
- ******************************************************************************/
+ *****************************************************************************/
 void		move_player_image(t_data *data);
-
-
-
-mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
-int		get_index(t_data *data, int x, int y);
+mlx_image_t	*draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
+int			get_index(t_data *data, int x, int y);
 mlx_image_t	*raycaster(t_data *data);
-
-
-void	draw_minimap_rays(t_data *data);
-
+void		draw_minimap_rays(t_data *data);
 
 #endif

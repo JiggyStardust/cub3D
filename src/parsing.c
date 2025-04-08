@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 12:07:24 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:09:32 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ void	read_to_end(int fd)
 
 int	all_found(t_data *data)
 {
-	if (!data->map_info.NO)
+	if (!data->map_info.no)
 		return (ft_putstr_fd("All textures not found", 2), 0);
-	if (!data->map_info.SO)
+	if (!data->map_info.so)
 		return (ft_putstr_fd("All textures not found", 2), 0);
-	if (!data->map_info.EA)
+	if (!data->map_info.ea)
 		return (ft_putstr_fd("All textures not found", 2), 0);
-	if (!data->map_info.WE)
+	if (!data->map_info.we)
 		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.floor_color.found)
 		return (ft_putstr_fd("All textures not found", 2), 0);
@@ -81,20 +81,3 @@ int	parsing(t_data *data, char **argv)
 	return (1);
 }
 
-/*
-void	draw_map(t_data *data)
-{
-	int	i;
-	int	j;
-	int	h;
-
-	i = -1;
-	j = -1;
-	while (++i < data->map_info.height)
-	{
-		h = -1;
-		while (++h < data->map_info.width)
-			printf("%d", data->map[++j]);
-		printf("\n");
-	}
-}*/

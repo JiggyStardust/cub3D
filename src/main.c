@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:29:39 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 15:32:06 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:07:58 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	init_data(t_data *data)
 {
 	data->map_info.height = 0;
 	data->map_info.width = 0;
-	data->map_info.NO = NULL;
-	data->map_info.SO = NULL;
-	data->map_info.WE = NULL;
-	data->map_info.EA = NULL;
+	data->map_info.no = NULL;
+	data->map_info.so = NULL;
+	data->map_info.we = NULL;
+	data->map_info.ea = NULL;
 	data->map_info.floor_color.found = 0;
 	data->map_info.ceiling_color.found = 0;
 	data->map = NULL;
@@ -42,22 +42,22 @@ void	cleanup(t_data *data)
 {
 	if (data->map)
 		free(data->map);
-	if (data->map_info.NO)
-		free(data->map_info.NO);
-	if (data->textures.NO)
-		mlx_delete_texture(data->textures.NO);
-	if (data->map_info.SO)
-		free(data->map_info.SO);
-	if (data->textures.SO)
-		mlx_delete_texture(data->textures.SO);
-	if (data->map_info.WE)
-		free(data->map_info.WE);
-	if (data->textures.WE)
-		mlx_delete_texture(data->textures.WE);
-	if (data->map_info.EA)
-		free(data->map_info.EA);
-	if (data->textures.EA)
-		mlx_delete_texture(data->textures.EA);
+	if (data->map_info.no)
+		free(data->map_info.no);
+	if (data->textures.no)
+		mlx_delete_texture(data->textures.no);
+	if (data->map_info.so)
+		free(data->map_info.so);
+	if (data->textures.so)
+		mlx_delete_texture(data->textures.so);
+	if (data->map_info.we)
+		free(data->map_info.we);
+	if (data->textures.we)
+		mlx_delete_texture(data->textures.we);
+	if (data->map_info.ea)
+		free(data->map_info.ea);
+	if (data->textures.ea)
+		mlx_delete_texture(data->textures.ea);
 }
 
 int	main(int argc, char **argv)

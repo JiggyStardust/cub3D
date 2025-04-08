@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>         #+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:21:08 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 10:51:11 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:10:18 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	permission_denied(char *file)
 {
-	ft_putstr_fd("No permission to file or file doesn't exist <", 2);
+	ft_putstr_fd("no permission to file or file doesn't exist <", 2);
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(">\n", 2);
 }
@@ -23,20 +23,20 @@ int	access_textures(t_map map)
 {
 	int	fd;
 
-	fd = open(map.NO, O_RDONLY);
+	fd = open(map.no, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.NO), 0);
+		return (permission_denied(map.no), 0);
 	close(fd);
-	fd = open(map.SO, O_RDONLY);
+	fd = open(map.so, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.SO), 0);
+		return (permission_denied(map.so), 0);
 	close(fd);
-	fd = open(map.WE, O_RDONLY);
+	fd = open(map.we, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.WE), 0);
-	fd = open(map.EA, O_RDONLY);
+		return (permission_denied(map.we), 0);
+	fd = open(map.ea, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.EA), 0);
+		return (permission_denied(map.ea), 0);
 	return (1);
 }
 
@@ -87,13 +87,13 @@ int	is_valid(t_data *data)
 {
 	if (!data->player.found)
 		return (ft_putstr_fd("Player missing\n", 2), 0);
-	if (!check_file_format(data->map_info.NO, ".png"))
+	if (!check_file_format(data->map_info.no, ".png"))
 		return (0);
-	if (!check_file_format(data->map_info.SO, ".png"))
+	if (!check_file_format(data->map_info.so, ".png"))
 		return (0);
-	if (!check_file_format(data->map_info.WE, ".png"))
+	if (!check_file_format(data->map_info.we, ".png"))
 		return (0);
-	if (!check_file_format(data->map_info.EA, ".png"))
+	if (!check_file_format(data->map_info.ea, ".png"))
 		return (0);
 	if (!access_textures(data->map_info))
 		return (0);
