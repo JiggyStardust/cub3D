@@ -6,12 +6,11 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:30:25 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 12:03:22 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:01:34 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
-
 
 void	dda(t_data *data, t_ray *ray, int step_x, int step_y)
 {

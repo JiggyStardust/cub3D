@@ -6,12 +6,11 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 12:04:01 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:27:19 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
-
 
 void	move_up_down(t_data *data)
 {
@@ -91,12 +90,6 @@ void	turn_player(t_data *data)
 	data->player.d_y = sin(data->player.angle) * MOVE_SPEED;
 }
 
-void	move_player_image(t_data *data)
-{
-	data->mini_p_img->instances[0].x = data->player.x * data->tile_mini;
-	data->mini_p_img->instances[0].y = data->player.y * data->tile_mini;
-}
-
 void	movement(void *param)
 {
 	t_data		*data;
@@ -108,14 +101,11 @@ void	movement(void *param)
 	data->view = raycaster(data);
 	mlx_image_to_window(data->mlx, data->view, 0, 0);
 	if (data->minimap)
-		move_player_image(data);
-	if (data->minimap)
 		draw_minimap_rays(data);
 	mlx_set_instance_depth(data->view->instances, 3);
 	if (data->minimap)
 	{
 		mlx_set_instance_depth(data->minimap->instances, 4);
-		mlx_set_instance_depth(data->mini_p_img->instances, 5);
-		mlx_set_instance_depth(data->ray->instances, 6);
+		mlx_set_instance_depth(data->ray->instances, 5);
 	}
 }

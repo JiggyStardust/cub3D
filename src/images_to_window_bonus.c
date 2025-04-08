@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:22:23 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/07 15:27:50 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:59:26 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ bool	images_to_window(t_data *data)
 	if (data->minimap)
 	{
 		if (mlx_image_to_window(data->mlx, data->minimap, 0, 0) == -1)
-			return (false);
-		if (mlx_image_to_window(data->mlx, data->mini_p_img, data->player.x \
-				* data->tile_mini, data->player.y * data->tile_mini) == -1)
 			return (false);
 	}
 	return (true);
