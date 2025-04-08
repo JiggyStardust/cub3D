@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/07 17:46:38 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:03:28 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,15 @@ t_player    player(char c, int j, t_data *data);
 int	is_valid(t_data *data);
 
 
+
+//drawing.c
+
+/*******************************************************************************
+ *  Draws the walls using textures, mlx_put_pixel() and the ray length we've 
+ * gotten from cast_ray.
+ ******************************************************************************/
+mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img);
+
 //raycasting.c
 /*******************************************************************************
  *  Calculates the length until a wall is hit using DDA (digital differential 
@@ -259,7 +268,12 @@ void	move_up_down(t_data *data);
 void	move_player_image(t_data *data);
 
 
-mlx_image_t *draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
-int		get_index_of_rov_and_col(t_data *data, int x, int y, enum dir_type gear);
+int		get_index_of_rov_and_col(t_data *data, int x, int y);
 mlx_image_t	*raycaster(t_data *data);
+
+
+void	draw_minimap_rays(t_data *data);
+// void	draw_minimap_ray_line(t_data *data, t_ray ray);
+
+
 #endif

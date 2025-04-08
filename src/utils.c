@@ -6,20 +6,18 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:46:53 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/03/10 11:06:07 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/08 10:50:00 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-void	free_2d_array(char **ptr)
-{
-	int	i;
 
-	i = -1;
-	while (ptr && ptr[++i])
-		free(ptr[i]);
-	free(ptr);
+int		get_index_of_rov_and_col(t_data *data, int x, int y)
+{
+	float	i;
+	i = y * data->map_info.width + x;
+	return (i);
 }
 // #include <stdio.h>
 // enum e_type	get_type(t_data *data, int row, int col)

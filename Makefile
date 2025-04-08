@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/04/07 17:35:22 by sniemela         ###   ########.fr        #
+#    Updated: 2025/04/08 11:53:59 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ LDFLAGS = -lglfw -lm
 CC = cc
 
 SOURCES = main.c \
+	drawing.c \
+	draw_minimap_rays.c \
 	hooks_bonus.c \
 	image_handling_bonus.c \
 	images_to_window_bonus.c \

@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/18 13:06:45 by sniemela          #+#    #+#              #
-#    Updated: 2024/11/13 15:55:12 by sniemela         ###   ########.fr        #
+#    Updated: 2025/04/08 11:02:15 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ NAME = libft.a
 SOURCES = ft_atoi.c \
 		  ft_bzero.c \
 		  ft_calloc.c \
+		  ft_free_2d_array.c\
 		  ft_isalnum.c \
 		  ft_isalpha.c \
 		  ft_isascii.c \

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:30:25 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/07 17:50:30 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:03:22 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	dda(t_data *data, t_ray *ray, int step_x, int step_y)
 
 	map_x = (int)ray->x;
 	map_y = (int)ray->y;
-	xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
+	xy = get_index_of_rov_and_col(data, map_x, map_y);
 	while (data->map[xy] == FLOOR)
 	{
 		if (ray->dist_x < ray->dist_y)
@@ -36,7 +36,7 @@ void	dda(t_data *data, t_ray *ray, int step_x, int step_y)
 			ray->dist_y += ray->dy;
 			ray->side = HORIZONTAL;
 		}
-		xy = get_index_of_rov_and_col(data, map_x, map_y, 1);
+		xy = get_index_of_rov_and_col(data, map_x, map_y);
 	}
 	ray->end_y = map_y;
 }
@@ -103,7 +103,6 @@ float	cast_ray(t_data *data, t_ray *ray)
 		return (fabs(ray->dist_y));
 }
 
-
 mlx_image_t	*raycaster(t_data *data)
 {
 	t_ray 		ray;
@@ -122,9 +121,8 @@ mlx_image_t	*raycaster(t_data *data)
 	i = -1;
 	while (++i < WIDTH)
 	{
-		ray.len = cast_ray(data, &ray);
-		ray.len2 = ray.len;
-		ray.len *= cos(data->player.angle - ray.angle);
+		ray.len2 = cast_ray(data, &ray);
+		ray.len = ray.len2 * cos(data->player.angle - ray.angle);
 		draw_ray(data, ray, i, data->view);
 		ray.angle += ((66.0 / 180 * PI) / WIDTH);
 		if (ray.angle >= 2 * PI)
