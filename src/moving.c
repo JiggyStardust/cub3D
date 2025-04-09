@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:44:46 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/09 12:50:53 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:23:53 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,52 @@ void	move_left_right(t_data *data)
 	}
 }
 
-void	turn_player(t_data *data)
+void	turn_player(t_data *data, int turn)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
-	{
 		data->player.angle -= TURN_SPEED;
-		if (data->player.angle < 0)
-			data->player.angle += 2 * PI;
-	}
+	else if (turn == 1)
+		data->player.angle -= TURN_SPEED * 0.5;
 	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
-	{
 		data->player.angle += TURN_SPEED;
-		if (data->player.angle > 2 * PI)
-			data->player.angle -= 2 * PI;
-	}
+	else if (turn == 2)
+		data->player.angle += TURN_SPEED * 0.5;
+	if (data->player.angle < 0)
+		data->player.angle += 2 * PI;
+	else if (data->player.angle > 2 * PI)
+		data->player.angle -= 2 * PI;
 	data->player.d_x = cos(data->player.angle) * MOVE_SPEED;
 	data->player.d_y = sin(data->player.angle) * MOVE_SPEED;
 	data->player.d_lr_x = cos(data->player.angle + PI / 2) * MOVE_SPEED;
 	data->player.d_lr_y = sin(data->player.angle + PI / 2) * MOVE_SPEED;
+}
+
+void	mouse_hook(void *param)
+{
+	t_data	*data;
+	int32_t	x;
+	int32_t	y;
+
+	data = (t_data *)param;
+	if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_HIDDEN);
+		data->mouse_rotate = true;
+	}
+	else if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_RIGHT))
+	{
+		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
+		data->mouse_rotate = false ;
+	}
+	if (!data->mouse_rotate)
+		return ;
+	mlx_get_mouse_pos(data->mlx, &x, &y);
+	if (x < data->mouse_x)
+		turn_player(data, 1);
+	else if (x > data->mouse_x)
+		turn_player(data, 2);
+	data->mouse_x = WIDTH / 2;
+	mlx_set_mouse_pos(data->mlx, WIDTH / 2, HEIGHT / 2);
 }
 
 void	movement(void *param)
@@ -95,7 +123,8 @@ void	movement(void *param)
 	data = (t_data *)param;
 	move_up_down(data);
 	move_left_right(data);
-	turn_player(data);
+	mouse_hook(data);
+	turn_player(data, 0);
 	data->view = raycaster(data);
 	mlx_image_to_window(data->mlx, data->view, 0, 0);
 	if (data->minimap)
