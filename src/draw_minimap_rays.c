@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 10:52:39 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 15:25:35 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 10:26:37 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ static void	draw_rays(t_data *data, float ray_angle, mlx_image_t *ray)
 		{
 			map_x += cos(ray_angle) * 0.01;
 			map_y += sin(ray_angle) * 0.01;
-			xy = get_index(data, (int)map_x, (int)map_y);
-			mlx_put_pixel(data->ray, map_x * data->tile - 6, \
-				map_y * data->tile - 6, RED);
+			xy = get_index(data, map_x, map_y);
+			if (data->map[xy] != FLOOR)
+				break ;
+			mlx_put_pixel(data->ray, map_x * data->tile, \
+				map_y * data->tile, RED);
 		}
 		ray_angle += (1.0 / 180 * PI);
 		if (ray_angle >= 2 * PI)
@@ -54,5 +56,5 @@ void	draw_minimap_rays(t_data *data)
 	else if (ray_angle < 0)
 		ray_angle += 2 * PI;
 	draw_rays(data, ray_angle, data->ray);
-	mlx_image_to_window(data->mlx, data->ray, data->player.x, data->player.y);
+	mlx_image_to_window(data->mlx, data->ray, data->player.x - 6, data->player.y - 6);
 }
