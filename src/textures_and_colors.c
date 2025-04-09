@@ -64,13 +64,13 @@ int	textures(char **info, t_data *data)
 		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "SO", 3) && \
 		!add_texture(texture[0], &data->map_info.so))
-		return (ft_free_array(&texture), 0);
+		return (free_textures(data, 0), ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "EA", 3) && \
 		!add_texture(texture[0], &data->map_info.ea))
-		return (ft_free_array(&texture), 0);
+		return (free_textures(data, 0), ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "WE", 3) && \
 		!add_texture(texture[0], &data->map_info.we))
-		return (ft_free_array(&texture), 0);
+		return (free_textures(data, 0), ft_free_array(&texture), 0);
 	ft_free_array(&texture);
 	return (1);
 }

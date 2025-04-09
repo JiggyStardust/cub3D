@@ -64,6 +64,8 @@ int	add_texture(char *src, char **dest)
 		ft_putstr_fd("' multiple times\n", 2);
 		return (0);
 	}
+	if (!src)
+		return (ft_putstr_fd("No texture found\n", 2), 0);
 	*dest = ft_strdup(src);
 	if (!*dest)
 		return (ft_putstr_fd("Alloctation failed\n", 2), 0);
