@@ -27,6 +27,7 @@ static void	init_data(t_data *data)
 	data->view = NULL;
 	data->ray = NULL;
 	data->minimap = NULL;
+	data->mouse_rotate = false;
 }
 
 static void	init_player(t_data *data)

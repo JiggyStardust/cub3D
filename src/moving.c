@@ -95,6 +95,7 @@ void	mouse_hook(void *param)
 	int32_t	y;
 
 	data = (t_data *)param;
+	data->mouse_x = WIDTH / 2;
 	if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
 		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_HIDDEN);
@@ -112,7 +113,6 @@ void	mouse_hook(void *param)
 		turn_player(data, 1);
 	else if (x > data->mouse_x)
 		turn_player(data, 2);
-	data->mouse_x = WIDTH / 2;
 	mlx_set_mouse_pos(data->mlx, WIDTH / 2, HEIGHT / 2);
 }
 
