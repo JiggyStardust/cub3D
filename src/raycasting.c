@@ -40,7 +40,7 @@ void	dda(t_data *data, t_ray *ray, int step_x, int step_y)
 	ray->end_y = map_y;
 }
 
-static void	calc_step_x(t_data *data, t_ray *ray, int *step_x)
+static void	calc_step_x(t_ray *ray, int *step_x)
 {
 	if (cos(ray->angle) != 0)
 		ray->dx = fabs(1 / cos(ray->angle));
@@ -62,7 +62,7 @@ static void	calc_step_x(t_data *data, t_ray *ray, int *step_x)
 	}
 }
 
-static void	calc_step_y(t_data *data, t_ray *ray, int *step_y)
+static void	calc_step_y(t_ray *ray, int *step_y)
 {
 	if (sin(ray->angle) != 0)
 		ray->dy = fabs(1 / sin(ray->angle));
@@ -89,8 +89,8 @@ float	cast_ray(t_data *data, t_ray *ray)
 	int		step_x;
 	int		step_y;
 
-	calc_step_x(data, ray, &step_x);
-	calc_step_y(data, ray, &step_y);
+	calc_step_x(ray, &step_x);
+	calc_step_y(ray, &step_y);
 	dda(data, ray, step_x, step_y);
 	if (ray->side == VERTICAL)
 		ray->dist_x -= ray->dx;

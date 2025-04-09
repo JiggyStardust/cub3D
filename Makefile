@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/04/08 15:50:46 by sniemela         ###   ########.fr        #
+#    Updated: 2025/04/09 12:46:08 by hpirkola         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ REMAKE			= echo "💡 $(GREEN)Successfully rebuilt everything!$(RESET)"
 CUB3D			= echo "🔗 $(YELLOW)Linking cub3D...$(RESET)"
 
 NAME = cub3D
-CFLAGS = -Wall -g #-Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 LDFLAGS = -lglfw -lm
 CC = cc
 

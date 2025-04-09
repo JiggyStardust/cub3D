@@ -12,7 +12,7 @@
 
 #include "includes/cub3d.h"
 
-static void	draw_rays(t_data *data, float ray_angle, mlx_image_t *ray)
+static void	draw_rays(t_data *data, float ray_angle)
 {
 	int		i;
 	float	map_x;
@@ -54,6 +54,6 @@ void	draw_minimap_rays(t_data *data)
 		ray_angle -= 2 * PI;
 	else if (ray_angle < 0)
 		ray_angle += 2 * PI;
-	draw_rays(data, ray_angle, data->ray);
+	draw_rays(data, ray_angle);
 	mlx_image_to_window(data->mlx, data->ray, data->player.x, data->player.y);
 }

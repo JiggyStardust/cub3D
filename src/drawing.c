@@ -16,7 +16,7 @@ static void	get_pixel(mlx_texture_t *texture, uint32_t *color, int xy)
 {
 	t_rgb	rgb;
 
-	if (xy + 3 >= (texture->width * texture->height))
+	if ((unsigned int) xy + 3 >= (texture->width * texture->height))
 		return ;
 	rgb.r = texture->pixels[xy * 4];
 	rgb.g = texture->pixels[xy * 4 + 1];
@@ -59,7 +59,7 @@ static uint32_t	get_x(t_data *data, t_ray ray)
 		t_x = data->texture->width - t_x - 1;
 	if (t_x < 0)
 		t_x = 0;
-	if (t_x >= data->texture->width)
+	if ((uint32_t) t_x >= data->texture->width)
 		t_x = data->texture->width - 1;
 	return ((uint32_t)t_x);
 }
