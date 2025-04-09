@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/04/09 12:46:08 by hpirkola         ###   ########.fr        #
+#    Updated: 2025/04/09 12:51:53 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,14 +34,14 @@ CC = cc
 SOURCES = main.c \
 	drawing.c \
 	draw_minimap_rays.c \
-	hooks_bonus.c \
-	image_handling_bonus.c \
-	images_to_window_bonus.c \
+	hooks.c \
+	image_handling.c \
+	images_to_window.c \
 	init_utils.c \
-	moving_bonus.c \
+	moving.c \
 	parsing.c \
 	raycasting.c \
-	terminate_n_free_bonus.c \
+	terminate_n_free.c \
 	utils.c \
 	validate.c \
 	map.c \
