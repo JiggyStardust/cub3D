@@ -64,38 +64,41 @@ static uint32_t	get_x(t_data *data, t_ray ray)
 	return ((uint32_t)t_x);
 }
 
-mlx_image_t *draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
+void	init_wall(t_wall *wall, t_ray ray)
 {
+	wall->height = HEIGHT / ray.len;
+	wall->top = (HEIGHT / 2) - wall->height / 2;
+	if (wall->top < 0)
+		wall->top = 0;
+	wall->bottom = wall->top + wall->height;
+	if (wall->bottom >= HEIGHT)
+		wall->bottom = HEIGHT - 1;
+}
 
-	float	wall_height;
-	int		wall_top;
-	double	t_pos;
-	uint32_t	text_x;
-	uint32_t	text_y;
-	double	step;
+mlx_image_t	*draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img)
+{
+	t_wall		wall;
+	double		t_pos;
+	t_x_y		xy;
+	double		step;
 	uint32_t	color;
 
-	wall_height = HEIGHT / ray.len;
-	wall_top = (HEIGHT / 2) - wall_height / 2;
-	if (wall_top < 0)
-		wall_top = 0;
+	init_wall(&wall, ray);
 	choose_texture(data, ray);
-	text_x = get_x(data, ray);
-	step = (double) data->texture->height / wall_height;
-	t_pos = (wall_top - HEIGHT / 2 + wall_height / 2) * step;
-	while (wall_top <= (HEIGHT / 2) + wall_height / 2)
+	xy.x = get_x(data, ray);
+	step = (double) data->texture->height / wall.height;
+	t_pos = (wall.top - HEIGHT / 2 + wall.height / 2) * step;
+	while (wall.top <= wall.bottom)
 	{
-		text_y = (uint32_t) t_pos;
-		if (text_y < 0)
-			text_y = 0;
-		if (text_y >= data->texture->height)
-			text_y = (uint32_t) data->texture->height - 1;
-		get_pixel(data->texture, &color, (data->texture->width * text_y + text_x));
-		mlx_put_pixel(img, x, wall_top, color);
+		xy.y = (uint32_t) t_pos;
+		if (xy.y < 0)
+			xy.y = 0;
+		if (xy.y >= data->texture->height)
+			xy.y = (uint32_t) data->texture->height - 1;
+		get_pixel(data->texture, &color, (data->texture->width * xy.y + xy.x));
+		mlx_put_pixel(img, x, wall.top, color);
 		t_pos += step;
-		wall_top++;
-		if (wall_top == HEIGHT)
-			break ;
+		wall.top++;
 	}
 	return (img);
 }
