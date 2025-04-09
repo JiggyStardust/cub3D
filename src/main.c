@@ -65,7 +65,7 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (argc != 2)
-		return (ft_putstr_fd("Example: ./cub3D file.cub\n", 2), 1);
+		return (ft_putstr_fd("Error\nExample: ./cub3D file.cub\n", 2), 1);
 	init_data(&data);
 	if (!parsing(&data, argv))
 	{

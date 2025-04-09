@@ -28,17 +28,17 @@ void	read_to_end(int fd)
 int	all_found(t_data *data)
 {
 	if (!data->map_info.no)
-		return (ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("Error\nAll textures not found\n", 2), 0);
 	if (!data->map_info.so)
-		return (ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("Error\nAll textures not found\n", 2), 0);
 	if (!data->map_info.ea)
-		return (ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("Error\nAll textures not found\n", 2), 0);
 	if (!data->map_info.we)
-		return (ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("Error\nAll textures not found\n", 2), 0);
 	if (!data->map_info.floor_color.found)
-		return (ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("Error\nBoth colors not found\n", 2), 0);
 	if (!data->map_info.ceiling_color.found)
-		return (ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("Error\nBoth colors not found\n", 2), 0);
 	return (1);
 }
 
@@ -49,7 +49,7 @@ int	check_file_format(char *file, char *format)
 	i = ft_strlen(file) - 4;
 	if (i < 0)
 	{
-		ft_putstr_fd("Expected file format: ", 2);
+		ft_putstr_fd("Error\nExpected file format: ", 2);
 		ft_putstr_fd(format, 2);
 		ft_putstr_fd("\n", 2);
 		return (0);
@@ -57,7 +57,7 @@ int	check_file_format(char *file, char *format)
 	file += i;
 	if (ft_strncmp(file, format, 5))
 	{	
-		ft_putstr_fd("Expected file format: ", 2);
+		ft_putstr_fd("Error\nExpected file format: ", 2);
 		ft_putstr_fd(format, 2);
 		ft_putstr_fd("\n", 2);
 		return (0);

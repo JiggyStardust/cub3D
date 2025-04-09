@@ -20,13 +20,13 @@ int	get_index(t_data *data, int x, int y)
 	return (i);
 }
 
-int	is_texture_or_color(char *line)
+int	is_texture_or_color(char *line, int j)
 {
-	int	j;
+	int	i;
 
-	j = 0;
-	if (line[j] == 'N' || line[j] == 'W' || line[j] == 'S' || line[j] == 'E'
-		|| line[j] == 'F' || line[j] == 'C' || line[j] == '\n')
+	i = 0;
+	if (line[i] == 'N' || line[i] == 'W' || line[i] == 'S' || line[i] == 'E'
+		|| line[i] == 'F' || line[i] == 'C' || (line[i] == '\n' && j == 0))
 	{
 		free(line);
 		return (1);
@@ -55,42 +55,44 @@ t_position	get_pos(t_data *data, int i)
 	return (pos);
 }
 
-int	add_texture(char *src, char **dest)
+int	invalid_values(char **rgb)
 {
-	if (*dest)
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 3)
 	{
-		ft_putstr_fd("Found texture '", 2);
-		if (src)
-			ft_putstr_fd(src, 2);
-		else
-			ft_putstr_fd(" ", 2);
-		ft_putstr_fd("' multiple times\n", 2);
-		return (0);
+		j = 0;
+		while (rgb[i][j])
+		{
+			if (!ft_isdigit(rgb[i][j]) && rgb[i][j] != '\n')
+				return (1);
+			j++;
+		}
+		i++;
 	}
-	if (!src)
-		return (ft_putstr_fd("No texture found\n", 2), 0);
-	*dest = ft_strdup(src);
-	if (!*dest)
-		return (ft_putstr_fd("Alloctation failed\n", 2), 0);
-	return (1);
+	return (0);
 }
 
 int	set_color(char **rgb, t_rgb *colors)
 {
 	if (colors->found == 1)
-		return (ft_putstr_fd("Color found multiple times\n", 2), 0);
+		return (ft_putstr_fd("Error\nColor found multiple times\n", 2), 0);
 	colors->found = 1;
+	if (invalid_values(rgb))
+		return (ft_putstr_fd("Error\nError with color values\n", 2), 0);
 	colors->r = ft_atoi(rgb[0]);
 	if (colors->r == 0 && *rgb[0] != '0')
-		return (ft_putstr_fd("Error with color values\n", 2), 0);
+		return (ft_putstr_fd("Error\nError with color values\n", 2), 0);
 	colors->g = ft_atoi(rgb[1]);
 	if (colors->g == 0 && *rgb[1] != '0')
-		return (ft_putstr_fd("Error with color values\n", 2), 0);
+		return (ft_putstr_fd("Error\nError with color values\n", 2), 0);
 	colors->b = ft_atoi(rgb[2]);
 	if (colors->b == 0 && *rgb[2] != '0')
-		return (ft_putstr_fd("Error with color values\n", 2), 0);
+		return (ft_putstr_fd("Error\nError with color values\n", 2), 0);
 	if (colors->r > 255 || colors->r < 0 || colors->g > 255 || \
 		colors->g < 0 || colors->b > 255 || colors->b < 0)
-		return (ft_putstr_fd("Color out of range\n", 2), 0);
+		return (ft_putstr_fd("Error\nColor out of range\n", 2), 0);
 	return (1);
 }

@@ -151,7 +151,7 @@ void		free_2d_array(char **ptr);
 t_position	get_pos(t_data *data, int i);
 int			add_texture(char *src, char **dest);
 int			set_color(char **rgb, t_rgb *colors);
-int			is_texture_or_color(char *line);
+int			is_texture_or_color(char *line, int j);
 void		read_to_end(int fd);
 int			get_index(t_data *data, int x, int y);
 
