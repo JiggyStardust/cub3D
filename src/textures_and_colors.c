@@ -39,7 +39,7 @@ int	get_color(char **info, t_data *data)
 		return (ft_putstr_fd("Allocation failed\n", 2), 0);
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 	{
-		ft_putstr_fd("Color value missing\n", 2);
+		ft_putstr_fd("Error with color value\n", 2);
 		return (free_2d_array(rgb), 0);
 	}
 	if (*info[0] == 'F' && !set_color(rgb, &data->map_info.floor_color))
