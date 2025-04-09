@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 10:52:39 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 15:25:35 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:05:43 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static void	draw_rays(t_data *data, float ray_angle, mlx_image_t *ray)
 		{
 			map_x += cos(ray_angle) * 0.01;
 			map_y += sin(ray_angle) * 0.01;
-			xy = get_index(data, (int)map_x, (int)map_y);
-			mlx_put_pixel(data->ray, map_x * data->tile - 6, \
-				map_y * data->tile - 6, RED);
+			xy = get_index(data, map_x, map_y);
+			mlx_put_pixel(data->ray, map_x * (data->tile - 1), \
+				map_y * (data->tile - 1), RED);
 		}
 		ray_angle += (1.0 / 180 * PI);
 		if (ray_angle >= 2 * PI)
@@ -47,7 +47,8 @@ void	draw_minimap_rays(t_data *data)
 
 	if (data->ray)
 		mlx_delete_image(data->mlx, data->ray);
-	data->ray = mlx_new_image(data->mlx, WIDTH, HEIGHT);
+	data->ray = mlx_new_image(data->mlx, data->map_info.width * data->tile, \
+		data->map_info.height * data->tile);
 	ray_angle = data->player.angle - (33.0 / 180 * PI);
 	if (ray_angle >= 2 * PI)
 		ray_angle -= 2 * PI;
