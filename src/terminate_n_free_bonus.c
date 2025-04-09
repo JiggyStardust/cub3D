@@ -23,6 +23,21 @@ void	free_2d_array(char **ptr)
 	ptr = NULL;
 }
 
+int	free_textures(t_data *data, int i)
+{
+	if (i > 0)
+		mlx_delete_texture(data->textures.no);
+	if (i > 1)
+		mlx_delete_texture(data->textures.so);
+	if (i > 2)
+		mlx_delete_texture(data->textures.we);
+	free(data->map_info.no);
+	free(data->map_info.so);
+	free(data->map_info.we);
+	free(data->map_info.ea);
+	return (1);
+}
+
 static void	delete_images(t_data *data)
 {
 	if (data->minimap)
@@ -37,6 +52,10 @@ void	terminate_free(t_data *data, int error, char *message)
 {
 	if (data->map)
 		free(data->map);
+	mlx_delete_texture(data->textures.no);
+	mlx_delete_texture(data->textures.so);
+	mlx_delete_texture(data->textures.we);
+	mlx_delete_texture(data->textures.ea);
 	delete_images(data);
 	if (data->mlx)
 		mlx_terminate(data->mlx);

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 16:09:32 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 10:33:28 by hpirkola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,17 @@ int	check_file_format(char *file, char *format)
 	return (1);
 }
 
+void	init_textures(t_data *data)
+{
+	data->textures.no = NULL;
+	data->textures.so = NULL;
+	data->textures.ea = NULL;
+	data->textures.we = NULL;
+}
+
 int	parsing(t_data *data, char **argv)
 {
+	init_textures(data);
 	if (!check_file_format(argv[1], ".cub"))
 		return (0);
 	data->file = argv[1];
@@ -80,4 +89,3 @@ int	parsing(t_data *data, char **argv)
 		return (0);
 	return (1);
 }
-
