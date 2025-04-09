@@ -20,12 +20,12 @@ int	get_map_size(t_data *data)
 
 	fd = open(data->file, O_RDONLY);
 	if (fd == -1)
-		return (ft_putstr_fd("Opening of file failed", 2), 0);
+		return (ft_putstr_fd("Error\nOpening of file failed\n", 2), 0);
 	line = get_next_line(fd);
 	while (line)
 	{
 		j = 0;
-		if (is_texture_or_color(line))
+		if (is_texture_or_color(line, data->map_info.width))
 		{
 			line = get_next_line(fd);
 			continue ;
@@ -70,9 +70,9 @@ int	to_map(t_data *data, char *line, int j, int i)
 				if (!data->player.found)
 					data->player = player(line[i], j++, data);
 				else
-					return (ft_putstr_fd("Multiple players\n", 2), -1);
+					return (ft_putstr_fd("Error\nMultiple players\n", 2), -1);
 			}
-			else if (line[i] == ' ' || line[i] == '\0')
+			else if (line[i] == ' ' || line[i] == '\0' || i == '\n')
 				data->map[j++] = PADDING;
 			else
 				return (-1);
@@ -88,11 +88,11 @@ int	get_line(t_data *data, char *line, int j)
 	int	i;
 
 	i = 0;
-	if (is_texture_or_color(line))
+	if (is_texture_or_color(line, j))
 	{
 		if (j > 0)
 		{
-			ft_putstr_fd("Error\nTextures and colors must be found before the map\n", 2);
+			ft_putstr_fd("Error\nTextures and colors in wrong place\n", 2);
 			return (-1);
 		}
 		return (j);
@@ -113,10 +113,10 @@ int	get_map(t_data *data)
 	data->map = malloc(sizeof(enum e_type) * \
 		(data->map_info.height * data->map_info.width + 1));
 	if (!data->map)
-		return (ft_putstr_fd("Allocation failed\n", 2), 0);
+		return (ft_putstr_fd("Error\nAllocation failed\n", 2), 0);
 	fd = open(data->file, O_RDONLY);
 	if (fd < 0)
-		return (ft_putstr_fd("Opening of file failed\n", 2), 0);
+		return (ft_putstr_fd("Error\nOpening of file failed\n", 2), 0);
 	j = 0;
 	line = get_next_line(fd);
 	while (line)

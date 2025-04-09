@@ -34,23 +34,27 @@ int	get_color(char **info, t_data *data)
 {
 	char	**rgb;
 
-	if (!info[1])
-		return (ft_putstr_fd("Error\nInvalid identifier or missing color\n", 2), 0);
+	if (!info[1] || info[2])
+		return (ft_putstr_fd("Error\nInvalid identifier or" \
+		" missing color\n", 2), 0);
 	rgb = ft_split(info[1], ',');
 	if (!rgb)
-		return (ft_putstr_fd("Allocation failed\n", 2), 0);
+		return (ft_putstr_fd("Error\nAllocation failed\n", 2), 0);
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 	{
-		ft_putstr_fd("Error with color value\n", 2);
+		ft_putstr_fd("Error\nError with color value\n", 2);
 		return (free_2d_array(rgb), 0);
 	}
-	if (*info[0] == 'F')
+	if (!ft_strncmp(info[0], "F", 2) || !ft_strncmp(info[0], "C\n", 3))
 	{
 		if (!set_color(rgb, &data->map_info.floor_color))
 			return (free_2d_array(rgb), 0);
 	}
-	else if (*info[0] == 'C' && !set_color(rgb, &data->map_info.ceiling_color))
-		return (free_2d_array(rgb), 0);
+	else if (!ft_strncmp(info[0], "C", 2) || !ft_strncmp(info[0], "C\n", 3))
+	{
+		if (!set_color(rgb, &data->map_info.ceiling_color))
+			return (free_2d_array(rgb), 0);
+	}
 	free_2d_array(rgb);
 	return (1);
 }
@@ -60,7 +64,8 @@ int	textures(char **info, t_data *data)
 	char	**texture;
 
 	if (info[1] == NULL)
-		return (ft_putstr_fd("Invalid identifier or missing texture\n", 2), 0);
+		return (ft_putstr_fd("Error\nInvalid identifier or" \
+		" missing texture\n", 2), 0);
 	if (info[2])
 		return (ft_putstr_fd("Error\nInvalid texture\n", 2), 0);
 	texture = ft_split(info[1], '\n');
@@ -90,9 +95,9 @@ int	color_texture_loop(t_data *data, char *line)
 	info = ft_split(line, ' ');
 	free(line);
 	if (!info)
-		return (ft_putstr_fd("Allocation failed\n", 2), 0);
+		return (ft_putstr_fd("Error\nAllocation failed\n", 2), 0);
 	c = info[0][0];
-	if (!ft_strncmp(info[0], "F", 2) || !ft_strncmp(info[0], "C", 2))
+	if (c == 'F' || c == 'C')
 	{
 		if (!get_color(info, data))
 			return (free_2d_array(info), 0);
@@ -112,7 +117,7 @@ int	get_texture_and_color(t_data *data)
 
 	fd = open(data->file, O_RDONLY);
 	if (fd == -1)
-		return (ft_putstr_fd("Opening of file failed\n", 2), 0);
+		return (ft_putstr_fd("Error\nOpening of file failed\n", 2), 0);
 	line = get_next_line(fd);
 	while (line)
 	{
