@@ -6,16 +6,16 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 10:27:26 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 10:42:33 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:08:41 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-static void get_pixel(mlx_texture_t *texture, uint32_t *color, int xy)
+static void	get_pixel(mlx_texture_t *texture, uint32_t *color, int xy)
 {
-	t_rgb rgb;
-	
+	t_rgb	rgb;
+
 	if (xy + 3 >= (texture->width * texture->height))
 		return ;
 	rgb.r = texture->pixels[xy * 4];
@@ -30,20 +30,20 @@ static void	choose_texture(t_data *data, t_ray ray)
 	if (ray.side == VERTICAL)
 	{
 		if (cos(ray.angle) > 0)
-			data->texture = data->textures.EA;
+			data->texture = data->textures.ea;
 		else
-			data->texture = data->textures.WE;
+			data->texture = data->textures.we;
 	}
 	else
 	{
 		if (sin(ray.angle) < 0)
-			data->texture = data->textures.NO;
+			data->texture = data->textures.no;
 		else
-			data->texture = data->textures.SO;
+			data->texture = data->textures.so;
 	}
 }
 
-static uint32_t get_x(t_data *data, t_ray ray)
+static uint32_t	get_x(t_data *data, t_ray ray)
 {
 	int			t_x;
 	double		x;
@@ -54,7 +54,8 @@ static uint32_t get_x(t_data *data, t_ray ray)
 		x = ray.x + ray.len2 * cos(ray.angle);
 	x -= floor((x));
 	t_x = x * (double)data->texture->width;
-	if ((ray.side == VERTICAL && cos(ray.angle) > 0) || (ray.side == HORIZONTAL && sin(ray.angle) < 0))
+	if ((ray.side == VERTICAL && cos(ray.angle) > 0)
+		|| (ray.side == HORIZONTAL && sin(ray.angle) < 0))
 		t_x = data->texture->width - t_x - 1;
 	if (t_x < 0)
 		t_x = 0;

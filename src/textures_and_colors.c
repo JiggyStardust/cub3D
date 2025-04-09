@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures_and_colors.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpirkola <hpirkola@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 09:47:10 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 09:50:58 by hpirkola         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:15:26 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 int	load_textures(t_data *data)
 {
-	data->textures.NO = mlx_load_png(data->map_info.NO);
-	if (!data->textures.NO)
+	data->textures.no = mlx_load_png(data->map_info.no);
+	if (!data->textures.no)
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	data->textures.SO = mlx_load_png(data->map_info.SO);
-	if (!data->textures.SO)
+	data->textures.so = mlx_load_png(data->map_info.so);
+	if (!data->textures.so)
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	data->textures.WE = mlx_load_png(data->map_info.WE);
-	if (!data->textures.WE)
+	data->textures.we = mlx_load_png(data->map_info.we);
+	if (!data->textures.we)
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
-	data->textures.EA = mlx_load_png(data->map_info.EA);
-	if (!data->textures.EA)
+	data->textures.ea = mlx_load_png(data->map_info.ea);
+	if (!data->textures.ea)
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
 	return (1);
 }
@@ -59,16 +59,16 @@ int	textures(char **info, t_data *data)
 	if (!texture && ft_strncmp(info[0], "\n", 2))
 		return (0);
 	if (!ft_strncmp(info[0], "NO", 3) && \
-		!add_texture(texture[0], &data->map_info.NO))
+		!add_texture(texture[0], &data->map_info.no))
 		return (free_2d_array(texture), 0);
 	else if (!ft_strncmp(info[0], "SO", 3) && \
-		!add_texture(texture[0], &data->map_info.SO))
+		!add_texture(texture[0], &data->map_info.so))
 		return (free_2d_array(texture), 0);
 	else if (!ft_strncmp(info[0], "EA", 3) && \
-		!add_texture(texture[0], &data->map_info.EA))
+		!add_texture(texture[0], &data->map_info.ea))
 		return (free_2d_array(texture), 0);
 	else if (!ft_strncmp(info[0], "WE", 3) && \
-		!add_texture(texture[0], &data->map_info.WE))
+		!add_texture(texture[0], &data->map_info.we))
 		return (free_2d_array(texture), 0);
 	free_2d_array(texture);
 	return (1);

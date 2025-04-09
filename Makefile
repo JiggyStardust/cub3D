@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/19 13:52:26 by hpirkola          #+#    #+#              #
-#    Updated: 2025/04/08 11:53:59 by sniemela         ###   ########.fr        #
+#    Updated: 2025/04/08 15:50:46 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ SOURCES = main.c \
 	hooks_bonus.c \
 	image_handling_bonus.c \
 	images_to_window_bonus.c \
-	init_utils_bonus.c \
+	init_utils.c \
 	moving_bonus.c \
 	parsing.c \
 	raycasting.c \

@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:27:59 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 13:04:23 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:00:07 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 {
-	mlx_image_t *img;
+	mlx_image_t	*img;
 	uint32_t	color;
 	int			x;
 	int			y;
@@ -37,7 +37,7 @@ mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 	return (img);
 }
 
-void	 draw_minimap(t_data *data, enum e_type c, int x, int y)
+void	draw_minimap(t_data *data, enum e_type c, int x, int y)
 {
 	uint32_t	color;
 	int			i;
@@ -50,19 +50,20 @@ void	 draw_minimap(t_data *data, enum e_type c, int x, int y)
 	else
 		return ;
 	i = 0;
-	while (i < data->tile_mini)
+	while (i < data->tile)
 	{
 		j = 0;
-		while (j < data->tile_mini)
+		while (j < data->tile)
 		{
-			mlx_put_pixel(data->minimap, x * data->tile_mini + j, y * data->tile_mini + i, color);
+			mlx_put_pixel(data->minimap, x * data->tile + j, \
+				y * data->tile + i, color);
 			j++;
 		}
 		i++;
 	}
 }
 
-int		define_minimap_tile(int map_width, int map_height)
+static int	define_mini_tile(int map_width, int map_height)
 {
 	int	tile;
 
@@ -82,26 +83,23 @@ bool	setup_images(t_data *data)
 	t_position	pos;
 
 	i = 0;
-	data->minimap = NULL;
-	data->tile_mini = define_minimap_tile(data->map_info.width, data->map_info.height);
 	data->ceiling_img = draw_background(data, data->map_info.ceiling_color);
 	if (!data->ceiling_img)
 		return (false);
 	data->floor_img = draw_background(data, data->map_info.floor_color);
 	if (!data->floor_img)
 		return (false);
-	if (data->tile_mini >= 30)
-		data->minimap = mlx_new_image(data->mlx, data->map_info.width * data->tile_mini, data->map_info.height * data->tile_mini);
-	if (data->tile_mini >= 30 && !data->minimap)
+	data->tile = define_mini_tile(data->map_info.width, data->map_info.height);
+	if (data->tile >= 30)
+		data->minimap = mlx_new_image(data->mlx, \
+		data->map_info.width * data->tile, data->map_info.height * data->tile);
+	if (data->tile >= 30 && !data->minimap)
 		return (false);
-	if (data->minimap)
+	while (data->minimap && i < data->map_info.width * data->map_info.height)
 	{
-		while (i < data->map_info.width * data->map_info.height)
-		{
-			pos = get_pos(data, i);
-			draw_minimap(data, data->map[i], pos.col, pos.row);
-			i++;
-		}
+		pos = get_pos(data, i);
+		draw_minimap(data, data->map[i], pos.col, pos.row);
+		i++;
 	}
 	return (true);
 }

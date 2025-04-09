@@ -6,13 +6,13 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:46:53 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 10:50:00 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:48:23 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-int	get_index_of_rov_and_col(t_data *data, int x, int y)
+int	get_index(t_data *data, int x, int y)
 {
 	float	i;
 
@@ -53,27 +53,6 @@ t_position	get_pos(t_data *data, int i)
 	while (col++ < i)
 		pos.col++;
 	return (pos);
-}
-
-t_player	player(char c, int j, t_data *data)
-{
-	t_player	player;
-	t_position	pos;
-
-	if (c == 'N')
-		player.p_dir = 'N';
-	if (c == 'S')
-		player.p_dir = 'S';
-	if (c == 'W')
-		player.p_dir = 'W';
-	if (c == 'E')
-		player.p_dir = 'E';
-	pos = get_pos(data, j);
-	player.x = (float)pos.col;
-	player.y = (float)pos.row;
-	player.found = 1;
-	data->map[j] = FLOOR;
-	return (player);
 }
 
 int	add_texture(char *src, char **dest)
