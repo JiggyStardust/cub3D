@@ -15,17 +15,18 @@
 int	load_textures(t_data *data)
 {
 	data->textures.no = mlx_load_png(data->map_info.no);
-	if (!data->textures.no)
+	if (!data->textures.no && free_textures(data, 0))
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
 	data->textures.so = mlx_load_png(data->map_info.so);
-	if (!data->textures.so)
+	if (!data->textures.so && free_textures(data, 1))
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
 	data->textures.we = mlx_load_png(data->map_info.we);
-	if (!data->textures.we)
+	if (!data->textures.we && free_textures(data, 2))
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
 	data->textures.ea = mlx_load_png(data->map_info.ea);
-	if (!data->textures.ea)
+	if (!data->textures.ea && free_textures(data, 3))
 		return (ft_putstr_fd("Error\nLoading textures failed\n", 2), 0);
+	free_textures(data, 0);
 	return (1);
 }
 
@@ -60,17 +61,17 @@ int	textures(char **info, t_data *data)
 		return (0);
 	if (!ft_strncmp(info[0], "NO", 3) && \
 		!add_texture(texture[0], &data->map_info.no))
-		return (free_2d_array(texture), 0);
+		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "SO", 3) && \
 		!add_texture(texture[0], &data->map_info.so))
-		return (free_2d_array(texture), 0);
+		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "EA", 3) && \
 		!add_texture(texture[0], &data->map_info.ea))
-		return (free_2d_array(texture), 0);
+		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "WE", 3) && \
 		!add_texture(texture[0], &data->map_info.we))
-		return (free_2d_array(texture), 0);
-	free_2d_array(texture);
+		return (ft_free_array(&texture), 0);
+	ft_free_array(&texture);
 	return (1);
 }
 

@@ -46,6 +46,13 @@ typedef struct s_textures
 	mlx_texture_t	*ea;
 }	t_textures;
 
+typedef struct wall
+{
+	float	height;
+	int		top;
+	int		bottom;
+}	t_wall;
+
 typedef struct s_ray
 {
 	float	dx;
@@ -106,6 +113,13 @@ enum	e_type
 	E
 };
 
+
+typedef struct s_x_y
+{
+	uint32_t	x;
+	uint32_t	y;
+}	t_x_y;
+
 typedef struct s_data
 {
 	char			*file;
@@ -124,6 +138,8 @@ typedef struct s_data
 }	t_data;
 
 //main.c
+void	cleanup(t_data *data);
+
 //parsing.c
 int			parsing(t_data *data, char **argv);
 int			check_file_format(char *file, char *format);
@@ -148,6 +164,9 @@ int			load_textures(t_data *data);
 
 //validate.c
 int			is_valid(t_data *data);
+
+//terminate_n_free_bonus.c
+int			free_textures(t_data *data, int i);
 
 //drawing.c
 
