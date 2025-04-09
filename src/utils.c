@@ -60,7 +60,10 @@ int	add_texture(char *src, char **dest)
 	if (*dest)
 	{
 		ft_putstr_fd("Found texture '", 2);
-		ft_putstr_fd(src, 2);
+		if (src)
+			ft_putstr_fd(src, 2);
+		else
+			ft_putstr_fd(" ", 2);
 		ft_putstr_fd("' multiple times\n", 2);
 		return (0);
 	}
@@ -78,8 +81,14 @@ int	set_color(char **rgb, t_rgb *colors)
 		return (ft_putstr_fd("Color found multiple times\n", 2), 0);
 	colors->found = 1;
 	colors->r = ft_atoi(rgb[0]);
+	if (colors->r == 0 && *rgb[0] != '0')
+		return (ft_putstr_fd("Error with color values\n", 2), 0);
 	colors->g = ft_atoi(rgb[1]);
+	if (colors->g == 0 && *rgb[1] != '0')
+		return (ft_putstr_fd("Error with color values\n", 2), 0);
 	colors->b = ft_atoi(rgb[2]);
+	if (colors->b == 0 && *rgb[2] != '0')
+		return (ft_putstr_fd("Error with color values\n", 2), 0);
 	if (colors->r > 255 || colors->r < 0 || colors->g > 255 || \
 		colors->g < 0 || colors->b > 255 || colors->b < 0)
 		return (ft_putstr_fd("Color out of range\n", 2), 0);

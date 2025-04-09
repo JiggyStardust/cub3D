@@ -91,13 +91,16 @@ int	get_line(t_data *data, char *line, int j)
 	if (is_texture_or_color(line))
 	{
 		if (j > 0)
-			return (ft_putstr_fd("Invalid map\n", 2), -1);
+		{
+			ft_putstr_fd("Error\nTextures and colors must be found before the map\n", 2);
+			return (-1);
+		}
 		return (j);
 	}
 	j = to_map(data, line, j, -1);
 	free(line);
 	if (j < 0)
-		return (ft_putstr_fd("Invalid map \n", 2), -1);
+		return (ft_putstr_fd("Error\nInvalid character in file\n", 2), -1);
 	return (j);
 }
 

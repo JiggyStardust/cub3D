@@ -46,6 +46,20 @@ static void	loops(t_data *data)
 	mlx_loop(data->mlx);
 }
 
+void	cleanup(t_data *data)
+{
+	if (data->map)
+		free(data->map);
+	if (data->map_info.no)
+		free(data->map_info.no);
+	if (data->map_info.so)
+		free(data->map_info.so);
+	if (data->map_info.we)
+		free(data->map_info.we);
+	if (data->map_info.ea)
+		free(data->map_info.ea);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -55,8 +69,7 @@ int	main(int argc, char **argv)
 	init_data(&data);
 	if (!parsing(&data, argv))
 	{
-		if (data.map)
-			free(data.map);
+		cleanup(&data);
 		return (1);
 	}
 	init_player(&data);

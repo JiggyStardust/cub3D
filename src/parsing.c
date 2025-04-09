@@ -28,23 +28,17 @@ void	read_to_end(int fd)
 int	all_found(t_data *data)
 {
 	if (!data->map_info.no)
-		return (free_textures(data, 0), \
-		ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.so)
-		return (free_textures(data, 0), \
-		ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.ea)
-		return (free_textures(data, 0), \
-		ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.we)
-		return (free_textures(data, 0), \
-		ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.floor_color.found)
-		return (free_textures(data, 0), \
-		ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	if (!data->map_info.ceiling_color.found)
-		return (free_textures(data, 0), \
-		ft_putstr_fd("All textures not found", 2), 0);
+		return (ft_putstr_fd("All textures not found", 2), 0);
 	return (1);
 }
 
