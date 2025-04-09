@@ -6,30 +6,11 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:49:10 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 15:52:12 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:13:52 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
-
-void	get_player_x_y(enum e_type *map, t_data *data)
-{
-	int			i;
-	int			size;
-	t_position	pos;
-
-	i = 0;
-	size = data->map_info.height * data->map_info.width;
-	while (i < size)
-	{
-		if (map[i] == S || map[i] == W || map[i] == N || map[i] == E)
-			break ;
-		i++;
-	}
-	pos = get_pos(data, i);
-	data->player.x = (float)pos.col;
-	data->player.y = (float)pos.row;
-}
 
 float	get_player_angle(char dir)
 {

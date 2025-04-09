@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 16:05:46 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 12:18:39 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ enum	e_type
 	E
 };
 
-
 typedef struct s_x_y
 {
 	uint32_t	x;
@@ -137,9 +136,6 @@ typedef struct s_data
 	mlx_image_t		*view;
 }	t_data;
 
-//main.c
-void	cleanup(t_data *data);
-
 //parsing.c
 int			parsing(t_data *data, char **argv);
 int			check_file_format(char *file, char *format);
@@ -157,6 +153,7 @@ int			add_texture(char *src, char **dest);
 int			set_color(char **rgb, t_rgb *colors);
 int			is_texture_or_color(char *line);
 void		read_to_end(int fd);
+int			get_index(t_data *data, int x, int y);
 
 //textures_and_colors.c
 int			get_texture_and_color(t_data *data);
@@ -168,6 +165,15 @@ int			is_valid(t_data *data);
 //terminate_n_free_bonus.c
 int			free_textures(t_data *data, int i);
 
+//draw_minimap_rays.c
+
+/*******************************************************************************
+ * This function is called after the POV is already drawn. Here we have a sepa-
+ * rate and a rougher version of "raycasting" and detecting wall hits (not using)
+ * DDA.
+ *****************************************************************************/
+void		draw_minimap_rays(t_data *data);
+
 //drawing.c
 
 /*******************************************************************************
@@ -176,7 +182,33 @@ int			free_textures(t_data *data, int i);
  *****************************************************************************/
 mlx_image_t	*draw_ray(t_data *data, t_ray ray, int x, mlx_image_t *img);
 
+// hooks_bonus.c
+
+/*******************************************************************************
+ *  Hook for closing the window. The function calls terminate_free() which frees
+ * 	allocated memory, deletes pictures and exits.
+ *****************************************************************************/
+void		close_window(void *param);
+
+/*******************************************************************************
+ * If ESC is pressed, we close the window by calling terminate_free() which frees
+ * 	allocated memory, deletes pictures and exits.
+ * 
+ * Later the action for shooting, opening doors etc bonus stuff might be handled
+ * here aswell.
+ *****************************************************************************/
+void		key_hook(mlx_key_data_t keydata, void *param);
+
+// image_handling_bonus.c
+
+/*******************************************************************************
+ * Set's up minimap's images by converting minimap textures into mlx_image_t 
+ * images, resizing them if necessary and finally saves them into t_data struct.
+ *****************************************************************************/
+bool		setup_images(t_data *data);
+
 //raycasting.c
+
 /*******************************************************************************
  *  Calculates the length until a wall is hit using DDA (digital differential 
  * analysis) algorithm.
@@ -190,31 +222,23 @@ float		cast_ray(t_data *data, t_ray *ray);
  *****************************************************************************/
 mlx_image_t	*raycaster(t_data *data);
 
-//init_utils.c 
+//init_utils.c
+
 /*******************************************************************************
- * @param i the index on the map
- * @param size map arrays size (height*width)
+ * @param player player struct that's created
  * @param pos a struct which portrays index position in columns and rows.
  * 
- * We search for player enum (S, W, N or E) on the map array, then get position 
+ * Creates struct for player, and sets it spawning position on the map
  * by calling get_pos(data, i). We then update player.y (pos.row) and player.x 
- * (pos.col) into t_data struct.
+ * (pos.col) based on results.
  *****************************************************************************/
-void		get_player_x_y(enum e_type *map, t_data *data);
+t_player	player(char c, int j, t_data *data);
+
 /*******************************************************************************
  *  Updates @param angle of t_player, which is the direction the player is faced
  * in the beginning. Angle is handled in radians.
  *****************************************************************************/
 float		get_player_angle(char dir);
-
-t_player	player(char c, int j, t_data *data);
-
-// image_handling_bonus.c
-/*******************************************************************************
- * Set's up minimap's images by converting minimap textures into mlx_image_t 
- * images, resizing them if necessary and finally saves them into t_data struct.
- *****************************************************************************/
-bool		setup_images(t_data *data);
 
 // terminate_n_free.c
 /*******************************************************************************
@@ -224,21 +248,6 @@ bool		setup_images(t_data *data);
  * exits with the exit status defined by the caller.
  *****************************************************************************/
 void		terminate_free(t_data *data, int error, char *message);
-
-// hooks_bonus.c
-/*******************************************************************************
- *  Hook for closing the window. The function calls terminate_free() which frees
- * 	allocated memory, deletes pictures and exits.
- *****************************************************************************/
-void		close_window(void *param);
-/*******************************************************************************
- * If ESC is pressed, we close the window by calling terminate_free() which frees
- * 	allocated memory, deletes pictures and exits.
- * 
- * Later the action for shooting, opening doors etc bonus stuff might be handled
- * here aswell.
- *****************************************************************************/
-void		key_hook(mlx_key_data_t keydata, void *param);
 
 // images_to_window_bonus.c
 /*******************************************************************************
@@ -284,14 +293,5 @@ void		move_left_right(t_data *data);
  * right.
  *****************************************************************************/
 void		move_up_down(t_data *data);
-/*******************************************************************************
- * We move the player picture using mlx_image_t's instances, which are created
- * when player image is drawn on top of the map with mlx_image_to_window()
- *****************************************************************************/
-void		move_player_image(t_data *data);
-mlx_image_t	*draw_ray(t_data *data, t_ray ray, int i, mlx_image_t *img);
-int			get_index(t_data *data, int x, int y);
-mlx_image_t	*raycaster(t_data *data);
-void		draw_minimap_rays(t_data *data);
 
 #endif
