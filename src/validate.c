@@ -17,26 +17,27 @@ void	permission_denied(char *file)
 	ft_putstr_fd("no permission to file or file doesn't exist <", 2);
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(">\n", 2);
+	//free_textures(data, 0);
 }
 
-int	access_textures(t_map map)
+int	access_textures(t_data *data)
 {
 	int	fd;
 
-	fd = open(map.no, O_RDONLY);
+	fd = open(data->map_info.no, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.no), 0);
+		return (permission_denied(data->map_info.no), 0);
 	close(fd);
-	fd = open(map.so, O_RDONLY);
+	fd = open(data->map_info.so, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.so), 0);
+		return (permission_denied(data->map_info.so), 0);
 	close(fd);
-	fd = open(map.we, O_RDONLY);
+	fd = open(data->map_info.we, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.we), 0);
-	fd = open(map.ea, O_RDONLY);
+		return (permission_denied(data->map_info.we), 0);
+	fd = open(data->map_info.ea, O_RDONLY);
 	if (fd < 0)
-		return (permission_denied(map.ea), 0);
+		return (permission_denied(data->map_info.ea), 0);
 	return (1);
 }
 
@@ -95,7 +96,7 @@ int	is_valid(t_data *data)
 		return (0);
 	if (!check_file_format(data->map_info.ea, ".png"))
 		return (0);
-	if (!access_textures(data->map_info))
+	if (!access_textures(data))
 		return (0);
 	if (!valid_map(data->map, data->map_info.width, data->map_info.height))
 		return (ft_putstr_fd("Invalid map\n", 2), 0);

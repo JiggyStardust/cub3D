@@ -34,6 +34,8 @@ int	get_color(char **info, t_data *data)
 {
 	char	**rgb;
 
+	if (!info[1])
+		return (ft_putstr_fd("Error\nInvalid identifier or missing color\n", 2), 0);
 	rgb = ft_split(info[1], ',');
 	if (!rgb)
 		return (ft_putstr_fd("Allocation failed\n", 2), 0);
@@ -42,8 +44,11 @@ int	get_color(char **info, t_data *data)
 		ft_putstr_fd("Error with color value\n", 2);
 		return (free_2d_array(rgb), 0);
 	}
-	if (*info[0] == 'F' && !set_color(rgb, &data->map_info.floor_color))
-		return (free_2d_array(rgb), 0);
+	if (*info[0] == 'F')
+	{
+		if (!set_color(rgb, &data->map_info.floor_color))
+			return (free_2d_array(rgb), 0);
+	}
 	else if (*info[0] == 'C' && !set_color(rgb, &data->map_info.ceiling_color))
 		return (free_2d_array(rgb), 0);
 	free_2d_array(rgb);
@@ -55,7 +60,9 @@ int	textures(char **info, t_data *data)
 	char	**texture;
 
 	if (info[1] == NULL)
-		return (1);
+		return (ft_putstr_fd("Invalid identifier or missing texture\n", 2), 0);
+	if (info[2])
+		return (ft_putstr_fd("Error\nInvalid texture\n", 2), 0);
 	texture = ft_split(info[1], '\n');
 	if (!texture && ft_strncmp(info[0], "\n", 2))
 		return (0);
@@ -64,13 +71,13 @@ int	textures(char **info, t_data *data)
 		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "SO", 3) && \
 		!add_texture(texture[0], &data->map_info.so))
-		return (free_textures(data, 0), ft_free_array(&texture), 0);
+		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "EA", 3) && \
 		!add_texture(texture[0], &data->map_info.ea))
-		return (free_textures(data, 0), ft_free_array(&texture), 0);
+		return (ft_free_array(&texture), 0);
 	else if (!ft_strncmp(info[0], "WE", 3) && \
 		!add_texture(texture[0], &data->map_info.we))
-		return (free_textures(data, 0), ft_free_array(&texture), 0);
+		return (ft_free_array(&texture), 0);
 	ft_free_array(&texture);
 	return (1);
 }
