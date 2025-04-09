@@ -6,13 +6,13 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 15:27:59 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/09 11:02:26 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:52:13 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/cub3d.h"
 
-mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
+static mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 {
 	mlx_image_t	*img;
 	uint32_t	color;
@@ -37,7 +37,7 @@ mlx_image_t	*draw_background(t_data *data, t_rgb rgb)
 	return (img);
 }
 
-void	draw_minimap(t_data *data, enum e_type c, int x, int y)
+static void	draw_minimap(t_data *data, enum e_type c, int x, int y)
 {
 	uint32_t	color;
 	int			i;

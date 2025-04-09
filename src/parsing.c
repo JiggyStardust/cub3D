@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:25:15 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 16:09:32 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:21:14 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,3 @@ int	parsing(t_data *data, char **argv)
 		return (0);
 	return (1);
 }
-
