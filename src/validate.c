@@ -14,10 +14,9 @@
 
 void	permission_denied(char *file)
 {
-	ft_putstr_fd("no permission to file or file doesn't exist <", 2);
+	ft_putstr_fd("Error\nNo permission to file or file doesn't exist <", 2);
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(">\n", 2);
-	//free_textures(data, 0);
 }
 
 int	access_textures(t_data *data)
@@ -87,7 +86,7 @@ int	valid_map(enum e_type *map, int width, int height)
 int	is_valid(t_data *data)
 {
 	if (!data->player.found)
-		return (ft_putstr_fd("Player missing\n", 2), 0);
+		return (ft_putstr_fd("Error\nPlayer missing\n", 2), 0);
 	if (!check_file_format(data->map_info.no, ".png"))
 		return (0);
 	if (!check_file_format(data->map_info.so, ".png"))
@@ -99,7 +98,7 @@ int	is_valid(t_data *data)
 	if (!access_textures(data))
 		return (0);
 	if (!valid_map(data->map, data->map_info.width, data->map_info.height))
-		return (ft_putstr_fd("Invalid map\n", 2), 0);
+		return (ft_putstr_fd("Error\nInvalid map\n", 2), 0);
 	if (!load_textures(data))
 		return (0);
 	return (1);

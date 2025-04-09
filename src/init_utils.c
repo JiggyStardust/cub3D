@@ -44,3 +44,23 @@ t_player	player(char c, int j, t_data *data)
 	data->map[j] = FLOOR;
 	return (player);
 }
+
+int	add_texture(char *src, char **dest)
+{
+	if (*dest)
+	{
+		ft_putstr_fd("Error\nFound texture '", 2);
+		if (src)
+			ft_putstr_fd(src, 2);
+		else
+			ft_putstr_fd(" ", 2);
+		ft_putstr_fd("' multiple times\n", 2);
+		return (0);
+	}
+	if (!src)
+		return (ft_putstr_fd("Error\nNo texture found\n", 2), 0);
+	*dest = ft_strdup(src);
+	if (!*dest)
+		return (ft_putstr_fd("Error\nAlloctation failed\n", 2), 0);
+	return (1);
+}
