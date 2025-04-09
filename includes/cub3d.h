@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 13:28:22 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/09 12:18:39 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:52:54 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CUB3D_H
 
 # define HEIGHT 1518
-# define WIDTH 1518
+# define WIDTH 1800
 # define RED 0xFF0000FF
 # define DARK_RED 0x8B0000FF
 # define PI 3.14159265359
@@ -22,6 +22,8 @@
 # define TURN_SPEED 0.05
 # define VERTICAL 0
 # define HORIZONTAL 1
+# define LEFT 1
+# define RIGHT 2
 
 # include "../libft/libft.h"
 # include "MLX42/include/MLX42/MLX42.h"
@@ -121,6 +123,8 @@ typedef struct s_x_y
 
 typedef struct s_data
 {
+	bool			mouse_rotate;
+	int				mouse_x;
 	char			*file;
 	int				tile;
 	enum e_type		*map;
