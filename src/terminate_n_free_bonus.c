@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 17:23:21 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/08 14:56:43 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:10:51 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	free_2d_array(char **ptr)
 	while (ptr && ptr[++i])
 		free(ptr[i]);
 	free(ptr);
+	ptr = NULL;
 }
 
 static void	delete_images(t_data *data)
@@ -27,7 +28,7 @@ static void	delete_images(t_data *data)
 	if (data->minimap)
 		mlx_delete_image(data->mlx, data->minimap);
 	if (data->ray)
-		mlx_delete_image(data->mlx, data->minimap);
+		mlx_delete_image(data->mlx, data->ray);
 	if (data->view)
 		mlx_delete_image(data->mlx, data->view);
 }
