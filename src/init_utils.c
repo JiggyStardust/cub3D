@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:49:10 by sniemela          #+#    #+#             */
-/*   Updated: 2025/04/09 12:13:52 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/10 14:15:48 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ float	get_player_angle(char dir)
 {
 	if (dir == 'N')
 		return ((3 * PI) / 2);
-	else if (dir == 'W')
+	else if (dir == 'E')
 		return (0.0);
 	else if (dir == 'S')
 		return (PI / 2);
