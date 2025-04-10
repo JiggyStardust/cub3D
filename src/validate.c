@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 15:21:08 by hpirkola          #+#    #+#             */
-/*   Updated: 2025/04/08 16:10:18 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/04/10 09:37:40 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ int	access_textures(t_data *data)
 	fd = open(data->map_info.we, O_RDONLY);
 	if (fd < 0)
 		return (permission_denied(data->map_info.we), 0);
+	close(fd);
 	fd = open(data->map_info.ea, O_RDONLY);
 	if (fd < 0)
 		return (permission_denied(data->map_info.ea), 0);
+	close(fd);
 	return (1);
 }
 
