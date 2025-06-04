@@ -26,17 +26,28 @@ The configuration file (`.cub`) must include:
   - `N`, `S`, `E`, `W` for player starting position and direction
  
 ### Example map:
+
 NO ./textures/north.xpm
+
 SO ./textures/south.xpm
+
 WE ./textures/west.xpm
+
 EA ./textures/east.xpm
+
 F 220,100,0
+
 C 225,30,0
 
+
 111111
+
 100001
+
 1000N1
+
 111111
+
 
 ## 🎮 Controls
 
