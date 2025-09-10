@@ -1,5 +1,8 @@
 # Cub3D
 
+
+![preview](https://github.com/JiggyStardust/cub3D/blob/main/cub3d.gif)
+
 ## 🕹️ Overview
 
 **Cub3D** is a **raycasting** project inspired by the early 3D game *Wolfenstein 3D*. It is part of the 42 School curriculum and serves as your first step into the world of **graphics programming**, **game engines**, and **real-time rendering**.
